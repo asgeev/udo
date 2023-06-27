@@ -21,7 +21,7 @@ const router = createBrowserRouter(
                     </RequireAuth>
                 }
             ></Route>
-            <Route path="*" exact element={<PageNotFound />} />
+            <Route path="*" element={<PageNotFound />} />
         </>
     )
 )
