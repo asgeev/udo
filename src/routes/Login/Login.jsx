@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSignIn } from 'react-auth-kit'
+import { useSignIn, useIsAuthenticated } from 'react-auth-kit'
 import styled from 'styled-components'
 import { Button, Typography, Form, Input, message, Divider } from 'antd'
 import axios from 'axios'
@@ -56,6 +56,12 @@ export const ExternalLinks = styled.div`
     & a {
         all: unset;
         cursor: pointer;
+        color: rgba(0, 0, 0, 0.7);
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+            transform: scale(1.1);
+        }
     }
 `
 
@@ -65,6 +71,14 @@ export const Login = () => {
     const navigate = useNavigate()
     const [messageApi, contextHolder] = message.useMessage()
     const [loading, setLoading] = useState([false])
+    const isAuthenticated = useIsAuthenticated()
+    const auth = isAuthenticated()
+
+    useEffect(() => {
+        if (auth) {
+            return navigate('/')
+        }
+    }, [auth, navigate])
 
     const logIn = (res) => {
         setLoading(true)
@@ -118,7 +132,7 @@ export const Login = () => {
                     <FormContainer>
                         <LogoImg src={logo} />
                         <TextContainer>
-                            <Title level={3}>Witaj ponownie!</Title>
+                            <Title level={2}>Witaj ponownie!</Title>
                             <Text type="secondary">
                                 Zaloguj się domenowo aby korzystać z aplikacji.{' '}
                             </Text>
@@ -181,7 +195,7 @@ export const Login = () => {
                                 <GithubOutlined />
                             </a>
                             <a href="https://ant.design/">
-                                <AntDesignOutlined color="#199" />
+                                <AntDesignOutlined />
                             </a>
                         </ExternalLinks>
                     </FormContainer>

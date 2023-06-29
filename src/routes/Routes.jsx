@@ -7,7 +7,7 @@ import {
 import { AppLayout } from '../components/AppLayout/AppLayout'
 import { Login } from './Login/Login'
 import { PageNotFound } from './PageNotFound/PageNotFound'
-import { RequireAuth, useIsAuthenticated } from 'react-auth-kit'
+import { RequireAuth } from 'react-auth-kit'
 
 // const PrivateRoute = ({ Component }) => {
 //     const isAuthenticated = useIsAuthenticated()
