@@ -6,15 +6,24 @@ export const AppLayout = () => {
     const signOut = useSignOut()
     const navigate = useNavigate()
 
-    const logOut = () => {
-        signOut()
-        navigate('/login')
+    const handleLogOut = async () => {
+        navigate('/')
+        setTimeout(() => {
+            signOut()
+        }, 1000)
+
+        return null
     }
+
+    // const logOut = () => {
+    //     signOut()
+    //     navigate('/login')
+    // }
 
     return (
         <>
             <div>AppLayout</div>
-            <Button onClick={logOut}>Sign Out</Button>
+            <Button onClick={handleLogOut}>Sign Out</Button>
 
             <Outlet />
         </>
