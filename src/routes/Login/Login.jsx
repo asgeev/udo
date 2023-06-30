@@ -102,7 +102,6 @@ export const Login = () => {
         axios
             .post(`http://localhost:8080/wp-json/jwt-auth/v1/token`, values)
             .then((res) => {
-                console.log(res)
                 if (res.status === 200) {
                     logIn(res)
                 }

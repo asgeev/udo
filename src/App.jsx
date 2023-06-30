@@ -5,13 +5,11 @@ import { ConfigProvider } from 'antd'
 
 function App() {
     return (
-        <>
+        <AuthProvider authType={'cookie'} authName={'_auth'}>
             <ConfigProvider>
-                <AuthProvider authType={'cookie'} authName={'_auth'}>
-                    <RoutesComponent />
-                </AuthProvider>
+                <RoutesComponent />
             </ConfigProvider>
-        </>
+        </AuthProvider>
     )
 }
 
