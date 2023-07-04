@@ -1,31 +1,47 @@
-import { Outlet, useNavigate } from 'react-router-dom'
-import { Button } from 'antd'
-import { useSignOut } from 'react-auth-kit'
+import { Outlet } from 'react-router-dom'
+import { Breadcrumb, Layout, theme } from 'antd'
+import { StyledLayout } from './AppLayout.styles'
+import { AppHeader } from '../AppHeader/AppHeader'
+import { AppAsideMenu } from '../AppAsideMenu/AppAsideMenu'
 
 export const AppLayout = () => {
-    const signOut = useSignOut()
-    const navigate = useNavigate()
-
-    // const handleLogOut = async () => {
-    //     navigate('/')
-    //     setTimeout(() => {
-    //         signOut()
-    //     }, 1000)
-
-    //     return null
-    // }
-
-    const handleLogOut = () => {
-        signOut()
-        navigate('/login')
-    }
+    const { Content } = Layout
+    const {
+        token: { colorBgContainer },
+    } = theme.useToken()
 
     return (
         <>
-            <div>AppLayout</div>
-            <Button onClick={handleLogOut}>Sign Out</Button>
+            <StyledLayout>
+                <AppAsideMenu />
 
-            <Outlet />
+                <Layout>
+                    <AppHeader />
+                    <Layout
+                        style={{
+                            padding: '0 24px  24px',
+                            marginLeft: 260,
+                        }}
+                    >
+                        <Breadcrumb
+                            style={{
+                                margin: '16px 0',
+                            }}
+                        ></Breadcrumb>
+                        <Content
+                            style={{
+                                padding: 24,
+                                margin: 0,
+                                minHeight: 280,
+                                background: colorBgContainer,
+                                overflowY: 'hidden',
+                            }}
+                        >
+                            <Outlet />
+                        </Content>
+                    </Layout>
+                </Layout>
+            </StyledLayout>
         </>
     )
 }

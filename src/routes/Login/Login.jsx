@@ -87,7 +87,7 @@ export const Login = () => {
                 token: res.data.token,
                 tokenType: 'Bearer',
                 expiresIn: 3600,
-                authState: res.data.user_email,
+                authState: res.data,
             })
         ) {
             setLoading(false)
@@ -102,7 +102,6 @@ export const Login = () => {
         axios
             .post(`http://localhost:8080/wp-json/jwt-auth/v1/token`, values)
             .then((res) => {
-                console.log(res)
                 if (res.status === 200) {
                     logIn(res)
                 }
@@ -134,7 +133,7 @@ export const Login = () => {
                         <TextContainer>
                             <Title level={2}>Witaj ponownie!</Title>
                             <Text type="secondary">
-                                Zaloguj się domenowo aby korzystać z aplikacji.{' '}
+                                Zaloguj się domenowo aby korzystać z aplikacji.
                             </Text>
                         </TextContainer>
 
