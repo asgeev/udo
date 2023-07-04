@@ -87,7 +87,7 @@ export const Login = () => {
                 token: res.data.token,
                 tokenType: 'Bearer',
                 expiresIn: 3600,
-                authState: res.data.user_email,
+                authState: res.data,
             })
         ) {
             setLoading(false)
@@ -133,7 +133,7 @@ export const Login = () => {
                         <TextContainer>
                             <Title level={2}>Witaj ponownie!</Title>
                             <Text type="secondary">
-                                Zaloguj się domenowo aby korzystać z aplikacji.{' '}
+                                Zaloguj się domenowo aby korzystać z aplikacji.
                             </Text>
                         </TextContainer>
 
