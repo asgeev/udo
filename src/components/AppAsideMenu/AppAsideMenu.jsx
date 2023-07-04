@@ -1,25 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Layout, Menu, Typography } from 'antd'
 import { FileAddOutlined, HomeOutlined } from '@ant-design/icons'
-import styled from 'styled-components'
 import logoUDO from '../../assets/LogoUDO.png'
-
-export const LogoContainer = styled.div`
-    width: 100%;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    padding-left: 36px;
-    color: white;
-    gap: 10px;
-
-    & img {
-        max-height: 24px;
-        width: auto;
-        filter: invert(100%);
-    }
-`
+import { LogoContainer } from './AppAsideMenu.styles'
 
 //Construction of menu items in array
 //{ key, icon, children, label, disabled, type}
@@ -29,12 +13,10 @@ const menuItems = [
         key: '/',
         label: 'Główna',
         icon: <HomeOutlined />,
-        children: null,
     },
     {
         key: '/dodawanie',
         icon: <FileAddOutlined />,
-
         label: 'Dodawanie',
     },
 ]
@@ -45,6 +27,10 @@ export const AppAsideMenu = () => {
     const [current, setCurrent] = useState(location.pathname)
     const { Sider } = Layout
     const { Text } = Typography
+
+    useEffect(() => {
+        setCurrent(location.pathname)
+    }, [location.pathname])
 
     const navigateTo = (e) => {
         setCurrent(e.key)
