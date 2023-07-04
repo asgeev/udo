@@ -31,6 +31,7 @@ const router = createBrowserRouter(
             >
                 <Route index element={<Home />} />
                 <Route exact path="dodawanie" element={<Dodawanie />}></Route>
+                <Route exact path="dodawaniee" element={<Dodawanie />}></Route>
             </Route>
             <Route path="*" element={<PageNotFound />} />
         </>
