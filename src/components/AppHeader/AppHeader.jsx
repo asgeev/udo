@@ -9,14 +9,6 @@ import {
     BellOutlined,
 } from '@ant-design/icons'
 import { Typography } from 'antd'
-import styled from 'styled-components'
-
-const { Text } = Typography
-
-export const HeaderStart = styled(Space)`
-    height: 100%;
-`
-export const HeaderEnd = styled.div``
 
 export const AppHeader = () => {
     const { Header } = Layout
@@ -24,6 +16,8 @@ export const AppHeader = () => {
     const navigate = useNavigate()
     const auth = useAuthUser()
     const username = auth() ? auth()?.user_display_name : 'Witaj, użytkowniku'
+    const { Text } = Typography
+
     const {
         token: { colorBgContainer },
     } = theme.useToken()
