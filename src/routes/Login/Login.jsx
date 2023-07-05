@@ -50,13 +50,13 @@ export const Login = () => {
     const onSubmit = (values) => {
         setLoading(true)
         axios
-            .post(`http://localhost:8080/wp-json/jwt-auth/v1/token`, values, {
+            .post(`${import.meta.env.VITE_WP_URL}/jwt-auth/v1/token`, values, {
                 withCredentials: true,
             })
             .then((res) => {
                 if (res.status === 200) {
                     logIn(res)
-                    setAxiosBearerTokenHeader(res.data.token)
+                    setAxiosBearerTokenHeader(res?.data?.token)
                     setLoading(false)
                 }
             })
