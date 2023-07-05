@@ -14,13 +14,14 @@ import {
     TextContainer,
     ExternalLinks,
 } from './Login.styles'
+import setAxiosBearerTokenHeader from '../../helpers/setAxiosBearerTokenHeader'
 
 export const Login = () => {
     const { Title, Text } = Typography
     const signIn = useSignIn()
     const navigate = useNavigate()
     const [messageApi, contextHolder] = message.useMessage()
-    const [loading, setLoading] = useState([false])
+    const [loading, setLoading] = useState(false)
     const isAuthenticated = useIsAuthenticated()
     const auth = isAuthenticated()
 
@@ -31,7 +32,6 @@ export const Login = () => {
     }, [auth, navigate])
 
     const logIn = (res) => {
-        setLoading(true)
         if (
             signIn({
                 token: res.data.token,
@@ -40,7 +40,6 @@ export const Login = () => {
                 authState: res.data,
             })
         ) {
-            setLoading(false)
             navigate('/')
             // Only if you are using refreshToken feature
         } else {
@@ -49,15 +48,21 @@ export const Login = () => {
     }
 
     const onSubmit = (values) => {
+        setLoading(true)
         axios
-            .post(`http://localhost:8080/wp-json/jwt-auth/v1/token`, values)
+            .post(`http://localhost:8080/wp-json/jwt-auth/v1/token`, values, {
+                withCredentials: true,
+            })
             .then((res) => {
                 if (res.status === 200) {
                     logIn(res)
+                    setAxiosBearerTokenHeader(res.data.token)
+                    setLoading(false)
                 }
             })
             .catch((error) => {
                 console.error(error)
+                setLoading(false)
                 messageApi.error(error.message)
             })
     }
