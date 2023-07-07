@@ -10,7 +10,7 @@ import { Login } from './Login/Login'
 import { PageNotFound } from './PageNotFound/PageNotFound'
 import { useIsAuthenticated } from 'react-auth-kit'
 import { Home } from './Home/Home'
-import { Dodawanie } from './Dodawanie/Dodawanie'
+import { MainAdd } from './MainAdd/MainAdd'
 
 //Walkaround for update a component while rendering a different component error <PrivateRoute>
 //https://github.com/react-auth-kit/react-auth-kit/issues/1193
@@ -30,8 +30,7 @@ const router = createBrowserRouter(
                 element={<PrivateRoute Component={AppLayout}></PrivateRoute>}
             >
                 <Route index element={<Home />} />
-                <Route exact path="dodawanie" element={<Dodawanie />}></Route>
-                <Route exact path="dodawaniee" element={<Dodawanie />}></Route>
+                <Route exact path="dodawanie" element={<MainAdd />}></Route>
             </Route>
             <Route path="*" element={<PageNotFound />} />
         </>
