@@ -6,7 +6,7 @@ import { ConfigProvider } from 'antd'
 function App() {
     return (
         <AuthProvider
-            authType={'cookie'}
+            authType={'localstorage'}
             authName={'_auth'}
             cookieDomain={window.location.hostname}
             cookieSecure={window.location.protocol === 'https:'}
