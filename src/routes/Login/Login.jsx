@@ -14,6 +14,7 @@ import {
     TextContainer,
     ExternalLinks,
 } from './Login.styles'
+import WP_Instance from '../../services/WP_Instance'
 import setAxiosBearerTokenHeader from '../../helpers/setAxiosBearerTokenHeader'
 
 export const Login = () => {
@@ -49,6 +50,7 @@ export const Login = () => {
 
     const onSubmit = (values) => {
         setLoading(true)
+
         axios
             .post(`${import.meta.env.VITE_WP_URL}/jwt-auth/v1/token`, values, {
                 withCredentials: true,
@@ -56,7 +58,7 @@ export const Login = () => {
             .then((res) => {
                 if (res.status === 200) {
                     logIn(res)
-                    setAxiosBearerTokenHeader(res?.data?.token)
+                    // setAxiosBearerTokenHeader(res?.data?.token)
                     setLoading(false)
                 }
             })
