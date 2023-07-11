@@ -267,6 +267,13 @@ export const MainAdd = () => {
                             <Form.Item
                                 label="Nazwa podmiotu"
                                 name="company_name"
+                                rules={[
+                                    {
+                                        type: 'string',
+                                        required: true,
+                                        message: 'Prosze podać nazwę podmiotu',
+                                    },
+                                ]}
                             >
                                 <AutoComplete
                                     options={company}
@@ -281,19 +288,37 @@ export const MainAdd = () => {
                                     placeholder="wyszukaj lub wprowadź nazwę podmiotu"
                                 />
                             </Form.Item>
-                            <Form.Item label="Adres wnioskodawcy">
+                            <Form.Item label="Adres wnioskodawcy" required>
                                 <Space
                                     direction="vertical"
                                     style={{ rowGap: 0 }}
                                 >
                                     <Space direction="horizontal">
-                                        <Form.Item name="company_street">
+                                        <Form.Item
+                                            name="company_street"
+                                            rules={[
+                                                {
+                                                    type: 'string',
+                                                    required: true,
+                                                    message: 'Podaj ulicę',
+                                                },
+                                            ]}
+                                        >
                                             <Input
                                                 placeholder="ulica"
                                                 style={{ width: 250 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="company_house">
+                                        <Form.Item
+                                            name="company_house"
+                                            rules={[
+                                                {
+                                                    type: 'string',
+                                                    required: true,
+                                                    message: 'Podaj nr domu',
+                                                },
+                                            ]}
+                                        >
                                             <Input
                                                 placeholder="nr domu"
                                                 style={{ width: 120 }}
@@ -307,10 +332,29 @@ export const MainAdd = () => {
                                         </Form.Item>
                                     </Space>
                                     <Space>
-                                        <Form.Item name="company_postcode">
+                                        <Form.Item
+                                            name="company_postcode"
+                                            rules={[
+                                                {
+                                                    type: 'string',
+                                                    required: true,
+                                                    message:
+                                                        'Podaj kod pocztowy',
+                                                },
+                                            ]}
+                                        >
                                             <Input placeholder="kod pocztowy" />
                                         </Form.Item>
-                                        <Form.Item name="company_city">
+                                        <Form.Item
+                                            name="company_city"
+                                            rules={[
+                                                {
+                                                    type: 'string',
+                                                    required: true,
+                                                    message: 'Podaj miasto',
+                                                },
+                                            ]}
+                                        >
                                             <Input placeholder="miejscowość" />
                                         </Form.Item>
                                     </Space>
@@ -336,8 +380,9 @@ export const MainAdd = () => {
                                 >
                                     <Select
                                         showSearch
-                                        placeholder="podstawa"
+                                        placeholder="podstawa prawna dla"
                                         optionFilterProp="children"
+                                        style={{ minWidth: '100%' }}
                                         // onChange={onChange}
                                         // onSearch={onSearch}
                                         filterOption={(input, option) =>
@@ -347,16 +392,12 @@ export const MainAdd = () => {
                                         }
                                         options={[
                                             {
-                                                value: 'jack',
-                                                label: 'Jack',
+                                                value: 1,
+                                                label: 'Bank',
                                             },
                                             {
-                                                value: 'lucy',
-                                                label: 'Lucy',
-                                            },
-                                            {
-                                                value: 'tom',
-                                                label: 'Tom',
+                                                value: 2,
+                                                label: 'Ośrodek pomocy społecznej',
                                             },
                                         ]}
                                     />
@@ -386,19 +427,34 @@ export const MainAdd = () => {
                                 label="JRWA dla sprawy"
                                 tooltip="asfasff f faafsffafsasf asfaf af"
                                 name="jrwa_id"
+                                rules={[
+                                    {
+                                        type: 'number',
+                                        required: true,
+                                        message: 'Podaj jrwa',
+                                    },
+                                ]}
                             >
                                 <Select
                                     style={{ maxWidth: 200 }}
                                     placeholder="jrwa"
                                     allowClear
                                 >
-                                    <Option value="1">6610</Option>
-                                    <Option value="2">6611</Option>
+                                    <Option value={1}>6610</Option>
+                                    <Option value={2}>6611</Option>
                                 </Select>
                             </Form.Item>
                             <Form.Item
                                 label="Nazwa koszulki w EZD"
                                 name="ezd_name"
+                                initialValue="UDO -"
+                                rules={[
+                                    {
+                                        type: 'string',
+                                        required: true,
+                                        message: 'Podaj nazwę koszulki dla EZD',
+                                    },
+                                ]}
                             >
                                 <Input placeholder="wprowadż nazwę koszulki"></Input>
                             </Form.Item>
