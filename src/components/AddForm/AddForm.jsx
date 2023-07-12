@@ -34,6 +34,7 @@ export const AddForm = ({
     loading,
     onSelect,
     initialValues = {},
+    formDisabled,
 }) => {
     const { Title } = Typography
     const { TextArea } = Input
@@ -47,7 +48,8 @@ export const AddForm = ({
                 onFinish={onSubmit}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
-                scrollToFirstError={{ block: 'start', behavior: 'smooth' }}
+                disabled={formDisabled}
+                scrollToFirstError={{ block: 'center', behavior: 'smooth' }}
                 // onValuesChange={(changedValues) => {
                 //     console.log(changedValues)
                 // }}

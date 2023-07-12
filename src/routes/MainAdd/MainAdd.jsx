@@ -42,7 +42,8 @@ const stepsItemsTemplate = [
 export const MainAdd = () => {
     const [messageApi, contextHolder] = message.useMessage()
     const [loading, setLoading] = useState(false)
-    const [stepsItems, setStepsItems] = useState(null)
+    const [stepsItems, setStepsItems] = useState()
+    const [formDisabled, setFormDisabled] = useState(false)
 
     // setTimeout(() => {
     //     setStepsItems(stepsItemsTemplate)
@@ -64,6 +65,7 @@ export const MainAdd = () => {
         }
 
         setLoading(true)
+        setFormDisabled(true)
         console.log('Success:', payload)
 
         WP_Instance.post('/udo/v1/addDataRequest', payload)
@@ -71,13 +73,13 @@ export const MainAdd = () => {
                 console.log(response)
                 setLoading(false)
                 setStepsItems(response?.data)
-                messageApi.success(messageResponse(response?.data))
+                messageApi.success(messageResponse(response?.data), 4, () =>
+                    setFormDisabled(false)
+                )
             })
             .catch((error) => {
                 setLoading(false)
-                messageApi.error(
-                    'UPS! Nie udało nam się zapisać danych, spróbuj ponownie później'
-                )
+                messageApi.error(error.message, 4, () => setFormDisabled(false))
                 console.log(error)
             })
     }
@@ -104,6 +106,7 @@ export const MainAdd = () => {
                         onFinishFailed={onFinishFailed}
                         loading={loading}
                         onSelect={onSelect}
+                        formDisabled={formDisabled}
                     />
                     {stepsItems && (
                         <FormSection sectionName="Rezultat zapisu">
