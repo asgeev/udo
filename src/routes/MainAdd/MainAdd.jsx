@@ -7,7 +7,7 @@ import {
     DatePicker,
     AutoComplete,
     Select,
-    Divider,
+    Steps,
     Radio,
     Col,
     Row,
@@ -20,7 +20,8 @@ import { FormSection } from '../../components/FormSection/FormSection'
 
 export const FormWrapper = styled.div`
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 `
 
 const onSelect = (data) => {
@@ -48,6 +49,7 @@ export const MainAdd = () => {
     const { Option } = Select
     const [messageApi, contextHolder] = message.useMessage()
     const [loading, setLoading] = useState(false)
+    const [stepsItems, setStepItems] = useState([])
 
     //From failed
     const onFinishFailed = (values) => {
@@ -335,6 +337,14 @@ export const MainAdd = () => {
                                 <Form.Item
                                     name="company_type_id"
                                     label="Podstawa prawna dla"
+                                    rules={[
+                                        {
+                                            type: 'number',
+                                            required: true,
+                                            message:
+                                                'Wybierz podstawę prawną odpowiedzi',
+                                        },
+                                    ]}
                                 >
                                     <Select
                                         showSearch
@@ -376,7 +386,7 @@ export const MainAdd = () => {
                                 {
                                     type: 'string',
                                     required: true,
-                                    message: 'Podaj cel udostępnienia',
+                                    message: 'cel udostępnienia',
                                 },
                             ]}
                         >
@@ -468,6 +478,23 @@ export const MainAdd = () => {
                         </Col>
                     </Row>
                 </Form>
+                <Steps
+                    current={1}
+                    percent={60}
+                    style={{ minWidth: 400, maxWidth: 800, width: '100%' }}
+                    items={[
+                        {
+                            title: 'Finished',
+                        },
+                        {
+                            title: 'In Progress',
+                            subTitle: 'Left 00:00:08',
+                        },
+                        {
+                            title: 'Waiting',
+                        },
+                    ]}
+                />
             </FormWrapper>
         </>
     )
