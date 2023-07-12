@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Layout, Menu, Typography } from 'antd'
+import { Layout, Menu, Typography, Tag } from 'antd'
 import { FileAddOutlined, HomeOutlined } from '@ant-design/icons'
 import logoUDO from '../../assets/LogoUDO.png'
 import { LogoContainer } from './AppAsideMenu.styles'
@@ -60,8 +60,11 @@ export const AppAsideMenu = () => {
                         fontFamily: 'Lexend Peta, sans-serif',
                     }}
                 >
-                    UDO{' '}
+                    UDO
                 </Text>
+                <Tag color="blue">
+                    <strong>BETA</strong>
+                </Tag>
             </LogoContainer>
             <Menu
                 mode="inline"
