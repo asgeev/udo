@@ -14,8 +14,6 @@ import {
     TextContainer,
     ExternalLinks,
 } from './Login.styles'
-import WP_Instance from '../../services/WP_Instance'
-import setAxiosBearerTokenHeader from '../../helpers/setAxiosBearerTokenHeader'
 
 export const Login = () => {
     const { Title, Text } = Typography
@@ -44,7 +42,9 @@ export const Login = () => {
             navigate('/')
             // Only if you are using refreshToken feature
         } else {
-            messageApi.error('Error')
+            messageApi.error(
+                'Ups! Wystąpił błąd logowania, spróbuj ponownie później!'
+            )
         }
     }
 
@@ -58,20 +58,19 @@ export const Login = () => {
             .then((res) => {
                 if (res.status === 200) {
                     logIn(res)
-                    // setAxiosBearerTokenHeader(res?.data?.token)
                     setLoading(false)
                 }
             })
             .catch((error) => {
                 console.error(error)
                 setLoading(false)
-                messageApi.error(error.message)
+                messageApi.error(
+                    'Ups! Wystąpił błąd logowania, spróbuj ponownie później!'
+                )
             })
     }
 
     const onSubmitError = (errorInfo) => {
-        // console.log('Failed:', errorInfo)
-        // console.log(errorInfo.values.username)
         if (!errorInfo?.values?.username || !errorInfo?.values?.password) {
             messageApi.info('Podaj nazwę użytkownika i hasło')
         }
