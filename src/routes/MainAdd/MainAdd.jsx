@@ -1,5 +1,5 @@
 import { message } from 'antd'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import WP_Instance from '../../services/WP_Instance'
 import { AddForm } from '../../components/AddForm/AddForm'
 import { StepsView } from '../../components/StepsView/Steps'
