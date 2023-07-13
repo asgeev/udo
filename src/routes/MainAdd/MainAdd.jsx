@@ -44,31 +44,10 @@ export const MainAdd = () => {
     const [loading, setLoading] = useState(false)
     const [stepsItems, setStepsItems] = useState()
     const [formDisabled, setFormDisabled] = useState(false)
-    const [apiData, setApiData] = useState(null)
 
     // setTimeout(() => {
     //     setStepsItems(stepsItemsTemplate)
     // }, 3000)
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const jrwaList = await WP_Instance.get('/udo/v1/getJRWAList')
-            const companyTypes = await WP_Instance.get(
-                '/udo/v1/getCompanyTypesList'
-            )
-            const importanceStatus = await WP_Instance.get(
-                '/udo/v1/getImportanceStatusList'
-            )
-
-            setApiData({
-                jrwaList: jrwaList,
-                companyTypes: companyTypes,
-                importanceStatus: importanceStatus,
-            })
-        }
-
-        fetchData()
-    }, [])
 
     //From failed
     const onFinishFailed = (values) => {
@@ -128,7 +107,6 @@ export const MainAdd = () => {
                         loading={loading}
                         onSelect={onSelect}
                         formDisabled={formDisabled}
-                        apiData={apiData}
                     />
                     {stepsItems && (
                         <FormSection sectionName="Rezultat zapisu">

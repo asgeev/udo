@@ -1,26 +1,133 @@
+import { useEffect, useState } from 'react'
 import { FormSection } from '../FormSection/FormSection'
 import { Form, AutoComplete, Space, Input } from 'antd'
+import WP_Instance from '../../services/WP_Instance'
 
 const company = [
-    { value: 'dsasasasd', label: 'podmiot1', id: '1' },
-    { value: 'podmiot2' },
-    { value: 'podmiot3' },
-    { value: 'podmiot4' },
-    { value: 'podmiot5' },
-    { value: 'podmiot6' },
-    { value: 'podmiot7' },
-    { value: 'podmiot8' },
-    { value: 'podmiot9' },
-    { value: 'podmiot10' },
-    { value: 'podmiot11' },
-    { value: 'podmiot12' },
+    {
+        id: '1',
+        name: 'Bank pocztowy 2',
+        street: 'pocztowa',
+        house: '20',
+        apartment: '256',
+        postcode: '20-300',
+        city: 'Łódź',
+        company_type_id: '1',
+    },
+    {
+        id: '2',
+        name: 'afs',
+        street: 'afs',
+        house: 'af',
+        apartment: 'a',
+        postcode: 'fa',
+        city: 'asf',
+        company_type_id: '2',
+    },
+    {
+        id: '3',
+        name: 'afs',
+        street: 'afs',
+        house: 'af',
+        apartment: 'a',
+        postcode: 'fa',
+        city: 'asf',
+        company_type_id: '2',
+    },
+    {
+        id: '4',
+        name: 'podmiot2',
+        street: 'af',
+        house: 'af',
+        apartment: null,
+        postcode: 'af',
+        city: 'af',
+        company_type_id: '2',
+    },
+    {
+        id: '5',
+        name: 'podmiot2',
+        street: 'asfafs',
+        house: 'sgd',
+        apartment: null,
+        postcode: 'sdg',
+        city: 'sgd',
+        company_type_id: '2',
+    },
+    {
+        id: '6',
+        name: 'asf',
+        street: 'afs',
+        house: 'asf',
+        apartment: null,
+        postcode: 'afs',
+        city: 'asf',
+        company_type_id: '1',
+    },
+    {
+        id: '7',
+        name: 'asf',
+        street: 'afs',
+        house: 'asf',
+        apartment: null,
+        postcode: 'afs',
+        city: 'asf',
+        company_type_id: '1',
+    },
 ]
 
-export const CompanyDataFormSection = ({ onSelect }) => {
+export const CompanyDataFormSection = () => {
+    const [companyData, setCompanyData] = useState(company)
+    const [searchQuery, setSearchQuery] = useState('')
+    const [selectedCompany, setSelectedCompany] = useState({})
+
+    const createCompanyDataOptions = (data) => {
+        let newData = []
+
+        data?.map(
+            ({
+                id,
+                name,
+                street,
+                house,
+                apartment = '',
+                postcode = '',
+                city = '',
+            }) => {
+                newData.push({
+                    value: `${id}, ${name} | ${street} | ${house} | ${apartment} | ${postcode} | ${city}`,
+                    label: `${id}, ${name} | ${street} | ${house} | ${apartment} | ${postcode} | ${city}`,
+                })
+            }
+        )
+
+        return newData
+    }
+
+    const handleSelectCompany = (value, option) => {
+        console.log(`Value: ${value}, Option: ${option.id}`)
+    }
+
+    const handleOnSearch = (query) => {
+        setSearchQuery(query)
+    }
+
+    useEffect(() => {
+        WP_Instance.get(`/udo/v1/getCompanyList?company_name=${searchQuery}`)
+            .then((response) => {
+                setCompanyData(response.data)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+    }, [searchQuery])
+
+    useEffect(() => {}, [companyData])
+
     return (
         <FormSection sectionName="Dane wnioskodawcy">
             <Form.Item hidden={true} name="company_id">
-                <Input />
+                <Input value={companyData?.id} />
             </Form.Item>
             <Form.Item
                 label="Nazwa podmiotu"
@@ -34,16 +141,18 @@ export const CompanyDataFormSection = ({ onSelect }) => {
                 ]}
             >
                 <AutoComplete
-                    options={company}
-                    // onSearch={(text) => {
-                    //     console.log(text)
-                    // }}
-                    onSelect={onSelect}
-                    // onChange={(text) => {
-                    //     console.log(text)
-                    // }}
-
+                    options={createCompanyDataOptions(companyData)}
+                    notFoundContent="Nie znaleziono żadnego podmiotu"
+                    onSelect={handleSelectCompany}
+                    // onChange={handleOnChange}
+                    onSearch={handleOnSearch}
                     placeholder="wyszukaj lub wprowadź nazwę podmiotu"
+                    allowClear
+                    filterOption={(inputValue, option) =>
+                        option.value
+                            .toUpperCase()
+                            .indexOf(inputValue.toUpperCase()) !== -1
+                    }
                 />
             </Form.Item>
             <Form.Item label="Adres wnioskodawcy" required>
