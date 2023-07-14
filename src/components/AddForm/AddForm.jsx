@@ -1,15 +1,5 @@
-import {
-    Form,
-    Input,
-    Typography,
-    Space,
-    Button,
-    DatePicker,
-    Select,
-    Radio,
-    Col,
-    Row,
-} from 'antd'
+import { useState, useEffect } from 'react'
+import { Form, Typography, Button, Col, Row } from 'antd'
 import { InflowFormSection } from '../InflowFromSection/InflowFormSection'
 import { PersonDataFormSection } from '../PersonDataFormSection/PersonDataFormSection'
 import { CompanyDataFormSection } from '../CompanyDataFormSection/CompanyDataFormSection'
@@ -21,20 +11,16 @@ export const AddForm = ({
     onSubmit,
     onFinishFailed,
     loading,
-    onSelect,
-    initialValues = {},
     formDisabled,
-    apiData,
 }) => {
     const { Title } = Typography
-
-    console.log(apiData)
+    const [form] = Form.useForm()
 
     return (
         <>
             <Form
+                form={form}
                 name="mainAddForm"
-                initialValues={initialValues}
                 onFinish={onSubmit}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
@@ -51,7 +37,7 @@ export const AddForm = ({
 
                 <InflowFormSection />
                 <PersonDataFormSection />
-                <CompanyDataFormSection onSelect={onSelect} />
+                <CompanyDataFormSection />
                 <ReplyTemplateFormSection />
                 <EzdDataFormSection />
                 <AdditionalInfoFormSection />

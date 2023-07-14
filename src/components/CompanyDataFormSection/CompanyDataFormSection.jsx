@@ -3,6 +3,19 @@ import { FormSection } from '../FormSection/FormSection'
 import { Form, AutoComplete, Space, Input } from 'antd'
 import WP_Instance from '../../services/WP_Instance'
 
+const createCompanyDataOptions = (data) => {
+    let newData = []
+
+    data?.forEach((element) => {
+        newData.push({
+            key: element.id,
+            value: element.name,
+            label: `${element.name} |  Adres: ${element.street}  ${element.house}  ${element.apartment}  ${element.postcode}  ${element.city}`,
+            ...element,
+        })
+    })
+    return newData
+}
 const company = [
     {
         id: '1',
@@ -77,58 +90,49 @@ const company = [
 ]
 
 export const CompanyDataFormSection = () => {
-    const [companyData, setCompanyData] = useState(company)
+    const form = Form.useFormInstance()
+    const [companyData, setCompanyData] = useState(null)
     const [searchQuery, setSearchQuery] = useState('')
-    const [selectedCompany, setSelectedCompany] = useState({})
+    const [selectedCompany, setSeclectedCompany] = useState(null)
 
-    const createCompanyDataOptions = (data) => {
-        let newData = []
-
-        data?.map(
-            ({
-                id,
-                name,
-                street,
-                house,
-                apartment = '',
-                postcode = '',
-                city = '',
-            }) => {
-                newData.push({
-                    value: `${id}, ${name} | ${street} | ${house} | ${apartment} | ${postcode} | ${city}`,
-                    label: `${id}, ${name} | ${street} | ${house} | ${apartment} | ${postcode} | ${city}`,
-                })
-            }
-        )
-
-        return newData
+    const handleSetSelectedCompany = (value, options) => {
+        setSeclectedCompany(options)
     }
 
-    const handleSelectCompany = (value, option) => {
-        console.log(`Value: ${value}, Option: ${option.id}`)
+    const handleSetCompanyData = (data) => {
+        setCompanyData(data)
     }
-
     const handleOnSearch = (query) => {
         setSearchQuery(query)
     }
 
     useEffect(() => {
+        form.setFieldValue('company_street', selectedCompany?.street)
+        form.setFieldValue('company_house', selectedCompany?.house)
+        form.setFieldValue('company_apartment', selectedCompany?.apartment)
+        form.setFieldValue('company_postcode', selectedCompany?.postcode)
+        form.setFieldValue('company_city', selectedCompany?.city)
+    }, [selectedCompany])
+
+    useEffect(() => {
         WP_Instance.get(`/udo/v1/getCompanyList?company_name=${searchQuery}`)
             .then((response) => {
-                setCompanyData(response.data)
+                handleSetCompanyData(response?.data)
             })
             .catch((error) => {
                 console.error(error)
+                handleSetCompanyData(company) //
             })
     }, [searchQuery])
 
-    useEffect(() => {}, [companyData])
+    // useEffect(() => {}, [selectedCompany])
 
     return (
         <FormSection sectionName="Dane wnioskodawcy">
             <Form.Item hidden={true} name="company_id">
-                <Input value={companyData?.id} />
+                <Input />
             </Form.Item>
+
             <Form.Item
                 label="Nazwa podmiotu"
                 name="company_name"
@@ -142,14 +146,13 @@ export const CompanyDataFormSection = () => {
             >
                 <AutoComplete
                     options={createCompanyDataOptions(companyData)}
-                    notFoundContent="Nie znaleziono żadnego podmiotu"
-                    onSelect={handleSelectCompany}
-                    // onChange={handleOnChange}
+                    notFoundContent="Przykro nam ale nie znaleźliśmy żadnego podmiotu"
+                    onSelect={handleSetSelectedCompany}
                     onSearch={handleOnSearch}
                     placeholder="wyszukaj lub wprowadź nazwę podmiotu"
                     allowClear
                     filterOption={(inputValue, option) =>
-                        option.value
+                        option.label
                             .toUpperCase()
                             .indexOf(inputValue.toUpperCase()) !== -1
                     }
@@ -167,6 +170,9 @@ export const CompanyDataFormSection = () => {
                                     message: 'Podaj ulicę',
                                 },
                             ]}
+                            // initialValue={selectedCompany?.street}
+                            // getValueFromEvent={selectedCompany?.street}
+                            // shouldUpdate
                         >
                             <Input placeholder="ulica" style={{ width: 250 }} />
                         </Form.Item>
