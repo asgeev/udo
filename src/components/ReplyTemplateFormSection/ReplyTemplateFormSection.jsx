@@ -6,7 +6,7 @@ import { createCompanyTypeIdOptions } from '../../helpers/createCompanyTypeIdOpt
 
 export const ReplyTemplateFormSection = () => {
     const { TextArea } = Input
-    const [companyTypesItems, setCompanyTypesItems] = useState(null)
+    const [companyTypesItems, setCompanyTypesItems] = useState([])
 
     useEffect(() => {
         WP_Instance.get(`/udo/v1/getCompanyTypesList`)
