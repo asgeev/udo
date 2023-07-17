@@ -1,4 +1,5 @@
-import { message } from 'antd'
+import { useNavigate } from 'react-router-dom'
+import { message, notification, Space, Button } from 'antd'
 import { useState } from 'react'
 import WP_Instance from '../../services/WP_Instance'
 import { AddForm } from '../../components/AddForm/AddForm'
@@ -36,14 +37,17 @@ const stepsItemsTemplate = [
 ]
 
 export const MainAdd = () => {
-    const [messageApi, contextHolder] = message.useMessage()
+    const navigate = useNavigate()
+    const [messageApi, messageContextHolder] = message.useMessage()
+    const [notificationApi, notificationContextHolder] =
+        notification.useNotification()
     const [loading, setLoading] = useState(false)
     const [stepsItems, setStepsItems] = useState()
     const [formDisabled, setFormDisabled] = useState(false)
 
-    // setTimeout(() => {
-    //     setStepsItems(stepsItemsTemplate)
-    // }, 3000)
+    setTimeout(() => {
+        setStepsItems()
+    }, 3000)
 
     //From failed
     const onFinishFailed = (values) => {
@@ -80,21 +84,32 @@ export const MainAdd = () => {
             })
     }
 
-    // const onSubmit = (values) => {
-    //     const newValues = {
-    //         ...values,
-    //         inflow_date: values['inflow_date']?.format('YYYY-MM-DD'),
-    //         birth_date: values['birth_date']?.format('YYYY-MM-DD'),
-    //         max_finish_date: values['max_finish_date']?.format('YYYY-MM-DD'),
-    //     }
+    //Show message when one of all api response has error
+    const onApiFetchErrorOpenNotification = () => {
+        const key = `open${Date.now()}`
+        const btn = (
+            <Space>
+                <Button type="primary" onClick={() => navigate(0)}>
+                    Odśwież stronę
+                </Button>
+            </Space>
+        )
 
-    //     console.log('Success:', newValues)
+        notificationApi.error({
+            message: 'UPS! Wystąpił błąd',
+            description:
+                'Wystąpił błąd podczas pobierania danych formularza, przeładuj stronę i spróbuj ponownie. Jeżeli problem będzie występował nadal prosimy o kontakt z administratorami strony',
+            btn,
+            key,
+            closeIcon: false,
+            duration: 0,
+        })
+    }
 
-    //     messageApi.success(messageResponse(stepsItemsTemplate), 6)
-    // }
     return (
         <>
-            {contextHolder}
+            {messageContextHolder}
+            {notificationContextHolder}
             <MainAddContainer>
                 <StyledContent>
                     <AddForm
@@ -104,12 +119,10 @@ export const MainAdd = () => {
                         formDisabled={formDisabled}
                         // initialValues={{}}
                     />
+                    <button onClick={onApiFetchErrorOpenNotification} />
                     {stepsItems && (
                         <FormSection sectionName="Rezultat zapisu">
-                            <StepsView
-                                // style={{ minWidth: 400, maxWidth: 800, width: '100%' }}
-                                stepsItems={stepsItems}
-                            />
+                            <StepsView stepsItems={stepsItems} />
                         </FormSection>
                     )}
                 </StyledContent>

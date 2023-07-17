@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react'
 import { FormSection } from '../FormSection/FormSection'
 import { Form, Row, Col, Select, Input } from 'antd'
 import WP_Instance from '../../services/WP_Instance'
+import { createCompanyTypeIdOptions } from '../../helpers/createCompanyTypeIdOptions'
 
 export const ReplyTemplateFormSection = () => {
     const { TextArea } = Input
-    const [companyTypesItems, setCompanyTypesItems] = useState([])
+    const [companyTypesItems, setCompanyTypesItems] = useState(null)
 
     useEffect(() => {
         WP_Instance.get(`/udo/v1/getCompanyTypesList`)
@@ -42,8 +43,10 @@ export const ReplyTemplateFormSection = () => {
                                     .toLowerCase()
                                     .includes(input.toLowerCase())
                             }
-                            onSelect={(value) => console.log(value)}
-                            options={companyTypesItems}
+                            // onSelect={(value) => console.log(value)}
+                            options={createCompanyTypeIdOptions(
+                                companyTypesItems
+                            )}
                         />
                     </Form.Item>
                 </Col>
@@ -58,7 +61,7 @@ export const ReplyTemplateFormSection = () => {
                 name="reason_of_request"
                 rules={[
                     {
-                        type: 'number',
+                        type: 'string',
                         required: true,
                         message: 'cel udostępnienia',
                     },
