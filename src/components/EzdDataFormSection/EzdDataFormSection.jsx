@@ -25,7 +25,7 @@ export const EzdDataFormSection = () => {
                 name="jrwa_id"
                 rules={[
                     {
-                        type: 'number',
+                        type: 'string',
                         required: true,
                         message: 'Podaj jrwa',
                     },
