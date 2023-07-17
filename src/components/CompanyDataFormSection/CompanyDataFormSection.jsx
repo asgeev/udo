@@ -95,6 +95,7 @@ export const CompanyDataFormSection = () => {
     }
 
     useEffect(() => {
+        form.setFieldValue('company_id', selectedCompany?.id)
         form.setFieldValue('company_street', selectedCompany?.street)
         form.setFieldValue('company_house', selectedCompany?.house)
         form.setFieldValue('company_apartment', selectedCompany?.apartment)
