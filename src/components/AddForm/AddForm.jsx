@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { Form, Typography, Button, Col, Row } from 'antd'
 import { InflowFormSection } from '../InflowFromSection/InflowFormSection'
 import { PersonDataFormSection } from '../PersonDataFormSection/PersonDataFormSection'

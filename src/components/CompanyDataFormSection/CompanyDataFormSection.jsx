@@ -2,20 +2,8 @@ import { useEffect, useState } from 'react'
 import { FormSection } from '../FormSection/FormSection'
 import { Form, AutoComplete, Space, Input } from 'antd'
 import WP_Instance from '../../services/WP_Instance'
+import { createCompanyDataOptions } from '../../helpers/createCompanyDataOptions'
 
-const createCompanyDataOptions = (data) => {
-    let newData = []
-
-    data?.forEach((element) => {
-        newData.push({
-            key: element.id,
-            value: element.name,
-            label: `${element.name} |  Adres: ${element.street}  ${element.house}  ${element.apartment}  ${element.postcode}  ${element.city}`,
-            ...element,
-        })
-    })
-    return newData
-}
 const company = [
     {
         id: '1',
@@ -29,7 +17,7 @@ const company = [
     },
     {
         id: '2',
-        name: 'afs',
+        name: 'afsasfasfmgm',
         street: 'afs',
         house: 'af',
         apartment: 'a',
@@ -112,6 +100,7 @@ export const CompanyDataFormSection = () => {
         form.setFieldValue('company_apartment', selectedCompany?.apartment)
         form.setFieldValue('company_postcode', selectedCompany?.postcode)
         form.setFieldValue('company_city', selectedCompany?.city)
+        form.setFieldValue('company_type_id', selectedCompany?.company_type_id)
     }, [selectedCompany])
 
     useEffect(() => {
@@ -121,11 +110,9 @@ export const CompanyDataFormSection = () => {
             })
             .catch((error) => {
                 console.error(error)
-                handleSetCompanyData(company) //
+                // handleSetCompanyData(company) //
             })
     }, [searchQuery])
-
-    // useEffect(() => {}, [selectedCompany])
 
     return (
         <FormSection sectionName="Dane wnioskodawcy">
@@ -146,7 +133,7 @@ export const CompanyDataFormSection = () => {
             >
                 <AutoComplete
                     options={createCompanyDataOptions(companyData)}
-                    notFoundContent="Przykro nam ale nie znaleźliśmy żadnego podmiotu"
+                    notFoundContent="☹️  Przykro nam ale nie znaleźliśmy żadnego podmiotu"
                     onSelect={handleSetSelectedCompany}
                     onSearch={handleOnSearch}
                     placeholder="wyszukaj lub wprowadź nazwę podmiotu"
@@ -170,9 +157,6 @@ export const CompanyDataFormSection = () => {
                                     message: 'Podaj ulicę',
                                 },
                             ]}
-                            // initialValue={selectedCompany?.street}
-                            // getValueFromEvent={selectedCompany?.street}
-                            // shouldUpdate
                         >
                             <Input placeholder="ulica" style={{ width: 250 }} />
                         </Form.Item>
