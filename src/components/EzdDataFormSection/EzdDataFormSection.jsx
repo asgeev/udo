@@ -1,8 +1,21 @@
+import { useState, useEffect } from 'react'
 import { FormSection } from '../FormSection/FormSection'
 import { Form, Select, Input } from 'antd'
+import WP_Instance from '../../services/WP_Instance'
+import { createJrwaDataOptions } from '../../helpers/createJrwaDataOptions'
 
 export const EzdDataFormSection = () => {
-    const { Option } = Select
+    const [jrwaData, setJrwaData] = useState([])
+
+    useEffect(() => {
+        WP_Instance.get(`/udo/v1/getJRWAList`)
+            .then((response) => {
+                setJrwaData(response?.data)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+    }, [])
 
     return (
         <FormSection sectionName="Dane sprawy w EZD">
@@ -22,10 +35,8 @@ export const EzdDataFormSection = () => {
                     style={{ maxWidth: 200 }}
                     placeholder="wybierz jrwa"
                     allowClear
-                >
-                    <Option value={1}>6610</Option>
-                    <Option value={2}>6611</Option>
-                </Select>
+                    options={createJrwaDataOptions(jrwaData)}
+                ></Select>
             </Form.Item>
             <Form.Item
                 label="Nazwa koszulki w EZD"

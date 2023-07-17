@@ -1,8 +1,21 @@
+import { useState, useEffect } from 'react'
 import { FormSection } from '../FormSection/FormSection'
 import { Form, Row, Col, Select, Input } from 'antd'
+import WP_Instance from '../../services/WP_Instance'
 
 export const ReplyTemplateFormSection = () => {
     const { TextArea } = Input
+    const [companyTypesItems, setCompanyTypesItems] = useState([])
+
+    useEffect(() => {
+        WP_Instance.get(`/udo/v1/getCompanyTypesList`)
+            .then((response) => {
+                setCompanyTypesItems(response?.data)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+    }, [])
 
     return (
         <FormSection sectionName="Dane szablonu odpowiedzi">
@@ -13,7 +26,7 @@ export const ReplyTemplateFormSection = () => {
                         label="Podstawa prawna dla"
                         rules={[
                             {
-                                type: 'number',
+                                type: 'string',
                                 required: true,
                                 message: 'Wybierz podstawę prawną odpowiedzi',
                             },
@@ -21,25 +34,16 @@ export const ReplyTemplateFormSection = () => {
                     >
                         <Select
                             showSearch
+                            showArrow
                             placeholder="podstawa prawna dla"
-                            optionFilterProp="children"
-                            // onChange={onChange}
-                            // onSearch={onSearch}
+                            optionLabelProp="label"
                             filterOption={(input, option) =>
                                 (option?.label ?? '')
                                     .toLowerCase()
                                     .includes(input.toLowerCase())
                             }
-                            options={[
-                                {
-                                    value: 1,
-                                    label: 'Bank',
-                                },
-                                {
-                                    value: 2,
-                                    label: 'Ośrodek pomocy społecznej',
-                                },
-                            ]}
+                            onSelect={(value) => console.log(value)}
+                            options={companyTypesItems}
                         />
                     </Form.Item>
                 </Col>
@@ -54,7 +58,7 @@ export const ReplyTemplateFormSection = () => {
                 name="reason_of_request"
                 rules={[
                     {
-                        type: 'string',
+                        type: 'number',
                         required: true,
                         message: 'cel udostępnienia',
                     },

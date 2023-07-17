@@ -1,15 +1,11 @@
 import { message } from 'antd'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import WP_Instance from '../../services/WP_Instance'
 import { AddForm } from '../../components/AddForm/AddForm'
 import { StepsView } from '../../components/StepsView/Steps'
 import { MainAddContainer, StyledContent } from './MainAdd.styles'
 import { FormSection } from '../../components/FormSection/FormSection'
 import { messageResponse } from '../../helpers/messageResponse'
-
-const onSelect = (data) => {
-    console.log('onSelect', data)
-}
 
 const stepsItemsTemplate = [
     {
@@ -105,8 +101,8 @@ export const MainAdd = () => {
                         onSubmit={onSubmit}
                         onFinishFailed={onFinishFailed}
                         loading={loading}
-                        onSelect={onSelect}
                         formDisabled={formDisabled}
+                        // initialValues={{}}
                     />
                     {stepsItems && (
                         <FormSection sectionName="Rezultat zapisu">

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { FormSection } from '../FormSection/FormSection'
 import { Form, AutoComplete, Space, Input } from 'antd'
 import WP_Instance from '../../services/WP_Instance'
+import { createCompanyDataOptions } from '../../helpers/createCompanyDataOptions'
 
 const company = [
     {
@@ -16,7 +17,7 @@ const company = [
     },
     {
         id: '2',
-        name: 'afs',
+        name: 'afsasfasfmgm',
         street: 'afs',
         house: 'af',
         apartment: 'a',
@@ -77,58 +78,48 @@ const company = [
 ]
 
 export const CompanyDataFormSection = () => {
-    const [companyData, setCompanyData] = useState(company)
+    const form = Form.useFormInstance()
+    const [companyData, setCompanyData] = useState(null)
     const [searchQuery, setSearchQuery] = useState('')
-    const [selectedCompany, setSelectedCompany] = useState({})
+    const [selectedCompany, setSeclectedCompany] = useState(null)
 
-    const createCompanyDataOptions = (data) => {
-        let newData = []
-
-        data?.map(
-            ({
-                id,
-                name,
-                street,
-                house,
-                apartment = '',
-                postcode = '',
-                city = '',
-            }) => {
-                newData.push({
-                    value: `${id}, ${name} | ${street} | ${house} | ${apartment} | ${postcode} | ${city}`,
-                    label: `${id}, ${name} | ${street} | ${house} | ${apartment} | ${postcode} | ${city}`,
-                })
-            }
-        )
-
-        return newData
+    const handleSetSelectedCompany = (value, options) => {
+        setSeclectedCompany(options)
     }
 
-    const handleSelectCompany = (value, option) => {
-        console.log(`Value: ${value}, Option: ${option.id}`)
+    const handleSetCompanyData = (data) => {
+        setCompanyData(data)
     }
-
     const handleOnSearch = (query) => {
         setSearchQuery(query)
     }
 
     useEffect(() => {
+        form.setFieldValue('company_street', selectedCompany?.street)
+        form.setFieldValue('company_house', selectedCompany?.house)
+        form.setFieldValue('company_apartment', selectedCompany?.apartment)
+        form.setFieldValue('company_postcode', selectedCompany?.postcode)
+        form.setFieldValue('company_city', selectedCompany?.city)
+        form.setFieldValue('company_type_id', selectedCompany?.company_type_id)
+    }, [selectedCompany])
+
+    useEffect(() => {
         WP_Instance.get(`/udo/v1/getCompanyList?company_name=${searchQuery}`)
             .then((response) => {
-                setCompanyData(response.data)
+                handleSetCompanyData(response?.data)
             })
             .catch((error) => {
                 console.error(error)
+                // handleSetCompanyData(company) //
             })
     }, [searchQuery])
-
-    useEffect(() => {}, [companyData])
 
     return (
         <FormSection sectionName="Dane wnioskodawcy">
             <Form.Item hidden={true} name="company_id">
-                <Input value={companyData?.id} />
+                <Input />
             </Form.Item>
+
             <Form.Item
                 label="Nazwa podmiotu"
                 name="company_name"
@@ -142,14 +133,13 @@ export const CompanyDataFormSection = () => {
             >
                 <AutoComplete
                     options={createCompanyDataOptions(companyData)}
-                    notFoundContent="Nie znaleziono żadnego podmiotu"
-                    onSelect={handleSelectCompany}
-                    // onChange={handleOnChange}
+                    notFoundContent="☹️  Przykro nam ale nie znaleźliśmy żadnego podmiotu"
+                    onSelect={handleSetSelectedCompany}
                     onSearch={handleOnSearch}
                     placeholder="wyszukaj lub wprowadź nazwę podmiotu"
                     allowClear
                     filterOption={(inputValue, option) =>
-                        option.value
+                        option.label
                             .toUpperCase()
                             .indexOf(inputValue.toUpperCase()) !== -1
                     }
