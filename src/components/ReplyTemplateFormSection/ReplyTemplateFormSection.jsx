@@ -43,7 +43,6 @@ export const ReplyTemplateFormSection = () => {
                                     .toLowerCase()
                                     .includes(input.toLowerCase())
                             }
-                            // onSelect={(value) => console.log(value)}
                             options={createCompanyTypeIdOptions(
                                 companyTypesItems
                             )}
