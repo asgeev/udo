@@ -1,57 +1,62 @@
-import { useNavigate } from 'react-router-dom'
-import { message, notification, Space, Button } from 'antd'
+import { message, notification, Alert } from 'antd'
 import { useState } from 'react'
 import WP_Instance from '../../services/WP_Instance'
 import { AddForm } from '../../components/AddForm/AddForm'
 import { StepsView } from '../../components/StepsView/Steps'
-import { MainAddContainer, StyledContent } from './MainAdd.styles'
 import { FormSection } from '../../components/FormSection/FormSection'
 import { messageResponse } from '../../helpers/messageResponse'
-
-const stepsItemsTemplate = [
-    {
-        title: 'Zapis do bazy danych',
-        status: 'finish',
-        description: 'Zapisano dane do bazy',
-    },
-    {
-        title: 'Tworzenie koszulki w EZD',
-        status: 'finish',
-        description: 'Wystąpił problem przy tworzeniu koszulki',
-    },
-    // {
-    //     title: 'Tworzenie koszulki w EZD',
-    //     status: 'finish',
-    //     description: 'Wystąpił problem przy tworzeniu koszulki',
-    // },
-    // {
-    //     title: 'Tworzenie koszulki w EZD',
-    //     status: 'error',
-    //     description: 'Wystąpił problem przy tworzeniu koszulki',
-    // },
-    // {
-    //     title: 'Zapis do bazy danych',
-    //     status: 'finish',
-    //     description: 'Zapisano dane do bazy',
-    // },
-]
+import { PageTitleHeader } from '../../components/PageTitleHeader/PageTitleHeader'
+import { useTheme } from 'styled-components'
+// const stepsItemsTemplate = [
+//     {
+//         title: 'Zapis do bazy danych',
+//         status: 'finish',
+//         description: 'Zapisano dane do bazy',
+//     },
+//     {
+//         title: 'Tworzenie koszulki w EZD',
+//         status: 'finish',
+//         description: 'Wystąpił problem przy tworzeniu koszulki',
+//     },
+//     // {
+//     //     title: 'Tworzenie koszulki w EZD',
+//     //     status: 'finish',
+//     //     description: 'Wystąpił problem przy tworzeniu koszulki',
+//     // },
+//     // {
+//     //     title: 'Tworzenie koszulki w EZD',
+//     //     status: 'error',
+//     //     description: 'Wystąpił problem przy tworzeniu koszulki',
+//     // },
+//     // {
+//     //     title: 'Zapis do bazy danych',
+//     //     status: 'finish',
+//     //     description: 'Zapisano dane do bazy',
+//     // },
+// ]
 
 export const MainAdd = () => {
-    const navigate = useNavigate()
     const [messageApi, messageContextHolder] = message.useMessage()
     const [notificationApi, notificationContextHolder] =
         notification.useNotification()
     const [loading, setLoading] = useState(false)
     const [stepsItems, setStepsItems] = useState()
     const [formDisabled, setFormDisabled] = useState(false)
+    const [error, setError] = useState(false)
+    const { colors } = useTheme()
 
-    setTimeout(() => {
-        setStepsItems()
-    }, 3000)
+    // setTimeout(() => {
+    //     setStepsItems()
+    // }, 3000)
 
-    //From failed
+    //Form failed
     const onFinishFailed = (values) => {
         messageApi.error('Wypełnij wszystkie wymagane pola', 6)
+        notificationApi.error({
+            message: 'Poczekaj',
+            description: 'Musisz wypełnić wszystkie wymagane pola',
+            onClose: () => setFormDisabled(false),
+        })
         console.log('Failed:', values)
     }
 
@@ -66,8 +71,6 @@ export const MainAdd = () => {
 
         setLoading(true)
         setFormDisabled(true)
-        console.log('Success:', payload)
-
         WP_Instance.post('/udo/v1/addDataRequest', payload)
             .then((response) => {
                 console.log(response)
@@ -82,12 +85,17 @@ export const MainAdd = () => {
                 messageApi.error(error.resp.message, 4, () =>
                     setFormDisabled(false)
                 )
-                console.log(error)
+                notificationApi.error({
+                    description: 'Błąd',
+                    message: 'asfasfas',
+                    onClose: () => setFormDisabled(false),
+                })
+                // console.log(error)
 
                 if (error.response) {
                     // The request was made and the server responded with a status code
                     // that falls out of the range of 2xx
-                    messageApi.error(error.response.data.message, 4, () =>
+                    messageApi.error(error.response?.data?.message, 4, () =>
                         setFormDisabled(false)
                     )
 
@@ -107,49 +115,34 @@ export const MainAdd = () => {
             })
     }
 
-    //Show message when one of all api response has error
-    const onApiFetchErrorOpenNotification = () => {
-        const key = `open${Date.now()}`
-        const btn = (
-            <Space>
-                <Button type="primary" onClick={() => navigate(0)}>
-                    Odśwież stronę
-                </Button>
-            </Space>
-        )
-
-        notificationApi.error({
-            message: 'UPS! Wystąpił błąd',
-            description:
-                'Wystąpił błąd podczas pobierania danych formularza, przeładuj stronę i spróbuj ponownie. Jeżeli problem będzie występował nadal prosimy o kontakt z administratorami strony',
-            btn,
-            key,
-            closeIcon: false,
-            duration: 0,
-        })
-    }
-
     return (
         <>
             {messageContextHolder}
             {notificationContextHolder}
-            <MainAddContainer>
-                <StyledContent>
-                    <AddForm
-                        onSubmit={onSubmit}
-                        onFinishFailed={onFinishFailed}
-                        loading={loading}
-                        formDisabled={formDisabled}
-                        // initialValues={{}}
-                    />
-                    <button onClick={onApiFetchErrorOpenNotification} />
-                    {stepsItems && (
-                        <FormSection sectionName="Rezultat zapisu">
-                            <StepsView stepsItems={stepsItems} />
-                        </FormSection>
-                    )}
-                </StyledContent>
-            </MainAddContainer>
+            {/* {error && (
+                <Alert
+                    message="Ups! Wystąpił błąd"
+                    description="Podczas pobierania danych formularza wystapił błąd, spróbuj przeładować stronę naciskając przyciski CTRL + F5. Jeżeli problem będzie występował nadal prosimy o kontakt z administratorami strony."
+                    type="error"
+                    showIcon
+                />
+            )} */}
+            <PageTitleHeader
+                title="Zarejestruj zapytanie"
+                backgroundColor={colors.color_card_1}
+            />
+            <AddForm
+                onSubmit={onSubmit}
+                onFinishFailed={onFinishFailed}
+                loading={loading}
+                formDisabled={formDisabled}
+                setError={setError}
+            />
+            {stepsItems && (
+                <FormSection sectionName="Rezultat zapisu">
+                    <StepsView stepsItems={stepsItems} />
+                </FormSection>
+            )}
         </>
     )
 }

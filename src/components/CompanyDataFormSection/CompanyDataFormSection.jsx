@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { FormSection } from '../FormSection/FormSection'
-import { Form, AutoComplete, Space, Input } from 'antd'
+import { Form, AutoComplete, Space, Input, Alert } from 'antd'
 import WP_Instance from '../../services/WP_Instance'
 import { createCompanyDataOptions } from '../../helpers/createCompanyDataOptions'
+import { useTheme } from 'styled-components'
 
 const company = [
     {
@@ -78,6 +79,7 @@ const company = [
 ]
 
 export const CompanyDataFormSection = () => {
+    const { colors } = useTheme()
     const form = Form.useFormInstance()
     const [companyData, setCompanyData] = useState(null)
     const [searchQuery, setSearchQuery] = useState('')
@@ -111,16 +113,25 @@ export const CompanyDataFormSection = () => {
             })
             .catch((error) => {
                 console.error(error)
-                // handleSetCompanyData(company) //
             })
     }, [searchQuery])
 
     return (
-        <FormSection sectionName="Dane wnioskodawcy">
+        <FormSection
+            sectionName="Dane wnioskodawcy"
+            backgroundColor={colors.color_card_7}
+            style={{ gridRow: 2 / 12, gridColumn: 1 }}
+        >
             <Form.Item hidden={true} name="company_id">
                 <Input />
             </Form.Item>
-
+            <Alert
+                message="Możesz wprowadzić swojego odbiorcę lub wyszukać z już istniejących"
+                type="info"
+                closable
+                showIcon
+                style={{ marginBottom: 10 }}
+            />
             <Form.Item
                 label="Nazwa podmiotu"
                 name="company_name"

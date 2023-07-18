@@ -1,5 +1,5 @@
 import { Outlet, useLocation, NavLink } from 'react-router-dom'
-import { Breadcrumb, Layout, theme } from 'antd'
+import { Breadcrumb, Layout } from 'antd'
 import { StyledLayout } from './AppLayout.styles'
 import { AppHeader } from '../AppHeader/AppHeader'
 import { AppAsideMenu } from '../AppAsideMenu/AppAsideMenu'
@@ -13,9 +13,6 @@ const breadcrumbNameMap = {
 
 export const AppLayout = () => {
     const { Content } = Layout
-    const {
-        token: { colorBgContainer },
-    } = theme.useToken()
 
     //Code from https://ant.design/components/breadcrumb
     //Section react-router V6
@@ -53,20 +50,20 @@ export const AppLayout = () => {
                         style={{
                             padding: '0 24px  24px',
                             marginLeft: 260,
+                            backgroundColor: '#F1F1F1',
                         }}
                     >
                         <Breadcrumb
                             style={{
-                                margin: '16px 0',
+                                margin: '24px 24px',
                             }}
                             items={breadcrumbItems}
                         ></Breadcrumb>
                         <Content
                             style={{
-                                padding: 24,
+                                padding: '0 24px 24px 24px',
                                 margin: 0,
                                 minHeight: 280,
-                                background: colorBgContainer,
                                 overflowY: 'hidden',
                             }}
                         >

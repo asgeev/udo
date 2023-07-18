@@ -1,9 +1,15 @@
 import { FormSection } from '../FormSection/FormSection'
 import { Space, Form, Input, DatePicker } from 'antd'
+import { useTheme } from 'styled-components'
 
 export const InflowFormSection = () => {
+    const { colors } = useTheme()
     return (
-        <FormSection sectionName="Dane wpływu">
+        <FormSection
+            backgroundColor={colors.color_card_5}
+            sectionName="Dane wpływu"
+            subTitle="Wprowadź dane dotyczące sprawy"
+        >
             <Space>
                 <Form.Item
                     label="RPW"

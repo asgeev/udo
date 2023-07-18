@@ -2,6 +2,8 @@ import 'antd/dist/reset.css'
 import { AuthProvider } from 'react-auth-kit'
 import { RoutesComponent } from './routes/Routes'
 import { ConfigProvider } from 'antd'
+import { ThemeProvider } from 'styled-components'
+import { theme } from './theme/theme'
 
 function App() {
     return (
@@ -12,7 +14,9 @@ function App() {
             cookieSecure={window.location.protocol === 'https:'}
         >
             <ConfigProvider>
-                <RoutesComponent />
+                <ThemeProvider theme={theme}>
+                    <RoutesComponent />
+                </ThemeProvider>
             </ConfigProvider>
         </AuthProvider>
     )

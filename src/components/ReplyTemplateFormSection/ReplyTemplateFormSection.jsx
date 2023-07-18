@@ -4,7 +4,7 @@ import { Form, Row, Col, Select, Input } from 'antd'
 import WP_Instance from '../../services/WP_Instance'
 import { createCompanyTypeIdOptions } from '../../helpers/createCompanyTypeIdOptions'
 
-export const ReplyTemplateFormSection = () => {
+export const ReplyTemplateFormSection = ({ setError }) => {
     const { TextArea } = Input
     const [companyTypesItems, setCompanyTypesItems] = useState([])
 
@@ -15,6 +15,7 @@ export const ReplyTemplateFormSection = () => {
             })
             .catch((error) => {
                 console.error(error)
+                setError(true)
             })
     }, [])
 
