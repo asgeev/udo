@@ -4,7 +4,7 @@ import { Form, Select, Input } from 'antd'
 import WP_Instance from '../../services/WP_Instance'
 import { createJrwaDataOptions } from '../../helpers/createJrwaDataOptions'
 
-export const EzdDataFormSection = () => {
+export const EzdDataFormSection = ({ setError }) => {
     const [jrwaData, setJrwaData] = useState([])
 
     useEffect(() => {
@@ -14,6 +14,7 @@ export const EzdDataFormSection = () => {
             })
             .catch((error) => {
                 console.error(error)
+                setError(true)
             })
     }, [])
 

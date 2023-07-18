@@ -1,9 +1,16 @@
 import { FormSection } from '../FormSection/FormSection'
 import { Form, Input, Row, Col, Space, DatePicker } from 'antd'
+import { useTheme } from 'styled-components'
 
 export const PersonDataFormSection = () => {
+    const { colors } = useTheme()
+
     return (
-        <FormSection sectionName="Dane osoby">
+        <FormSection
+            sectionName="Dane osoby"
+            backgroundColor={colors.color_card_4}
+            subTitle="Wprowadź dane dotyczące osoby której dotyczy zapytanie"
+        >
             <Form.Item label="Pesel" name="pesel">
                 <Input placeholder="pesel" style={{ maxWidth: 200 }} />
             </Form.Item>

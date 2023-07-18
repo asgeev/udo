@@ -1,19 +1,35 @@
-import { Row, Col, Typography, Divider } from 'antd'
+import { Typography, Row, Col } from 'antd'
+import styled from 'styled-components'
 
-export const FormSection = ({ children, sectionName }) => {
-    const { Title } = Typography
+export const Wrapper = styled.div`
+    /* background-color: ${({ backgroundColor }) =>
+        backgroundColor ? backgroundColor : 'white'}; */
+    border-radius: 10px;
+    padding: ${({ theme }) => theme.paddings.padding_tilt_1};
+    margin: 24px 0;
+`
+
+export const FormSection = ({
+    children,
+    sectionName,
+    backgroundColor,
+    subTitle,
+}) => {
+    const { Title, Text } = Typography
 
     return (
         <>
-            <Row style={{ marginTop: 50 }}>
-                <Col span={5}>
-                    <Title level={4}>{sectionName}</Title>
-                </Col>
-                <Col span={1}>
-                    <Divider type="vertical" style={{ height: '100%' }} />
-                </Col>
-                <Col span={18}>{children}</Col>
-            </Row>
+            <Wrapper backgroundColor={backgroundColor}>
+                <Row>
+                    <Col span={5} offset={1}>
+                        <Title level={5}>{sectionName}</Title>
+                        {subTitle && <Text type="secondary">{subTitle}</Text>}
+                    </Col>
+                    <Col span={10} offset={2}>
+                        {children}
+                    </Col>
+                </Row>
+            </Wrapper>
         </>
     )
 }

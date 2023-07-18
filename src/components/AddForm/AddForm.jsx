@@ -1,18 +1,28 @@
-import { Form, Typography, Button, Col, Row } from 'antd'
+import { Form, Button, Col, Row, Divider } from 'antd'
 import { InflowFormSection } from '../InflowFromSection/InflowFormSection'
 import { PersonDataFormSection } from '../PersonDataFormSection/PersonDataFormSection'
 import { CompanyDataFormSection } from '../CompanyDataFormSection/CompanyDataFormSection'
 import { ReplyTemplateFormSection } from '../ReplyTemplateFormSection/ReplyTemplateFormSection'
 import { EzdDataFormSection } from '../EzdDataFormSection/EzdDataFormSection'
 import { AdditionalInfoFormSection } from '../AdditionalInfoFormSection/AdditionalInfoFormSection'
+import styled from 'styled-components'
+
+const GridWrapper = styled.div`
+    /* border: 1px solid #edf2f4; */
+    background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+        rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    border-radius: 10px;
+    padding-top: 24px;
+`
 
 export const AddForm = ({
     onSubmit,
     onFinishFailed,
     loading,
     formDisabled,
+    setError,
 }) => {
-    const { Title } = Typography
     const [form] = Form.useForm()
 
     return (
@@ -30,16 +40,19 @@ export const AddForm = ({
                 // }}
                 layout="vertical"
             >
-                <Title style={{ marginBottom: 60, marginTop: 30 }} level={2}>
-                    Zarejestruj zapytanie
-                </Title>
-
-                <InflowFormSection />
-                <PersonDataFormSection />
-                <CompanyDataFormSection />
-                <ReplyTemplateFormSection />
-                <EzdDataFormSection />
-                <AdditionalInfoFormSection />
+                <GridWrapper>
+                    <InflowFormSection />
+                    <Divider />
+                    <PersonDataFormSection />
+                    <Divider />
+                    <CompanyDataFormSection />
+                    <Divider />
+                    <ReplyTemplateFormSection setError={setError} />
+                    <Divider />
+                    <EzdDataFormSection setError={setError} />
+                    <Divider />
+                    <AdditionalInfoFormSection setError={setError} />
+                </GridWrapper>
 
                 <Row style={{ marginTop: 50 }} justify="end">
                     <Col>
