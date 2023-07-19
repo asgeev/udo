@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
-import { Steps, Timeline } from 'antd'
+import { Steps } from 'antd'
 import styled from 'styled-components'
 
 export const StepsViewConstainer = styled.div`
     margin-top: 20px;
     margin-bottom: 20px;
+    min-width: 420px;
 `
 
 export const StepsView = ({ stepsItems = [] }) => {
