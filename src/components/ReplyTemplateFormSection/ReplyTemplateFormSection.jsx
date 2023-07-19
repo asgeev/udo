@@ -51,14 +51,17 @@ export const ReplyTemplateFormSection = ({ setError }) => {
                     </Form.Item>
                 </Col>
                 <Col span={12}>
-                    <Form.Item name="act_signature" label="Sygnatura akt">
+                    <Form.Item
+                        name="requestor_act_signature"
+                        label="Sygnatura akt"
+                    >
                         <Input placeholder="sygnatura akt" />
                     </Form.Item>
                 </Col>
             </Row>
             <Form.Item
                 label="Cel udostępnienia"
-                name="reason_of_request"
+                name="reason of request"
                 rules={[
                     {
                         type: 'string',

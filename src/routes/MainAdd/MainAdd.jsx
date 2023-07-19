@@ -82,14 +82,14 @@ export const MainAdd = () => {
             })
             .catch((error) => {
                 setLoading(false)
-                messageApi.error(error.resp.message, 4, () =>
-                    setFormDisabled(false)
-                )
-                notificationApi.error({
-                    description: 'Błąd',
-                    message: 'asfasfas',
-                    onClose: () => setFormDisabled(false),
-                })
+                // messageApi.error(error.resp.message, 4, () =>
+                //     setFormDisabled(false)
+                // )
+                // notificationApi.error({
+                //     description: 'Błąd',
+                //     message: 'asfasfas',
+                //     onClose: () => setFormDisabled(false),
+                // })
                 // console.log(error)
 
                 if (error.response) {
@@ -119,14 +119,14 @@ export const MainAdd = () => {
         <>
             {messageContextHolder}
             {notificationContextHolder}
-            {/* {error && (
+            {error && (
                 <Alert
                     message="Ups! Wystąpił błąd"
                     description="Podczas pobierania danych formularza wystapił błąd, spróbuj przeładować stronę naciskając przyciski CTRL + F5. Jeżeli problem będzie występował nadal prosimy o kontakt z administratorami strony."
                     type="error"
                     showIcon
                 />
-            )} */}
+            )}
             <PageTitleHeader
                 title="Zarejestruj zapytanie"
                 backgroundColor={colors.color_card_1}
