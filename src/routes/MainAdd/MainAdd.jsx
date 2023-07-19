@@ -52,11 +52,11 @@ export const MainAdd = () => {
     //Form failed
     const onFinishFailed = (values) => {
         messageApi.error('Wypełnij wszystkie wymagane pola', 6)
-        notificationApi.error({
-            message: 'Poczekaj',
-            description: 'Musisz wypełnić wszystkie wymagane pola',
-            onClose: () => setFormDisabled(false),
-        })
+        // notificationApi.error({
+        //     message: 'Poczekaj',
+        //     description: 'Musisz wypełnić wszystkie wymagane pola',
+        //     onClose: () => setFormDisabled(false),
+        // })
         console.log('Failed:', values)
     }
 
@@ -68,7 +68,7 @@ export const MainAdd = () => {
             birth_date: values['birth_date']?.format('YYYY-MM-DD'),
             max_finish_date: values['max_finish_date']?.format('YYYY-MM-DD'),
         }
-
+        console.log(payload)
         setLoading(true)
         setFormDisabled(true)
         WP_Instance.post('/udo/v1/addDataRequest', payload)
@@ -82,6 +82,7 @@ export const MainAdd = () => {
             })
             .catch((error) => {
                 setLoading(false)
+                setFormDisabled(false)
                 // messageApi.error(error.resp.message, 4, () =>
                 //     setFormDisabled(false)
                 // )
@@ -95,9 +96,7 @@ export const MainAdd = () => {
                 if (error.response) {
                     // The request was made and the server responded with a status code
                     // that falls out of the range of 2xx
-                    messageApi.error(error.response?.data?.message, 4, () =>
-                        setFormDisabled(false)
-                    )
+                    messageApi.error(error.response?.data?.message, 4)
 
                     console.log(error.response.data)
                     console.log(error.response.status)
@@ -118,7 +117,6 @@ export const MainAdd = () => {
     return (
         <>
             {messageContextHolder}
-            {notificationContextHolder}
             {error && (
                 <Alert
                     message="Ups! Wystąpił błąd"
