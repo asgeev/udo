@@ -61,7 +61,7 @@ export const ReplyTemplateFormSection = ({ setError }) => {
             </Row>
             <Form.Item
                 label="Cel udostępnienia"
-                name="reason of request"
+                name="reason_of_request"
                 rules={[
                     {
                         type: 'string',
