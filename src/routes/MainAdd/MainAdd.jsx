@@ -1,62 +1,84 @@
-import { message, notification, Alert } from 'antd'
+import { message, Form, Alert, Modal, Typography } from 'antd'
 import { useState } from 'react'
 import WP_Instance from '../../services/WP_Instance'
 import { AddForm } from '../../components/AddForm/AddForm'
-import { StepsView } from '../../components/StepsView/Steps'
-import { FormSection } from '../../components/FormSection/FormSection'
-import { messageResponse } from '../../helpers/messageResponse'
 import { PageTitleHeader } from '../../components/PageTitleHeader/PageTitleHeader'
 import { useTheme } from 'styled-components'
-// const stepsItemsTemplate = [
-//     {
-//         title: 'Zapis do bazy danych',
-//         status: 'finish',
-//         description: 'Zapisano dane do bazy',
-//     },
-//     {
-//         title: 'Tworzenie koszulki w EZD',
-//         status: 'finish',
-//         description: 'Wystąpił problem przy tworzeniu koszulki',
-//     },
-//     // {
-//     //     title: 'Tworzenie koszulki w EZD',
-//     //     status: 'finish',
-//     //     description: 'Wystąpił problem przy tworzeniu koszulki',
-//     // },
-//     // {
-//     //     title: 'Tworzenie koszulki w EZD',
-//     //     status: 'error',
-//     //     description: 'Wystąpił problem przy tworzeniu koszulki',
-//     // },
-//     // {
-//     //     title: 'Zapis do bazy danych',
-//     //     status: 'finish',
-//     //     description: 'Zapisano dane do bazy',
-//     // },
-// ]
+import { useNavigate } from 'react-router-dom'
+import { ModalStepsView } from '../../components/ModalStepsView/ModalStepsView'
+
+const stepsItemsTemplate = [
+    {
+        title: 'Zapis do bazy danych',
+        status: 'finish',
+        description: 'Zapisano dane do bazy',
+    },
+    {
+        title: 'Tworzenie koszulki w EZD',
+        status: 'finish',
+        description: 'Wystąpił problem przy tworzeniu koszulki',
+    },
+    {
+        title: 'Tworzenie koszulki w EZD',
+        status: 'error',
+        description: 'Wystąpił problem przy tworzeniu koszulki',
+    },
+    // {
+    //     title: 'Tworzenie koszulki w EZD',
+    //     status: 'error',
+    //     description: 'Wystąpił problem przy tworzeniu koszulki',
+    // },
+    // {
+    //     title: 'Zapis do bazy danych',
+    //     status: 'error',
+    //     description: 'Zapisano dane do bazy',
+    // },
+]
 
 export const MainAdd = () => {
+    const { Title } = Typography
+    const { colors } = useTheme()
     const [messageApi, messageContextHolder] = message.useMessage()
-    const [notificationApi, notificationContextHolder] =
-        notification.useNotification()
     const [loading, setLoading] = useState(false)
-    const [stepsItems, setStepsItems] = useState()
+    // const [stepsItems, setStepsItems] = useState()
     const [formDisabled, setFormDisabled] = useState(false)
     const [error, setError] = useState(false)
-    const { colors } = useTheme()
+    const [modal, modalContextHolder] = Modal.useModal()
+    const [form] = Form.useForm()
+    const navigate = useNavigate()
 
-    // setTimeout(() => {
-    //     setStepsItems()
-    // }, 3000)
+    //Show succes modal after succes response
+    const showSuccesModal = (stepsItems = []) => {
+        const handleOk = () => {
+            form.resetFields()
+            instance.destroy()
+            window.scrollTo({ top: '0', behavior: 'smooth' })
+        }
+        const instance = modal.confirm({
+            title: (
+                <Title level={4} style={{ margin: 0 }}>
+                    Gratulacje!
+                </Title>
+            ),
+            content: <ModalStepsView stepsItems={stepsItems} />,
+            destroyOnClose: true,
+            centered: true,
+            width: 600,
+            icon: null,
+            okText: 'Ok',
+            onOk() {
+                handleOk()
+            },
+            cancelText: 'Edytuj wpis',
+            onCancel() {
+                navigate('/')
+            },
+        })
+    }
 
     //Form failed
     const onFinishFailed = (values) => {
-        messageApi.error('Wypełnij wszystkie wymagane pola', 6)
-        // notificationApi.error({
-        //     message: 'Poczekaj',
-        //     description: 'Musisz wypełnić wszystkie wymagane pola',
-        //     onClose: () => setFormDisabled(false),
-        // })
+        messageApi.error('Wypełnij wszystkie wymagane pola', 7)
         console.log('Failed:', values)
     }
 
@@ -75,23 +97,15 @@ export const MainAdd = () => {
             .then((response) => {
                 console.log(response)
                 setLoading(false)
-                setStepsItems(response?.data)
-                messageApi.success(messageResponse(response?.data), 4, () =>
-                    setFormDisabled(false)
-                )
+                // setStepsItems(response?.data)
+                showSuccesModal(response?.data)
             })
             .catch((error) => {
                 setLoading(false)
                 setFormDisabled(false)
-                // messageApi.error(error.resp.message, 4, () =>
-                //     setFormDisabled(false)
-                // )
-                // notificationApi.error({
-                //     description: 'Błąd',
-                //     message: 'asfasfas',
-                //     onClose: () => setFormDisabled(false),
-                // })
-                // console.log(error)
+                messageApi.error(error.resp.message, 6, () =>
+                    setFormDisabled(false)
+                )
 
                 if (error.response) {
                     // The request was made and the server responded with a status code
@@ -117,6 +131,7 @@ export const MainAdd = () => {
     return (
         <>
             {messageContextHolder}
+            {modalContextHolder}
             {error && (
                 <Alert
                     message="Ups! Wystąpił błąd"
@@ -125,22 +140,16 @@ export const MainAdd = () => {
                     showIcon
                 />
             )}
-            <PageTitleHeader
-                title="Zarejestruj zapytanie"
-                backgroundColor={colors.color_card_1}
-            />
+            {}
+            <PageTitleHeader title="Zarejestruj zapytanie" />
             <AddForm
                 onSubmit={onSubmit}
                 onFinishFailed={onFinishFailed}
                 loading={loading}
                 formDisabled={formDisabled}
                 setError={setError}
+                form={form}
             />
-            {stepsItems && (
-                <FormSection sectionName="Rezultat zapisu">
-                    <StepsView stepsItems={stepsItems} />
-                </FormSection>
-            )}
         </>
     )
 }

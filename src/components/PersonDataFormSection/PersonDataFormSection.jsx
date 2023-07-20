@@ -1,6 +1,7 @@
 import { FormSection } from '../FormSection/FormSection'
-import { Form, Input, Row, Col, Space, DatePicker } from 'antd'
+import { Form, Input, Row, Col, Space, DatePicker, Alert } from 'antd'
 import { useTheme } from 'styled-components'
+import validatePesel from '../../helpers/validatePesel'
 
 export const PersonDataFormSection = () => {
     const { colors } = useTheme()
@@ -11,9 +12,51 @@ export const PersonDataFormSection = () => {
             backgroundColor={colors.color_card_4}
             subTitle="Wprowadź dane dotyczące osoby której dotyczy zapytanie"
         >
-            <Form.Item label="Pesel" name="pesel">
+            <Alert
+                message="Jeżeli podano błędny pesel to pole będzie wyświetlało się na czerwono ale zgłoszenie uda się zapisać"
+                type="info"
+                showIcon
+                closable
+                style={{ marginBottom: 10 }}
+            />
+            <Form.Item
+                label="Pesel"
+                name="pesel"
+                validateTrigger={['onBlur', 'onChange']}
+                hasFeedback
+                required
+                rules={[
+                    () => ({
+                        validator(_, pesel) {
+                            if (pesel.length < 12) {
+                                return Promise.resolve()
+                            }
+                            return Promise.reject(
+                                new Error(
+                                    'Uwaga pesel zawiera więcej niż 11 znaków'
+                                )
+                            )
+                        },
+                    }),
+                    () => ({
+                        validator(_, pesel) {
+                            if (
+                                !pesel ||
+                                validatePesel(pesel) ||
+                                pesel.length > 11
+                            ) {
+                                return Promise.resolve()
+                            }
+                            return Promise.reject(
+                                new Error('Błędny numer pesel')
+                            )
+                        },
+                    }),
+                ]}
+            >
                 <Input placeholder="pesel" style={{ maxWidth: 200 }} />
             </Form.Item>
+
             <Form.Item
                 label="Inne dane identyfikacyjne"
                 name="other_identification_data"
