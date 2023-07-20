@@ -17,7 +17,8 @@ export const InflowFormSection = () => {
                 <Form.Item
                     label="RPW"
                     name="rpw"
-                    validateTrigger={['onBlur']}
+                    hasFeedback
+                    validateTrigger={['onBlur', 'onChange']}
                     rules={[
                         {
                             required: true,

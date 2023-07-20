@@ -28,7 +28,7 @@ export const PersonDataFormSection = () => {
                 rules={[
                     () => ({
                         validator(_, pesel) {
-                            if (pesel.length < 12) {
+                            if (pesel?.length < 12) {
                                 return Promise.resolve()
                             }
                             return Promise.reject(
@@ -43,7 +43,7 @@ export const PersonDataFormSection = () => {
                             if (
                                 !pesel ||
                                 validatePesel(pesel) ||
-                                pesel.length > 11
+                                pesel?.length > 11
                             ) {
                                 return Promise.resolve()
                             }

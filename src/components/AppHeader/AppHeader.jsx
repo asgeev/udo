@@ -10,7 +10,7 @@ import {
 } from '@ant-design/icons'
 import { Typography } from 'antd'
 
-export const AppHeader = () => {
+export const AppHeader = ({ collapsed }) => {
     const { Header } = Layout
     const signOut = useSignOut()
     const navigate = useNavigate()
@@ -57,7 +57,7 @@ export const AppHeader = () => {
             style={{
                 position: 'sticky',
                 top: 0,
-                marginLeft: 260,
+                marginLeft: collapsed ? '80px' : '260px',
                 zIndex: 1,
                 display: 'flex',
                 alignItems: 'center',

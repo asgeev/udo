@@ -14,4 +14,14 @@ WP_Instance.interceptors.request.use(function (config) {
     return config
 })
 
+WP_Instance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response.status === 403) {
+            localStorage.clear()
+            window.location.replace('/login')
+        }
+    }
+)
+
 export default WP_Instance

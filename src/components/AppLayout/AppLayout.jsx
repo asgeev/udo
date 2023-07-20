@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Outlet, useLocation, NavLink } from 'react-router-dom'
 import { Breadcrumb, Layout } from 'antd'
 import { StyledLayout } from './AppLayout.styles'
@@ -13,6 +14,7 @@ const breadcrumbNameMap = {
 
 export const AppLayout = () => {
     const { Content } = Layout
+    const [collapsed, setCollapsed] = useState(false)
 
     //Code from https://ant.design/components/breadcrumb
     //Section react-router V6
@@ -43,13 +45,16 @@ export const AppLayout = () => {
     return (
         <>
             <StyledLayout>
-                <AppAsideMenu />
+                <AppAsideMenu
+                    collapsed={collapsed}
+                    setCollapsed={setCollapsed}
+                />
                 <Layout>
-                    <AppHeader />
+                    <AppHeader collapsed={collapsed} />
                     <Layout
                         style={{
                             padding: '0 24px  24px',
-                            marginLeft: 260,
+                            marginLeft: collapsed ? '80px' : '260px',
                             backgroundColor: '#F1F1F1',
                         }}
                     >

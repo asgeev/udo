@@ -5,7 +5,7 @@ export const LogoContainer = styled.div`
     height: 64px;
     display: flex;
     align-items: center;
-    padding-left: 36px;
+    padding-left: 28px;
     color: white;
     gap: 10px;
 

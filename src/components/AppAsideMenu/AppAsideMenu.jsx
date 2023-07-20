@@ -21,7 +21,7 @@ const menuItems = [
     },
 ]
 
-export const AppAsideMenu = () => {
+export const AppAsideMenu = ({ collapsed, setCollapsed }) => {
     const navigate = useNavigate()
     const location = useLocation()
     const [current, setCurrent] = useState(location.pathname)
@@ -40,31 +40,37 @@ export const AppAsideMenu = () => {
     return (
         <Sider
             width={260}
+            collapsible
+            collapsed={collapsed}
+            onCollapse={(value) => setCollapsed(value)}
             style={{
-                background: '#001529',
                 height: '100vh',
                 position: 'fixed',
-                left: 0,
-                bottom: 0,
             }}
         >
             <LogoContainer>
                 <a href="/">
                     <img src={logoUDO} />
                 </a>
-                <Text
-                    type="secondary"
-                    style={{
-                        color: 'white',
-                        fontSize: '1.8rem',
-                        fontFamily: 'Lexend Peta, sans-serif',
-                    }}
-                >
-                    UDO
-                </Text>
-                <Tag color="blue">
-                    <strong>BETA</strong>
-                </Tag>
+                {!collapsed && (
+                    <>
+                        <Text
+                            type="secondary"
+                            style={{
+                                color: 'white',
+                                fontSize: '1.8rem',
+                                fontFamily: 'Lexend Peta, sans-serif',
+                                transition: 'visible 2s ease-in-out',
+                                whiteSpace: 'nowrap',
+                            }}
+                        >
+                            UDO
+                        </Text>
+                        <Tag color="blue">
+                            <strong>BETA</strong>
+                        </Tag>
+                    </>
+                )}
             </LogoContainer>
             <Menu
                 mode="inline"
@@ -72,8 +78,8 @@ export const AppAsideMenu = () => {
                 selectedKeys={[current]}
                 theme="dark"
                 style={{
-                    height: '100%',
                     padding: '10px',
+                    height: '100%',
                 }}
                 items={menuItems}
             />
