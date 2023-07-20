@@ -35,12 +35,11 @@ export const Login = () => {
             signIn({
                 token: res.data.token,
                 tokenType: 'Bearer',
-                expiresIn: 3600,
+                expiresIn: 8,
                 authState: res.data,
             })
         ) {
             navigate('/')
-            // Only if you are using refreshToken feature
         } else {
             messageApi.error(
                 'Ups! Wystąpił błąd logowania, spróbuj ponownie później!'
@@ -64,15 +63,23 @@ export const Login = () => {
             .catch((error) => {
                 console.error(error)
                 setLoading(false)
-                messageApi.error(
-                    'Ups! Wystąpił błąd logowania, spróbuj ponownie później!'
-                )
+                if (error.response.status === 403) {
+                    messageApi.error(
+                        'Nieprawidłowy login lub hasło. Spróbuj ponownie.',
+                        8
+                    )
+                } else {
+                    messageApi.error(
+                        'Ups! Wystąpił błąd logowania, spróbuj ponownie później!',
+                        8
+                    )
+                }
             })
     }
 
     const onSubmitError = (errorInfo) => {
         if (!errorInfo?.values?.username || !errorInfo?.values?.password) {
-            messageApi.info('Podaj nazwę użytkownika i hasło')
+            messageApi.warning('Podaj nazwę użytkownika i hasło')
         }
     }
 
@@ -92,7 +99,6 @@ export const Login = () => {
                                 Zaloguj się domenowo aby korzystać z aplikacji.
                             </Text>
                         </TextContainer>
-
                         <Form
                             name="loginForm"
                             layout="vertical"
@@ -105,7 +111,7 @@ export const Login = () => {
                             autoComplete="on"
                         >
                             <Form.Item
-                                label="Login"
+                                label="Nazwa użytkownika lub E-mail"
                                 name="username"
                                 rules={[
                                     {
@@ -115,7 +121,7 @@ export const Login = () => {
                                     },
                                 ]}
                             >
-                                <Input />
+                                <Input placeholder="" />
                             </Form.Item>
 
                             <Form.Item
