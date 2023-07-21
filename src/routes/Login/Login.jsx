@@ -63,7 +63,7 @@ export const Login = () => {
             .catch((error) => {
                 console.error(error)
                 setLoading(false)
-                if (error.response.status === 403) {
+                if (error.response?.status === 403) {
                     messageApi.error(
                         'Nieprawidłowy login lub hasło. Spróbuj ponownie.',
                         8
