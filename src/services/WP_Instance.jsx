@@ -15,12 +15,19 @@ WP_Instance.interceptors.request.use(function (config) {
 })
 
 WP_Instance.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        if (error.response.status === 403) {
+    function (response) {
+        // Any status code that lie within the range of 2xx cause this function to trigger
+        // Do something with response data
+        return response
+    },
+    function (error) {
+        // Any status codes that falls outside the range of 2xx cause this function to trigger
+        // Do something with response error
+        if (error?.response?.status === 403) {
             localStorage.clear()
             window.location.replace('/login')
         }
+        return Promise.reject(error)
     }
 )
 
