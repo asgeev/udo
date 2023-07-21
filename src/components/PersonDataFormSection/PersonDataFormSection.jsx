@@ -24,34 +24,34 @@ export const PersonDataFormSection = () => {
                 name="pesel"
                 validateTrigger={['onBlur', 'onChange']}
                 hasFeedback
-                rules={[
-                    () => ({
-                        validator(_, pesel) {
-                            if (pesel?.length < 12) {
-                                return Promise.resolve()
-                            }
-                            return Promise.reject(
-                                new Error(
-                                    'Uwaga pesel zawiera więcej niż 11 znaków'
-                                )
-                            )
-                        },
-                    }),
-                    () => ({
-                        validator(_, pesel) {
-                            if (
-                                !pesel ||
-                                validatePesel(pesel) ||
-                                pesel?.length > 11
-                            ) {
-                                return Promise.resolve()
-                            }
-                            return Promise.reject(
-                                new Error('Błędny numer pesel')
-                            )
-                        },
-                    }),
-                ]}
+                rules={
+                    [
+                        // {
+                        //     validator(_, pesel) {
+                        //         if (pesel?.length < 12) {
+                        //             return Promise.resolve()
+                        //         }
+                        //         return Promise.reject(
+                        //             'Uwaga pesel zawiera więcej niż 11 znaków'
+                        //         )
+                        //     },
+                        // },
+                        // {
+                        //     validator(_, pesel) {
+                        //         if (
+                        //             !pesel ||
+                        //             validatePesel(pesel) ||
+                        //             pesel?.length > 11
+                        //         ) {
+                        //             return Promise.resolve()
+                        //         }
+                        //         return Promise.reject(
+                        //             new Error('Błędny numer pesel')
+                        //         )
+                        //     },
+                        // },
+                    ]
+                }
             >
                 <Input placeholder="pesel" style={{ maxWidth: 200 }} />
             </Form.Item>
