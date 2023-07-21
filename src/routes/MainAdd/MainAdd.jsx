@@ -51,6 +51,7 @@ export const MainAdd = () => {
             form.resetFields()
             instance.destroy()
             window.scrollTo({ top: '0', behavior: 'smooth' })
+            setFormDisabled(false)
         }
         const instance = modal.confirm({
             title: (
@@ -95,13 +96,12 @@ export const MainAdd = () => {
             .then((response) => {
                 console.log(response)
                 setLoading(false)
-                // setStepsItems(response?.data)
                 showSuccesModal(response?.data)
             })
             .catch((error) => {
                 setLoading(false)
                 setFormDisabled(false)
-                messageApi.error(error.resp.message, 6, () =>
+                messageApi.error(error?.resp?.message, 6, () =>
                     setFormDisabled(false)
                 )
 
