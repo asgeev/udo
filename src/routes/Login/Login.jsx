@@ -39,7 +39,7 @@ export const Login = () => {
                 authState: res.data,
             })
         ) {
-            navigate('/')
+            navigate('/dodawanie')
         } else {
             messageApi.error(
                 'Ups! Wystąpił błąd logowania, spróbuj ponownie później!'
