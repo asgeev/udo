@@ -24,7 +24,6 @@ export const PersonDataFormSection = () => {
                 name="pesel"
                 validateTrigger={['onBlur', 'onChange']}
                 hasFeedback
-                required
                 rules={[
                     () => ({
                         validator(_, pesel) {
