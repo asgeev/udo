@@ -3,7 +3,6 @@ import { useState } from 'react'
 import WP_Instance from '../../services/WP_Instance'
 import { AddForm } from '../../components/AddForm/AddForm'
 import { PageTitleHeader } from '../../components/PageTitleHeader/PageTitleHeader'
-import { useTheme } from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { ModalStepsView } from '../../components/ModalStepsView/ModalStepsView'
 
@@ -37,7 +36,6 @@ const stepsItemsTemplate = [
 
 export const MainAdd = () => {
     const { Title } = Typography
-    const { colors } = useTheme()
     const [messageApi, messageContextHolder] = message.useMessage()
     const [loading, setLoading] = useState(false)
     // const [stepsItems, setStepsItems] = useState()
@@ -140,7 +138,6 @@ export const MainAdd = () => {
                     showIcon
                 />
             )}
-            {}
             <PageTitleHeader title="Zarejestruj zapytanie" />
             <AddForm
                 onSubmit={onSubmit}
