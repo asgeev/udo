@@ -1,10 +1,12 @@
-import { Form, Button, Col, Row, Divider } from 'antd'
+import { Form, Button, Col, Row, Divider, Spin, Space } from 'antd'
 import { InflowFormSection } from '../InflowFromSection/InflowFormSection'
 import { PersonDataFormSection } from '../PersonDataFormSection/PersonDataFormSection'
 import { CompanyDataFormSection } from '../CompanyDataFormSection/CompanyDataFormSection'
 import { ReplyTemplateFormSection } from '../ReplyTemplateFormSection/ReplyTemplateFormSection'
 import { EzdDataFormSection } from '../EzdDataFormSection/EzdDataFormSection'
 import { AdditionalInfoFormSection } from '../AdditionalInfoFormSection/AdditionalInfoFormSection'
+import { LoadingOutlined } from '@ant-design/icons'
+
 import styled from 'styled-components'
 
 const GridWrapper = styled.div`
@@ -14,6 +16,15 @@ const GridWrapper = styled.div`
     border-radius: 10px;
     padding-top: 24px;
 `
+
+const antIcon = (
+    <LoadingOutlined
+        style={{
+            fontSize: 24,
+        }}
+        spin
+    />
+)
 
 export const AddForm = ({
     onSubmit,
@@ -55,13 +66,16 @@ export const AddForm = ({
                 <Row style={{ marginTop: 50 }} justify="end">
                     <Col>
                         <Form.Item>
-                            <Button
-                                type="primary"
-                                loading={loading}
-                                htmlType="submit"
-                            >
-                                Zapisz szablon
-                            </Button>
+                            <Space>
+                                {loading && <Spin indicator={antIcon} />}
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    size="large"
+                                >
+                                    Zapisz szablon
+                                </Button>
+                            </Space>
                         </Form.Item>
                     </Col>
                 </Row>
