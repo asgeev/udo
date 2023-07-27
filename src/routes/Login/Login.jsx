@@ -35,7 +35,7 @@ export const Login = () => {
             signIn({
                 token: res?.data?.token,
                 tokenType: 'Bearer',
-                expiresIn: res?.data?.expiredIn,
+                expiresIn: res?.data?.expiredIn ? res?.data?.expiresIn : 480,
                 authState: res.data,
             })
         ) {

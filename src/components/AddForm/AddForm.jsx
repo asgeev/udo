@@ -1,5 +1,5 @@
 import { Form, Button, Col, Row, Divider, Spin, Space } from 'antd'
-import { InflowFormSection } from '../InflowFromSection/InflowFormSection'
+import { InflowFormSection } from '../InflowFormSection/InflowFormSection'
 import { PersonDataFormSection } from '../PersonDataFormSection/PersonDataFormSection'
 import { CompanyDataFormSection } from '../CompanyDataFormSection/CompanyDataFormSection'
 import { ReplyTemplateFormSection } from '../ReplyTemplateFormSection/ReplyTemplateFormSection'
