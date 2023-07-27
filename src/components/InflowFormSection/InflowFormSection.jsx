@@ -2,7 +2,7 @@ import { FormSection } from '../FormSection/FormSection'
 import { Space, Form, Input, DatePicker } from 'antd'
 import { useTheme } from 'styled-components'
 
-const rpwRegex = '^RPW/\\d\\d\\d\\d\\d\\d/\\d\\d\\d\\d$'
+const rpwRegex = '^RPW/'
 const isFieldValid = new RegExp(rpwRegex, 'i')
 
 export const InflowFormSection = () => {
