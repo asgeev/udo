@@ -19,6 +19,11 @@ const menuItems = [
         icon: <FileAddOutlined />,
         label: 'Dodawanie',
     },
+    {
+        key: '/podglad',
+        icon: <FileAddOutlined />,
+        label: 'Podgląd',
+    },
 ]
 
 export const AppAsideMenu = ({ collapsed, setCollapsed }) => {

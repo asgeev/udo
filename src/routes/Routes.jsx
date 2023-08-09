@@ -11,6 +11,7 @@ import { PageNotFound } from './PageNotFound/PageNotFound'
 import { useIsAuthenticated } from 'react-auth-kit'
 import { Home } from './Home/Home'
 import { MainAdd } from './MainAdd/MainAdd'
+import { RecordsView } from './RecordsView/recordsView'
 
 //Walkaround for update a component while rendering a different component error <PrivateRoute>
 //https://github.com/react-auth-kit/react-auth-kit/issues/1193
@@ -30,7 +31,8 @@ const router = createBrowserRouter(
                 element={<PrivateRoute Component={AppLayout}></PrivateRoute>}
             >
                 <Route index element={<Home />} />
-                <Route exact path="dodawanie" element={<MainAdd />}></Route>
+                <Route path="dodawanie" element={<MainAdd />}></Route>
+                <Route path="podglad" element={<RecordsView />}></Route>
             </Route>
             <Route path="*" element={<PageNotFound />} />
         </>
