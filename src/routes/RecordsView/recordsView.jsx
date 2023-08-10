@@ -1,4 +1,4 @@
-import { Table, Space, Tag, Button } from 'antd'
+import { Table, Space, Tag, Button, Tooltip } from 'antd'
 import {
     CheckCircleOutlined,
     SyncOutlined,
@@ -14,7 +14,7 @@ import { TableRowDescription } from '../../components/TableRowDescription/TableR
 const ShowTableStatusTags = ({ finished_status = 0 }) => {
     return (
         <Space>
-            {finished_status && finished_status ? (
+            {finished_status ? (
                 <Tag icon={<CheckCircleOutlined />} color="success">
                     zakończono
                 </Tag>
@@ -23,20 +23,29 @@ const ShowTableStatusTags = ({ finished_status = 0 }) => {
                     w trakcie
                 </Tag>
             )}
-            <Tag icon={<CheckCircleOutlined />} color="warning">
-                Ważne
-            </Tag>
+            <Tag color="red">pilne</Tag>
         </Space>
     )
 }
 
-export const ShowActionButtons = ({}) => {
+export const TableActionButtons = () => {
     return (
         <Space>
-            <Button type="primary" icon={<EditOutlined />} />
-
-            <Button>Zakończ</Button>
-            <Button type="primary" danger icon={<DeleteOutlined />} />
+            <Tooltip title="Edytuj" color="blue">
+                <Button
+                    type="text"
+                    icon={<EditOutlined />}
+                    onClick={() => console.log('Clicked edit button')}
+                />
+            </Tooltip>
+            <Tooltip title="Usuń" color="red">
+                <Button
+                    type="text"
+                    danger
+                    icon={<DeleteOutlined />}
+                    onClick={() => console.log('Clicked delete button')}
+                />
+            </Tooltip>
         </Space>
     )
 }
@@ -63,9 +72,9 @@ const columns = [
         key: 'last_name',
     },
     {
-        title: 'Nr sprawy',
-        dataIndex: 'nr_sprawy',
-        key: 'nr_sprawy',
+        title: 'RPW',
+        dataIndex: 'rpw',
+        key: 'rpw',
     },
     {
         title: 'Status',
@@ -77,7 +86,7 @@ const columns = [
         title: 'Akcja',
         dataIndex: 'action',
         key: 'action',
-        render: (_, record) => <ShowActionButtons />,
+        render: (_, record) => <TableActionButtons />,
     },
 ]
 
