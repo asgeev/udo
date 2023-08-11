@@ -1,92 +1,21 @@
 import { useEffect, useState } from 'react'
 import { FormSection } from '../FormSection/FormSection'
-import { Form, AutoComplete, Space, Input, Alert } from 'antd'
+import { Form, AutoComplete, Space, Input, Alert, Select } from 'antd'
 import WP_Instance from '../../services/WP_Instance'
 import { createCompanyDataOptions } from '../../helpers/createCompanyDataOptions'
 import { useTheme } from 'styled-components'
+import { createCompanyTypeIdOptions } from '../../helpers/createCompanyTypeIdOptions'
 
-const company = [
-    {
-        id: '1',
-        name: 'Bank pocztowy 2',
-        street: 'pocztowa',
-        house: '20',
-        apartment: '256',
-        postcode: '20-300',
-        city: 'Łódź',
-        company_type_id: '1',
-    },
-    {
-        id: '2',
-        name: 'afsasfasfmgm',
-        street: 'afs',
-        house: 'af',
-        apartment: 'a',
-        postcode: 'fa',
-        city: 'asf',
-        company_type_id: '2',
-    },
-    {
-        id: '3',
-        name: 'afs',
-        street: 'afs',
-        house: 'af',
-        apartment: 'a',
-        postcode: 'fa',
-        city: 'asf',
-        company_type_id: '2',
-    },
-    {
-        id: '4',
-        name: 'podmiot2',
-        street: 'af',
-        house: 'af',
-        apartment: null,
-        postcode: 'af',
-        city: 'af',
-        company_type_id: '2',
-    },
-    {
-        id: '5',
-        name: 'podmiot2',
-        street: 'asfafs',
-        house: 'sgd',
-        apartment: null,
-        postcode: 'sdg',
-        city: 'sgd',
-        company_type_id: '2',
-    },
-    {
-        id: '6',
-        name: 'asf',
-        street: 'afs',
-        house: 'asf',
-        apartment: null,
-        postcode: 'afs',
-        city: 'asf',
-        company_type_id: '1',
-    },
-    {
-        id: '7',
-        name: 'asf',
-        street: 'afs',
-        house: 'asf',
-        apartment: null,
-        postcode: 'afs',
-        city: 'asf',
-        company_type_id: '1',
-    },
-]
-
-export const CompanyDataFormSection = () => {
+export const CompanyDataFormSection = ({ setError }) => {
     const { colors } = useTheme()
     const form = Form.useFormInstance()
     const [companyData, setCompanyData] = useState(null)
     const [searchQuery, setSearchQuery] = useState('')
-    const [selectedCompany, setSeclectedCompany] = useState(null)
+    const [selectedRequestor, setSeclectedRequestor] = useState(null)
+    const [companyTypesItems, setCompanyTypesItems] = useState([])
 
     const handleSetSelectedCompany = (value, options) => {
-        setSeclectedCompany(options)
+        setSeclectedRequestor(options)
     }
 
     const handleSetCompanyData = (data) => {
@@ -97,17 +26,20 @@ export const CompanyDataFormSection = () => {
     }
 
     useEffect(() => {
-        form.setFieldValue('company_id', selectedCompany?.id)
-        form.setFieldValue('company_street', selectedCompany?.street)
-        form.setFieldValue('company_house', selectedCompany?.house)
-        form.setFieldValue('company_apartment', selectedCompany?.apartment)
-        form.setFieldValue('company_postcode', selectedCompany?.postcode)
-        form.setFieldValue('company_city', selectedCompany?.city)
-        form.setFieldValue('company_type_id', selectedCompany?.company_type_id)
-    }, [selectedCompany])
+        form.setFieldValue('requestor_id', selectedRequestor?.id)
+        form.setFieldValue('requestor_street', selectedRequestor?.street)
+        form.setFieldValue('requestor_house', selectedRequestor?.house)
+        form.setFieldValue('requestor_apartment', selectedRequestor?.apartment)
+        form.setFieldValue('requestor_postcode', selectedRequestor?.postcode)
+        form.setFieldValue('requestor_city', selectedRequestor?.city)
+        form.setFieldValue(
+            'requestor_type_id',
+            selectedRequestor?.requestor_type_id
+        )
+    }, [selectedRequestor])
 
     useEffect(() => {
-        WP_Instance.get(`/udo/v1/getCompanyList?company_name=${searchQuery}`)
+        WP_Instance.get(`/udo/v1/getRequestorList?company_name=${searchQuery}`)
             .then((response) => {
                 handleSetCompanyData(response?.data)
             })
@@ -115,6 +47,17 @@ export const CompanyDataFormSection = () => {
                 console.error(error)
             })
     }, [searchQuery])
+
+    useEffect(() => {
+        WP_Instance.get(`/udo/v1/getRequestorTypesList`)
+            .then((response) => {
+                setCompanyTypesItems(response?.data)
+            })
+            .catch((error) => {
+                console.error(error)
+                setError(true)
+            })
+    }, [])
 
     return (
         <FormSection
@@ -133,8 +76,8 @@ export const CompanyDataFormSection = () => {
                 style={{ marginBottom: 10 }}
             />
             <Form.Item
-                label="Nazwa podmiotu"
-                name="company_name"
+                label="Nazwa wnioskodawcy"
+                name="requestor_name"
                 rules={[
                     {
                         type: 'string',
@@ -145,7 +88,7 @@ export const CompanyDataFormSection = () => {
             >
                 <AutoComplete
                     options={createCompanyDataOptions(companyData)}
-                    notFoundContent="☹️  Przykro nam ale nie znaleźliśmy żadnego podmiotu"
+                    notFoundContent={' ☹️ Brak wyników dla wyszukiwanej frazy'}
                     onSelect={handleSetSelectedCompany}
                     onSearch={handleOnSearch}
                     placeholder="wyszukaj lub wprowadź nazwę podmiotu"
@@ -157,11 +100,15 @@ export const CompanyDataFormSection = () => {
                     }
                 />
             </Form.Item>
-            <Form.Item label="Adres wnioskodawcy" required>
-                <Space direction="vertical" style={{ rowGap: 0 }}>
-                    <Space direction="horizontal">
+            <Form.Item
+                label="Adres wnioskodawcy"
+                required
+                style={{ marginBottom: 0 }}
+            >
+                <Space wrap style={{ rowGap: 0 }}>
+                    <Space wrap style={{ rowGap: 0 }}>
                         <Form.Item
-                            name="company_street"
+                            name="requestor_street"
                             rules={[
                                 {
                                     type: 'string',
@@ -173,7 +120,7 @@ export const CompanyDataFormSection = () => {
                             <Input placeholder="ulica" style={{ width: 250 }} />
                         </Form.Item>
                         <Form.Item
-                            name="company_house"
+                            name="requestor_house"
                             rules={[
                                 {
                                     type: 'string',
@@ -187,16 +134,16 @@ export const CompanyDataFormSection = () => {
                                 style={{ width: 120 }}
                             />
                         </Form.Item>
-                        <Form.Item name="company_apartment">
+                        <Form.Item name="requestor_apartment">
                             <Input
                                 placeholder="nr mieszkania"
                                 style={{ maxWidth: 120 }}
                             />
                         </Form.Item>
                     </Space>
-                    <Space>
+                    <Space wrap style={{ rowGap: 0 }}>
                         <Form.Item
-                            name="company_postcode"
+                            name="requestor_postcode"
                             rules={[
                                 {
                                     type: 'string',
@@ -208,7 +155,7 @@ export const CompanyDataFormSection = () => {
                             <Input placeholder="kod pocztowy" />
                         </Form.Item>
                         <Form.Item
-                            name="company_city"
+                            name="requestor_city"
                             rules={[
                                 {
                                     type: 'string',
@@ -221,6 +168,29 @@ export const CompanyDataFormSection = () => {
                         </Form.Item>
                     </Space>
                 </Space>
+            </Form.Item>
+            <Form.Item
+                name="requestor_type_id"
+                label="Typ wnioskodawcy"
+                rules={[
+                    {
+                        type: 'string',
+                        required: true,
+                        message: 'Wybierz typ wnioskodawcy',
+                    },
+                ]}
+            >
+                <Select
+                    showSearch
+                    placeholder="typ wnioskodawcy"
+                    optionLabelProp="label"
+                    filterOption={(input, option) =>
+                        (option?.label ?? '')
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                    }
+                    options={createCompanyTypeIdOptions(companyTypesItems)}
+                />
             </Form.Item>
         </FormSection>
     )

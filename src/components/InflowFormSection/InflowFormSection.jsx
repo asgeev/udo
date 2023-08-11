@@ -1,57 +1,97 @@
 import { FormSection } from '../FormSection/FormSection'
-import { Space, Form, Input, DatePicker } from 'antd'
-import { useTheme } from 'styled-components'
+import { Space, Form, Input, DatePicker, Select, Button, Tooltip } from 'antd'
+import { SyncOutlined } from '@ant-design/icons'
 
 const rpwRegex = '^RPW/'
 const isFieldValid = new RegExp(rpwRegex, 'i')
 
+const inflowTypeOptions = [
+    { value: 'epuap', label: 'epuap' },
+    { value: 'poczta', lable: 'poczta' },
+    { value: 'e-mail', label: 'e-mail' },
+]
+
 export const InflowFormSection = () => {
-    const { colors } = useTheme()
     return (
         <FormSection
-            backgroundColor={colors.color_card_5}
             sectionName="Dane wpływu"
             subTitle="Wprowadź dane dotyczące sprawy"
         >
-            <Space>
-                <Form.Item
-                    label="RPW"
-                    name="rpw"
-                    hasFeedback
-                    validateTrigger={['onBlur', 'onChange']}
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Podaj numer RPW',
-                        },
-                        () => ({
-                            validator(_, rpw) {
-                                if (!rpw || isFieldValid.test(rpw)) {
-                                    return Promise.resolve()
-                                }
-                                return Promise.reject(
-                                    new Error('Błędny numer RPW')
-                                )
+            <Space direction="vertical">
+                <Space wrap>
+                    <Form.Item
+                        label="RPW"
+                        name="rpw"
+                        hasFeedback
+                        validateTrigger={['onBlur', 'onChange']}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Podaj numer RPW',
                             },
-                        }),
-                    ]}
-                >
-                    <Input placeholder="numer RPW z EZD" />
-                </Form.Item>
-
-                <Form.Item
-                    label="Data wpływu"
-                    name="inflow_date"
-                    rules={[
-                        {
-                            type: 'date',
-                            required: true,
-                            message: 'Podaj datę wpływu',
-                        },
-                    ]}
-                >
-                    <DatePicker placeholder="data wpływu" />
-                </Form.Item>
+                            () => ({
+                                validator(_, rpw) {
+                                    if (!rpw || isFieldValid.test(rpw)) {
+                                        return Promise.resolve()
+                                    }
+                                    return Promise.reject(
+                                        new Error('Błędny numer RPW')
+                                    )
+                                },
+                            }),
+                        ]}
+                    >
+                        <Input placeholder="numer RPW z EZD" />
+                    </Form.Item>
+                    <Form.Item
+                        name="id_koszulki"
+                        label="Id koszulki"
+                        rules={[
+                            { required: true, message: 'Podaj numer koszulki' },
+                        ]}
+                    >
+                        <Space>
+                            <Input placeholder="id koszulki" />
+                            <Tooltip title="Synchronizuj z EZD">
+                                <Button
+                                    disabled
+                                    type="primary"
+                                    icon={<SyncOutlined />}
+                                />
+                            </Tooltip>
+                        </Space>
+                    </Form.Item>
+                </Space>
+                <Space>
+                    <Form.Item
+                        label="Data wpływu"
+                        name="inflow_date"
+                        rules={[
+                            {
+                                type: 'date',
+                                required: true,
+                                message: 'Podaj datę wpływu',
+                            },
+                        ]}
+                    >
+                        <DatePicker placeholder="data wpływu" />
+                    </Form.Item>
+                </Space>
+                <Space>
+                    <Form.Item name="inflow_type" label="Sposób dostarczenia">
+                        <Select
+                            placeholder="sposób dostarczenia"
+                            options={inflowTypeOptions}
+                            allowClear
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        name="requestor_act_signature"
+                        label="Sygnatura akt"
+                    >
+                        <Input placeholder="sygnatura akt" />
+                    </Form.Item>
+                </Space>
             </Space>
         </FormSection>
     )
