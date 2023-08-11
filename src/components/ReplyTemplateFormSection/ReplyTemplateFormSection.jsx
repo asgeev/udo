@@ -1,80 +1,43 @@
-import { useState, useEffect } from 'react'
 import { FormSection } from '../FormSection/FormSection'
-import { Form, Row, Col, Select, Input } from 'antd'
-import WP_Instance from '../../services/WP_Instance'
-import { createCompanyTypeIdOptions } from '../../helpers/createCompanyTypeIdOptions'
+import { Alert } from 'antd'
+import { FullCheckboxForm } from '../FullCheckboxForm/FullCheckboxForm'
 
 export const ReplyTemplateFormSection = ({ setError }) => {
-    const { TextArea } = Input
-    const [companyTypesItems, setCompanyTypesItems] = useState([])
-
-    useEffect(() => {
-        WP_Instance.get(`/udo/v1/getCompanyTypesList`)
-            .then((response) => {
-                setCompanyTypesItems(response?.data)
-            })
-            .catch((error) => {
-                console.error(error)
-                setError(true)
-            })
-    }, [])
-
     return (
         <FormSection sectionName="Dane szablonu odpowiedzi">
-            <Row gutter={[8, 0]}>
-                <Col span={12}>
-                    <Form.Item
-                        name="company_type_id"
-                        label="Podstawa prawna dla"
-                        rules={[
-                            {
-                                type: 'string',
-                                required: true,
-                                message: 'Wybierz podstawę prawną odpowiedzi',
-                            },
-                        ]}
-                    >
-                        <Select
-                            showSearch
-                            showArrow
-                            placeholder="podstawa prawna dla"
-                            optionLabelProp="label"
-                            filterOption={(input, option) =>
-                                (option?.label ?? '')
-                                    .toLowerCase()
-                                    .includes(input.toLowerCase())
-                            }
-                            options={createCompanyTypeIdOptions(
-                                companyTypesItems
-                            )}
-                        />
-                    </Form.Item>
-                </Col>
-                <Col span={12}>
-                    <Form.Item
-                        name="requestor_act_signature"
-                        label="Sygnatura akt"
-                    >
-                        <Input placeholder="sygnatura akt" />
-                    </Form.Item>
-                </Col>
-            </Row>
-            <Form.Item
-                label="Cel udostępnienia"
-                name="reason_of_request"
-                rules={[
-                    {
-                        type: 'string',
-                        required: true,
-                        message: 'cel udostępnienia',
-                    },
-                ]}
-            >
+            {/* <Form.Item label="Cel udostępnienia" name="reason_of_request">
                 <Input placeholder="wpisz cel udostępnienia" />
-            </Form.Item>
-            <Form.Item name="template_main_text" label="Odpowiedź">
-                <TextArea></TextArea>
-            </Form.Item>
+            </Form.Item> */}
+            <Alert
+                showIcon
+                message="Dane z wybranego poniżej systemu będziesz mógł/mogła wykorzystać przy tworzeniu odpowiedzi."
+                type="info"
+                closeIcon
+                style={{ marginBottom: 24 }}
+            />
+            <FullCheckboxForm
+                name="CWU"
+                checkboxName="Centralny Wykaz Ubezpieczonych"
+                description="dane adresowe, status ubezpeczenia, karta ekuz"
+            />
+            <FullCheckboxForm
+                disabled
+                name="KPL"
+                checkboxName="Koszt Leczenia Pacjenta"
+                description="informacje medyczne, szczegółowe informacje dotyczące udzielonych świadczeń"
+            />
+            <FullCheckboxForm
+                disabled
+                name="SOFU"
+                checkboxName="System obsługi Formularzy Unijnych"
+                description="świadczenia zdrowotne w czasie tymczasowego pobytu na terenie inneg państwa UE/EFTA"
+            />
+            <FullCheckboxForm
+                disabled
+                name="BO"
+                checkboxName="Bussines Objects"
+                description="weryfikacja realizacji recept na leki wszystkie lub zaliczane do grupy N (kwalifikacja ATC)"
+            />
         </FormSection>
     )
 }

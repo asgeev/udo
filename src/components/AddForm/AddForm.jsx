@@ -54,7 +54,7 @@ export const AddForm = ({
                     <Divider />
                     <PersonDataFormSection />
                     <Divider />
-                    <CompanyDataFormSection />
+                    <CompanyDataFormSection setError={setError} />
                     <Divider />
                     <ReplyTemplateFormSection setError={setError} />
                     <Divider />
