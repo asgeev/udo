@@ -16,23 +16,16 @@ export const TableRowDescription = ({ data }) => {
         {
             key: '3',
             label: 'Nazwa podmiotu',
-            span: 1,
+            span: 3,
             children: data?.company_name,
         },
         {
             key: '4',
             label: 'Adres',
-            span: 2,
+            // span: 2,
             children: `${data?.company_street} ${data?.company_house} / ${data?.company_apartment} ______ ${data?.company_postcode} ${data?.company_city}`,
         },
     ]
 
-    return (
-        <Descriptions
-            layout="vertical"
-            size="small"
-            style={{ marginLeft: 48 }}
-            items={items}
-        />
-    )
+    return <Descriptions bordered style={{ marginLeft: 48 }} items={items} />
 }
