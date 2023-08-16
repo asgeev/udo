@@ -4,12 +4,14 @@ import {
     SyncOutlined,
     EditOutlined,
     DeleteOutlined,
+    CloudDownloadOutlined,
 } from '@ant-design/icons'
+import WP_Instance from '../../services/WP_Instance'
 import { PageTitleHeader } from '../../components/PageTitleHeader/PageTitleHeader'
 import { useState, useEffect } from 'react'
-import WP_Instance from '../../services/WP_Instance'
 import { newDataTableWithKey } from '../../helpers/newDataTableWithKey'
 import { TableRowDescription } from '../../components/TableRowDescription/TableRowDescription'
+import { downloadFile } from '../../helpers/downloadFile'
 
 const ShowTableStatusTags = ({ finished_status = 0 }) => {
     return (
@@ -28,7 +30,12 @@ const ShowTableStatusTags = ({ finished_status = 0 }) => {
     )
 }
 
-export const TableActionButtons = () => {
+export const TableActionButtons = ({ id }) => {
+    const handleDownloadFile = (id) => {
+        const filename = `${id} Odpowiedż do wnioskodawcy`
+        downloadFile(id, filename)
+    }
+
     return (
         <Space>
             <Tooltip title="Edytuj" color="blue">
@@ -44,6 +51,14 @@ export const TableActionButtons = () => {
                     danger
                     icon={<DeleteOutlined />}
                     onClick={() => console.log('Clicked delete button')}
+                />
+            </Tooltip>
+            <Tooltip title=".docx">
+                <Button
+                    type="text"
+                    icon={<CloudDownloadOutlined />}
+                    onClick={() => handleDownloadFile(id)}
+                    // href={}
                 />
             </Tooltip>
         </Space>
@@ -86,7 +101,7 @@ const columns = [
         title: 'Akcja',
         dataIndex: 'action',
         key: 'action',
-        render: (_, record) => <TableActionButtons />,
+        render: (_, record) => <TableActionButtons id={record.key} />,
     },
 ]
 
