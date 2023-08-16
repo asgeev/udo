@@ -1,17 +1,8 @@
-import { useEffect, useState } from 'react'
 import { FormSection } from '../FormSection/FormSection'
-import { Alert, Form } from 'antd'
+import { Alert } from 'antd'
 import { FullCheckboxForm } from '../FullCheckboxForm/FullCheckboxForm'
-import { RichTextEditor } from '../RichTextEditor/RichTextEditor'
 
 export const ReplyTemplateFormSection = ({ setError }) => {
-    const [richTextContent, setRichTextContent] = useState('')
-    const form = Form.useFormInstance()
-
-    useEffect(() => {
-        form.setFieldValue('template_main_text', richTextContent)
-    }, [richTextContent])
-
     return (
         <FormSection sectionName="Dane szablonu odpowiedzi">
             {/* <Form.Item label="Cel udostępnienia" name="reason_of_request">
@@ -47,9 +38,6 @@ export const ReplyTemplateFormSection = ({ setError }) => {
                 checkboxName="Bussines Objects"
                 description="weryfikacja realizacji recept na leki wszystkie lub zaliczane do grupy N (kwalifikacja ATC)"
             />
-            <Form.Item name="template_main_text" label="Treść odpowiedzi">
-                <RichTextEditor setRichTextContent={setRichTextContent} />
-            </Form.Item>
         </FormSection>
     )
 }
