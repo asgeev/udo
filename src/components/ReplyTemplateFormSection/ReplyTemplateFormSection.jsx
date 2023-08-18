@@ -1,6 +1,7 @@
 import { FormSection } from '../FormSection/FormSection'
-import { Alert } from 'antd'
+import { Alert, Form } from 'antd'
 import { FullCheckboxForm } from '../FullCheckboxForm/FullCheckboxForm'
+import { RichTextEditor } from '../RichTextEditor/RichTextEditor'
 
 export const ReplyTemplateFormSection = ({ setError }) => {
     return (
@@ -38,6 +39,9 @@ export const ReplyTemplateFormSection = ({ setError }) => {
                 checkboxName="Bussines Objects"
                 description="weryfikacja realizacji recept na leki wszystkie lub zaliczane do grupy N (kwalifikacja ATC)"
             />
+            {/* <Form.Item name="template_main_text" label="Treść odpowiedzi">
+                <RichTextEditor formField="template_main_text" />
+            </Form.Item> */}
         </FormSection>
     )
 }
