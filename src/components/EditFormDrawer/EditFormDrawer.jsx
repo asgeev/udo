@@ -4,7 +4,6 @@ import { EditForm } from '../EditForm/EditForm'
 
 export const EditFormDrawer = ({ recordId, open, onDrawerClose }) => {
     const [secondDrawerOpen, setSecondDrawerOpen] = useState(false)
-    // const formContext = createContext()
 
     const showSecondDrawer = () => {
         setSecondDrawerOpen(true)

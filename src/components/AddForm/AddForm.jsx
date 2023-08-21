@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { Form, Button, Col, Row, Divider, Spin, Space } from 'antd'
 import { InflowFormSection } from '../InflowFormSection/InflowFormSection'
 import { PersonDataFormSection } from '../PersonDataFormSection/PersonDataFormSection'
@@ -37,13 +36,6 @@ export const AddForm = ({
 }) => {
     return (
         <>
-            <Link to="/podglad" state={{ recordId: 1 }}>
-                <Button type="primary">Show record 1</Button>
-            </Link>
-
-            <Link to="/podglad" state={{ id: 2 }}>
-                show record 2
-            </Link>
             <Form
                 form={form}
                 name="mainAddForm"

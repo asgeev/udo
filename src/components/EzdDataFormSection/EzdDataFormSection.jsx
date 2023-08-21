@@ -4,7 +4,7 @@ import { Form, Select, Input } from 'antd'
 import WP_Instance from '../../services/WP_Instance'
 import { createJrwaDataOptions } from '../../helpers/createJrwaDataOptions'
 
-export const EzdDataFormSection = ({ setError }) => {
+export const EzdDataFormSection = ({ setError, editMode }) => {
     const [jrwaData, setJrwaData] = useState([])
 
     useEffect(() => {
@@ -19,7 +19,7 @@ export const EzdDataFormSection = ({ setError }) => {
     }, [])
 
     return (
-        <FormSection sectionName="Dane sprawy w EZD">
+        <FormSection editMode={editMode} sectionName="Dane sprawy w EZD">
             <Form.Item
                 label="JRWA dla sprawy"
                 tooltip="asfasff f faafsffafsasf asfaf af"

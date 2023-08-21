@@ -1,4 +1,4 @@
-import { Typography, Row, Col, Space } from 'antd'
+import { Typography, Row, Col } from 'antd'
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
