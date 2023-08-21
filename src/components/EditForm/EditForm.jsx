@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { Form, Button, Col, Row, Divider, Spin, Space } from 'antd'
 import { InflowFormSection } from '../InflowFormSection/InflowFormSection'
 import { PersonDataFormSection } from '../PersonDataFormSection/PersonDataFormSection'
@@ -6,28 +5,8 @@ import { CompanyDataFormSection } from '../CompanyDataFormSection/CompanyDataFor
 import { ReplyTemplateFormSection } from '../ReplyTemplateFormSection/ReplyTemplateFormSection'
 import { EzdDataFormSection } from '../EzdDataFormSection/EzdDataFormSection'
 import { AdditionalInfoFormSection } from '../AdditionalInfoFormSection/AdditionalInfoFormSection'
-import { LoadingOutlined } from '@ant-design/icons'
 
-import styled from 'styled-components'
-
-const GridWrapper = styled.div`
-    background-color: #fdfdfd;
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
-        rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
-    border-radius: 10px;
-    padding-top: 24px;
-`
-
-const antIcon = (
-    <LoadingOutlined
-        style={{
-            fontSize: 24,
-        }}
-        spin
-    />
-)
-
-export const AddForm = ({
+export const EditForm = ({
     onSubmit,
     onFinishFailed,
     loading,
@@ -37,13 +16,6 @@ export const AddForm = ({
 }) => {
     return (
         <>
-            <Link to="/podglad" state={{ recordId: 1 }}>
-                <Button type="primary">Show record 1</Button>
-            </Link>
-
-            <Link to="/podglad" state={{ id: 2 }}>
-                show record 2
-            </Link>
             <Form
                 form={form}
                 name="mainAddForm"
@@ -57,25 +29,23 @@ export const AddForm = ({
                 // }}
                 layout="vertical"
             >
-                <GridWrapper>
-                    <InflowFormSection />
-                    <Divider />
-                    <PersonDataFormSection />
-                    <Divider />
-                    <CompanyDataFormSection setError={setError} />
-                    <Divider />
-                    <ReplyTemplateFormSection setError={setError} />
-                    <Divider />
-                    <EzdDataFormSection setError={setError} />
-                    <Divider />
-                    <AdditionalInfoFormSection setError={setError} />
-                </GridWrapper>
+                <InflowFormSection editMode />
+                <Divider />
+                <PersonDataFormSection editMode />
+                <Divider />
+                <CompanyDataFormSection editMode setError={setError} />
+                <Divider />
+                <ReplyTemplateFormSection editMode setError={setError} />
+                <Divider />
+                <EzdDataFormSection editMode setError={setError} />
+                <Divider />
+                <AdditionalInfoFormSection editMode setError={setError} />
 
                 <Row style={{ marginTop: 50 }} justify="end">
                     <Col>
                         <Form.Item>
                             <Space>
-                                {loading && <Spin indicator={antIcon} />}
+                                {/* {loading && <Spin indicator={antIcon} />} */}
                                 <Button
                                     type="primary"
                                     htmlType="submit"

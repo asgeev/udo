@@ -21,24 +21,27 @@ const PrivateRoute = ({ Component }) => {
     return auth ? <Component /> : <Navigate to="/login" />
 }
 
-const router = createBrowserRouter(
-    createRoutesFromElements(
-        <>
-            <Route path="login" element={<Login />} />
-
-            <Route
-                path="/"
-                element={<PrivateRoute Component={AppLayout}></PrivateRoute>}
-            >
-                <Route index element={<Home />} />
-                <Route path="dodawanie" element={<MainAdd />}></Route>
-                <Route path="podglad" element={<RecordsView />}></Route>
-            </Route>
-            <Route path="*" element={<PageNotFound />} />
-        </>
-    )
-)
-
 export const RoutesComponent = () => {
+    const router = createBrowserRouter(
+        createRoutesFromElements(
+            <>
+                <Route path="login" element={<Login />} />
+
+                <Route
+                    path="/"
+                    element={
+                        <PrivateRoute Component={AppLayout}></PrivateRoute>
+                    }
+                >
+                    <Route index element={<Home />} />
+                    <Route path="dodawanie" element={<MainAdd />} />
+                    <Route path="podglad" element={<RecordsView />} />
+                    <Route path="podglad/:id" element={<RecordsView />} />
+                </Route>
+
+                <Route path="*" element={<PageNotFound />} />
+            </>
+        )
+    )
     return <RouterProvider router={router} />
 }

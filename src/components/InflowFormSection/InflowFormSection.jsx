@@ -11,9 +11,10 @@ const inflowTypeOptions = [
     { value: 'e-mail', label: 'e-mail' },
 ]
 
-export const InflowFormSection = () => {
+export const InflowFormSection = ({ editMode }) => {
     return (
         <FormSection
+            editMode={editMode}
             sectionName="Dane wpływu"
             subTitle="Wprowadź dane dotyczące sprawy"
         >
