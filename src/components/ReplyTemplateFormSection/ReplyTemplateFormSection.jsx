@@ -3,9 +3,9 @@ import { Alert, Form } from 'antd'
 import { FullCheckboxForm } from '../FullCheckboxForm/FullCheckboxForm'
 import { RichTextEditor } from '../RichTextEditor/RichTextEditor'
 
-export const ReplyTemplateFormSection = ({ setError }) => {
+export const ReplyTemplateFormSection = ({ setError, editMode }) => {
     return (
-        <FormSection sectionName="Dane szablonu odpowiedzi">
+        <FormSection editMode={editMode} sectionName="Dane szablonu odpowiedzi">
             {/* <Form.Item label="Cel udostępnienia" name="reason_of_request">
                 <Input placeholder="wpisz cel udostępnienia" />
             </Form.Item> */}

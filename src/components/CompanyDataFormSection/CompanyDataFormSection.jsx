@@ -6,7 +6,7 @@ import { createCompanyDataOptions } from '../../helpers/createCompanyDataOptions
 import { useTheme } from 'styled-components'
 import { createCompanyTypeIdOptions } from '../../helpers/createCompanyTypeIdOptions'
 
-export const CompanyDataFormSection = ({ setError }) => {
+export const CompanyDataFormSection = ({ setError, editMode }) => {
     const { colors } = useTheme()
     const form = Form.useFormInstance()
     const [companyData, setCompanyData] = useState(null)
@@ -61,6 +61,7 @@ export const CompanyDataFormSection = ({ setError }) => {
 
     return (
         <FormSection
+            editMode={editMode}
             sectionName="Dane wnioskodawcy"
             backgroundColor={colors.color_card_7}
             style={{ gridRow: 2 / 12, gridColumn: 1 }}

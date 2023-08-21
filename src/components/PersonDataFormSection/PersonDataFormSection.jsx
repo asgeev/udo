@@ -3,11 +3,12 @@ import { Form, Input, Row, Col, Space, DatePicker, Alert } from 'antd'
 import { useTheme } from 'styled-components'
 import validatePesel from '../../helpers/validatePesel'
 
-export const PersonDataFormSection = () => {
+export const PersonDataFormSection = ({ editMode }) => {
     const { colors } = useTheme()
 
     return (
         <FormSection
+            editMode={editMode}
             sectionName="Dane osoby"
             backgroundColor={colors.color_card_4}
             subTitle="Wprowadź dane dotyczące osoby której dotyczy zapytanie"

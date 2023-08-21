@@ -2,7 +2,7 @@ import { Form, Button, Col, Row, Divider, Spin, Space } from 'antd'
 import { InflowFormSection } from '../InflowFormSection/InflowFormSection'
 import { PersonDataFormSection } from '../PersonDataFormSection/PersonDataFormSection'
 import { CompanyDataFormSection } from '../CompanyDataFormSection/CompanyDataFormSection'
-import { ReplyTemplateFormSection } from '../ReplyTemplateFormSection/ReplyTemplateFormSection'
+import { ReplyTemplateFormSectionEditMode } from '../ReplyTemplateFormSectionEditMode/ReplyTemplateFormSectionEditMode'
 import { EzdDataFormSection } from '../EzdDataFormSection/EzdDataFormSection'
 import { AdditionalInfoFormSection } from '../AdditionalInfoFormSection/AdditionalInfoFormSection'
 
@@ -18,7 +18,7 @@ export const EditForm = ({
         <>
             <Form
                 form={form}
-                name="mainAddForm"
+                name="mainEditForm"
                 onFinish={onSubmit}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
@@ -35,7 +35,10 @@ export const EditForm = ({
                 <Divider />
                 <CompanyDataFormSection editMode setError={setError} />
                 <Divider />
-                <ReplyTemplateFormSection editMode setError={setError} />
+                <ReplyTemplateFormSectionEditMode
+                    editMode
+                    setError={setError}
+                />
                 <Divider />
                 <EzdDataFormSection editMode setError={setError} />
                 <Divider />
