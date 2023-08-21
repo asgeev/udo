@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Table, Space, Tag, Button, Tooltip } from 'antd'
 import {
     CheckCircleOutlined,
@@ -8,10 +10,10 @@ import {
 } from '@ant-design/icons'
 import WP_Instance from '../../services/WP_Instance'
 import { PageTitleHeader } from '../../components/PageTitleHeader/PageTitleHeader'
-import { useState, useEffect } from 'react'
 import { newDataTableWithKey } from '../../helpers/newDataTableWithKey'
 import { TableRowDescription } from '../../components/TableRowDescription/TableRowDescription'
 import { downloadFile } from '../../helpers/downloadFile'
+import { EditFormDrawer } from '../../components/EditFormDrawer/EditFormDrawer'
 
 const ShowTableStatusTags = ({ finished_status = 0 }) => {
     return (
@@ -111,6 +113,21 @@ export const RecordsView = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
+    const [drawerOpen, setDrawerOpen] = useState(false)
+    let { state } = useLocation()
+    const recordId = state?.recordId
+
+    const showDrawer = () => {
+        setDrawerOpen(true)
+    }
+    const onDrawerClose = () => {
+        setDrawerOpen(false)
+    }
+    useEffect(() => {
+        if (recordId) {
+            showDrawer()
+        }
+    }, [recordId])
 
     useEffect(() => {
         setIsLoading(true)
@@ -131,6 +148,9 @@ export const RecordsView = () => {
 
     return (
         <>
+            <Button type="primary" onClick={showDrawer}>
+                open edit drawer
+            </Button>
             <PageTitleHeader title="Podgląd zapisanych spraw" />
             <Table
                 loading={isLoading}
@@ -154,6 +174,11 @@ export const RecordsView = () => {
                         setPageSize(size)
                     },
                 }}
+            />
+            <EditFormDrawer
+                recordId={recordId}
+                open={drawerOpen}
+                onDrawerClose={onDrawerClose}
             />
         </>
     )
