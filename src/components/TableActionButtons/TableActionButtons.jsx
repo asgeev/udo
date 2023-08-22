@@ -1,9 +1,5 @@
 import { Space, Tooltip, Button } from 'antd'
-import {
-    EditOutlined,
-    DeleteOutlined,
-    CloudDownloadOutlined,
-} from '@ant-design/icons'
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 
 export const TableActionButtons = ({ recordId, showDrawer }) => {
     return (
@@ -23,9 +19,6 @@ export const TableActionButtons = ({ recordId, showDrawer }) => {
                     icon={<DeleteOutlined />}
                     onClick={() => console.log('Clicked delete button')}
                 />
-            </Tooltip>
-            <Tooltip title=".docx">
-                <Button type="text" icon={<CloudDownloadOutlined />} />
             </Tooltip>
         </Space>
     )

@@ -33,10 +33,10 @@ export const RoutesComponent = () => {
                         <PrivateRoute Component={AppLayout}></PrivateRoute>
                     }
                 >
-                    <Route index element={<Home />} />
+                    <Route element={<Home />} />
                     <Route path="dodawanie" element={<MainAdd />} />
                     <Route path="podglad" element={<RecordsView />} />
-                    <Route path="podglad/:id" element={<RecordsView />} />
+                    {/* <Route path="podglad" element={<RecordsView />} /> */}
                 </Route>
 
                 <Route path="*" element={<PageNotFound />} />

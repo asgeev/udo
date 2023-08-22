@@ -6,6 +6,7 @@ import { ReplyTemplateFormSection } from '../ReplyTemplateFormSection/ReplyTempl
 import { EzdDataFormSection } from '../EzdDataFormSection/EzdDataFormSection'
 import { AdditionalInfoFormSection } from '../AdditionalInfoFormSection/AdditionalInfoFormSection'
 import { LoadingOutlined } from '@ant-design/icons'
+import { Link } from 'react-router-dom'
 
 import styled from 'styled-components'
 
@@ -36,6 +37,9 @@ export const AddForm = ({
 }) => {
     return (
         <>
+            <Link to="/podglad" state={{ recordId: 999999 }}>
+                show record 2
+            </Link>
             <Form
                 form={form}
                 name="mainAddForm"
@@ -62,7 +66,6 @@ export const AddForm = ({
                     <Divider />
                     <AdditionalInfoFormSection setError={setError} />
                 </GridWrapper>
-
                 <Row style={{ marginTop: 50 }} justify="end">
                     <Col>
                         <Form.Item>

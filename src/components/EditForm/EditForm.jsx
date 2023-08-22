@@ -14,6 +14,9 @@ export const EditForm = ({
     setError,
     form,
 }) => {
+    onFinishFailed = (a) => {
+        console.log(a)
+    }
     return (
         <>
             <Form
