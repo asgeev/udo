@@ -1,8 +1,8 @@
 import 'antd/dist/reset.css'
 import { AuthProvider } from 'react-auth-kit'
-import { RoutesComponent } from './routes/Routes'
 import { ConfigProvider } from 'antd'
 import { ThemeProvider } from 'styled-components'
+import { Routes } from '@templates/Routes/Routes'
 import { theme } from './theme/theme'
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
         >
             <ConfigProvider>
                 <ThemeProvider theme={theme}>
-                    <RoutesComponent />
+                    <Routes />
                 </ThemeProvider>
             </ConfigProvider>
         </AuthProvider>
