@@ -1,9 +1,6 @@
 import { FormSection } from '../FormSection/FormSection'
 import { Space, Form, Input, DatePicker, Select, Button, Tooltip } from 'antd'
 import { SyncOutlined } from '@ant-design/icons'
-import dayjs from 'dayjs'
-import 'dayjs/locale/pl'
-import locale from 'antd/es/date-picker/locale/pl_PL'
 
 const rpwRegex = '^RPW/'
 const isFieldValid = new RegExp(rpwRegex, 'i')
@@ -24,31 +21,7 @@ export const InflowFormSection = ({ editMode }) => {
             <Space direction="vertical">
                 <Space wrap>
                     <Form.Item
-                        label="RPW"
-                        name="rpw"
-                        hasFeedback
-                        validateTrigger={['onBlur', 'onChange']}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Podaj numer RPW',
-                            },
-                            () => ({
-                                validator(_, rpw) {
-                                    if (!rpw || isFieldValid.test(rpw)) {
-                                        return Promise.resolve()
-                                    }
-                                    return Promise.reject(
-                                        new Error('Błędny numer RPW')
-                                    )
-                                },
-                            }),
-                        ]}
-                    >
-                        <Input placeholder="numer RPW z EZD" />
-                    </Form.Item>
-                    <Form.Item
-                        name="id_koszulki"
+                        name="inflow_nr_koszulki"
                         label="Id koszulki"
                         rules={[
                             { required: true, message: 'Podaj numer koszulki' },
@@ -83,6 +56,9 @@ export const InflowFormSection = ({ editMode }) => {
                             placeholder="data wpływu"
                         />
                     </Form.Item>
+                    <Form.Item label="RPW" name="rpw">
+                        <Input placeholder="numer RPW z EZD" />
+                    </Form.Item>
                 </Space>
                 <Space>
                     <Form.Item name="inflow_type" label="Sposób dostarczenia">
@@ -97,6 +73,22 @@ export const InflowFormSection = ({ editMode }) => {
                         label="Sygnatura akt"
                     >
                         <Input placeholder="sygnatura akt" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Data na piśmie wpływającym"
+                        name="inflow_date"
+                        rules={[
+                            {
+                                type: 'date',
+                                required: true,
+                                message: 'Podaj datę wpływu',
+                            },
+                        ]}
+                    >
+                        <DatePicker
+                            format={'YYYY-MM-DD'}
+                            placeholder="data wpływu"
+                        />
                     </Form.Item>
                 </Space>
             </Space>

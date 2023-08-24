@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useLayoutEffect } from 'react'
 import { FormSection } from '../FormSection/FormSection'
 import { Form, Select, Input } from 'antd'
 import WP_Instance from '../../services/WP_Instance'
@@ -7,7 +7,7 @@ import { createJrwaDataOptions } from '../../helpers/createJrwaDataOptions'
 export const EzdDataFormSection = ({ setError, editMode }) => {
     const [jrwaData, setJrwaData] = useState([])
 
-    useEffect(() => {
+    const getJrwaList = () => {
         WP_Instance.get(`/udo/v1/getJRWAList`)
             .then((response) => {
                 setJrwaData(response?.data)
@@ -16,6 +16,10 @@ export const EzdDataFormSection = ({ setError, editMode }) => {
                 console.error(error)
                 setError(true)
             })
+    }
+
+    useLayoutEffect(() => {
+        getJrwaList()
     }, [])
 
     return (
