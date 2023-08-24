@@ -14,7 +14,7 @@ export const AdditionalInfoFormSection = ({ setError, editMode }) => {
             backgroundColor={colors.color_card_2}
         >
             <Form.Item label="Czas odpowiedzi" name="max_finish_date">
-                <DatePicker />
+                <DatePicker format={'YYYY-MM-DD'} />
             </Form.Item>
 
             <Form.Item name="comment" label="Dodatkowy opis">

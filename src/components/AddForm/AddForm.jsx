@@ -1,4 +1,13 @@
-import { Form, Button, Col, Row, Divider, Spin, Space } from 'antd'
+import {
+    Form,
+    Button,
+    Col,
+    Row,
+    Divider,
+    Spin,
+    Space,
+    ConfigProvider,
+} from 'antd'
 import { InflowFormSection } from '../InflowFormSection/InflowFormSection'
 import { PersonDataFormSection } from '../PersonDataFormSection/PersonDataFormSection'
 import { CompanyDataFormSection } from '../CompanyDataFormSection/CompanyDataFormSection'
@@ -6,8 +15,10 @@ import { ReplyTemplateFormSection } from '../ReplyTemplateFormSection/ReplyTempl
 import { EzdDataFormSection } from '../EzdDataFormSection/EzdDataFormSection'
 import { AdditionalInfoFormSection } from '../AdditionalInfoFormSection/AdditionalInfoFormSection'
 import { LoadingOutlined } from '@ant-design/icons'
-
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import 'dayjs/locale/pl'
+import locale from 'antd/locale/pl_PL'
 
 const GridWrapper = styled.div`
     background-color: #fdfdfd;
@@ -36,6 +47,9 @@ export const AddForm = ({
 }) => {
     return (
         <>
+            <Link to="/podglad" state={{ recordId: 111 }}>
+                show record 2
+            </Link>
             <Form
                 form={form}
                 name="mainAddForm"
@@ -62,7 +76,6 @@ export const AddForm = ({
                     <Divider />
                     <AdditionalInfoFormSection setError={setError} />
                 </GridWrapper>
-
                 <Row style={{ marginTop: 50 }} justify="end">
                     <Col>
                         <Form.Item>

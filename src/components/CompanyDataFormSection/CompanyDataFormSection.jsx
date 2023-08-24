@@ -26,16 +26,24 @@ export const CompanyDataFormSection = ({ setError, editMode }) => {
     }
 
     useEffect(() => {
-        form.setFieldValue('requestor_id', selectedRequestor?.id)
-        form.setFieldValue('requestor_street', selectedRequestor?.street)
-        form.setFieldValue('requestor_house', selectedRequestor?.house)
-        form.setFieldValue('requestor_apartment', selectedRequestor?.apartment)
-        form.setFieldValue('requestor_postcode', selectedRequestor?.postcode)
-        form.setFieldValue('requestor_city', selectedRequestor?.city)
-        form.setFieldValue(
-            'requestor_type_id',
-            selectedRequestor?.requestor_type_id
-        )
+        if (!editMode) {
+            form.setFieldValue('requestor_id', selectedRequestor?.id)
+            form.setFieldValue('requestor_street', selectedRequestor?.street)
+            form.setFieldValue('requestor_house', selectedRequestor?.house)
+            form.setFieldValue(
+                'requestor_apartment',
+                selectedRequestor?.apartment
+            )
+            form.setFieldValue(
+                'requestor_postcode',
+                selectedRequestor?.postcode
+            )
+            form.setFieldValue('requestor_city', selectedRequestor?.city)
+            form.setFieldValue(
+                'requestor_type_id',
+                selectedRequestor?.requestor_type_id
+            )
+        }
     }, [selectedRequestor])
 
     useEffect(() => {
