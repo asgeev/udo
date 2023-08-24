@@ -103,7 +103,7 @@ export const PersonDataFormSection = ({ editMode }) => {
                 </Col>
                 <Col>
                     <Form.Item label="Data urodzenia" name="birth_date">
-                        <DatePicker />
+                        <DatePicker format={'YYYY-MM-DD'} />
                     </Form.Item>
                 </Col>
             </Row>

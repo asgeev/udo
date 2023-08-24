@@ -1,6 +1,9 @@
 import { FormSection } from '../FormSection/FormSection'
 import { Space, Form, Input, DatePicker, Select, Button, Tooltip } from 'antd'
 import { SyncOutlined } from '@ant-design/icons'
+import dayjs from 'dayjs'
+import 'dayjs/locale/pl'
+import locale from 'antd/es/date-picker/locale/pl_PL'
 
 const rpwRegex = '^RPW/'
 const isFieldValid = new RegExp(rpwRegex, 'i')
@@ -75,7 +78,10 @@ export const InflowFormSection = ({ editMode }) => {
                             },
                         ]}
                     >
-                        <DatePicker placeholder="data wpływu" />
+                        <DatePicker
+                            format={'YYYY-MM-DD'}
+                            placeholder="data wpływu"
+                        />
                     </Form.Item>
                 </Space>
                 <Space>

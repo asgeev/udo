@@ -30,7 +30,7 @@ export const Login = () => {
         }
     }, [auth, navigate])
 
-    const logIn = (res) => {
+       const logIn = (res) => {
         if (res.data.token) {
             if (
                 signIn({

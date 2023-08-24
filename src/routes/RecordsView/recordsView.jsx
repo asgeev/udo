@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useState, useEffect, useLayoutEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Table } from 'antd'
 import WP_Instance from '../../services/WP_Instance'
 import { PageTitleHeader } from '../../components/PageTitleHeader/PageTitleHeader'
@@ -16,9 +16,12 @@ export const RecordsView = () => {
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
     const [drawerOpen, setDrawerOpen] = useState(false)
-    const [recordId, setRecordId] = useState(false)
-    // let { state } = useLocation()
-    // const recordId = state?.recordId
+    const [recordId, setRecordId] = useState(null)
+    let location = useLocation()
+    const navigate = useNavigate()
+    const recordIdFromLink = location.state?.recordId
+
+    console.log('Record id from link: ' + recordIdFromLink)
 
     const columns = [
         {
@@ -66,22 +69,20 @@ export const RecordsView = () => {
     ]
 
     const showDrawer = (recordId) => {
-        console.log(recordId)
         setDrawerOpen(true)
         setRecordId(recordId)
     }
     const onDrawerClose = () => {
         setDrawerOpen(false)
+        navigate(location.pathname, {})
     }
-    useEffect(() => {
-        if (recordId) {
-            showDrawer(recordId)
-        }
-    }, [recordId])
 
-    //     <Link to="/podglad" state={{ id: 2 }}>
-    //     show record 2
-    // </Link>
+    useLayoutEffect(() => {
+        console.log(recordIdFromLink)
+        if (recordIdFromLink) {
+            showDrawer(recordIdFromLink)
+        }
+    }, [recordIdFromLink])
 
     useEffect(() => {
         setIsLoading(true)
