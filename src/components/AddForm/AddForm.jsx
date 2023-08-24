@@ -18,7 +18,6 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import 'dayjs/locale/pl'
-import locale from 'antd/locale/pl_PL'
 
 const GridWrapper = styled.div`
     background-color: #fdfdfd;
