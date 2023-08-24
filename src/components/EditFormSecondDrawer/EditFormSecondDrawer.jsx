@@ -6,7 +6,7 @@ export const EditFormSecondDrawer = ({
 }) => {
     return (
         <Drawer
-            width={800}
+            width={400}
             title="Dane z systemu"
             open={secondDrawerOpen}
             onClose={onSecondDrawerClose}

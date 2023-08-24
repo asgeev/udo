@@ -84,10 +84,6 @@ export const RecordsView = () => {
         }
     }, [recordIdFromLink])
 
-    //     <Link to="/podglad" state={{ id: 2 }}>
-    //     show record 2
-    // </Link>
-
     useEffect(() => {
         setIsLoading(true)
         WP_Instance.get(

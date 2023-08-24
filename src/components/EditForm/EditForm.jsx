@@ -13,7 +13,10 @@ export const EditForm = ({
     formDisabled,
     setError,
     form,
+    initialValues,
 }) => {
+    console.log(initialValues)
+
     onFinishFailed = (a) => {
         console.log(a)
     }
@@ -26,6 +29,7 @@ export const EditForm = ({
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
                 disabled={formDisabled}
+                initialValues={initialValues}
                 scrollToFirstError={{ block: 'center', behavior: 'smooth' }}
                 // onValuesChange={(changedValues) => {
                 //     console.log(changedValues)

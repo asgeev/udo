@@ -42,7 +42,6 @@ export const EzdDataFormSection = ({ setError, editMode }) => {
             <Form.Item
                 label="Nazwa koszulki w EZD"
                 name="ezd_name"
-                initialValue="UDO - "
                 rules={[
                     {
                         type: 'string',
