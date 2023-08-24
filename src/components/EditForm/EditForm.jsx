@@ -1,3 +1,5 @@
+import { useContext } from 'react'
+import { EditFormContext } from '../EditFormProvider/EditFormProvider'
 import { Form, Button, Col, Row, Divider, Spin, Space } from 'antd'
 import { InflowFormSection } from '../InflowFormSection/InflowFormSection'
 import { PersonDataFormSection } from '../PersonDataFormSection/PersonDataFormSection'
@@ -6,30 +8,22 @@ import { ReplyTemplateFormSectionEditMode } from '../ReplyTemplateFormSectionEdi
 import { EzdDataFormSection } from '../EzdDataFormSection/EzdDataFormSection'
 import { AdditionalInfoFormSection } from '../AdditionalInfoFormSection/AdditionalInfoFormSection'
 
-export const EditForm = ({
-    onSubmit,
-    onFinishFailed,
-    loading,
-    formDisabled,
-    setError,
-    form,
-    initialValues,
-}) => {
-    console.log(initialValues)
+export const EditForm = () => {
+    const context = useContext(EditFormContext)
+    const setError = null
 
-    onFinishFailed = (a) => {
-        console.log(a)
-    }
+    console.log(context)
+
     return (
         <>
             <Form
-                form={form}
+                form={context.editForm}
                 name="mainEditForm"
-                onFinish={onSubmit}
-                onFinishFailed={onFinishFailed}
+                onFinish={context.onSubmit}
+                onFinishFailed={context.onFinishFailed}
                 autoComplete="off"
-                disabled={formDisabled}
-                initialValues={initialValues}
+                disabled={context.formDisabled}
+                initialValues={context.initialValues}
                 scrollToFirstError={{ block: 'center', behavior: 'smooth' }}
                 // onValuesChange={(changedValues) => {
                 //     console.log(changedValues)
@@ -44,7 +38,7 @@ export const EditForm = ({
                 <Divider />
                 <ReplyTemplateFormSectionEditMode
                     editMode
-                    setError={setError}
+                    // setError={setError}
                 />
                 <Divider />
                 <EzdDataFormSection editMode setError={setError} />
@@ -61,7 +55,7 @@ export const EditForm = ({
                                     htmlType="submit"
                                     size="large"
                                 >
-                                    Zapisz szablon
+                                    Zapisz
                                 </Button>
                             </Space>
                         </Form.Item>

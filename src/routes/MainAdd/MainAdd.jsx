@@ -38,7 +38,6 @@ export const MainAdd = () => {
     const { Title } = Typography
     const [messageApi, messageContextHolder] = message.useMessage()
     const [loading, setLoading] = useState(false)
-    // const [stepsItems, setStepsItems] = useState()
     const [formDisabled, setFormDisabled] = useState(false)
     const [error, setError] = useState(false)
     const [modal, modalContextHolder] = Modal.useModal()
