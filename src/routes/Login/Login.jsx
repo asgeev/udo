@@ -30,16 +30,22 @@ export const Login = () => {
         }
     }, [auth, navigate])
 
-    const logIn = (res) => {
-        if (
-            signIn({
-                token: res.data.token,
-                tokenType: 'Bearer',
-                expiresIn: res.data.expiresIn ? res.data.expiresIn : 480,
-                authState: res.data,
-            })
-        ) {
-            navigate('/dodawanie')
+       const logIn = (res) => {
+        if (res.data.token) {
+            if (
+                signIn({
+                    token: res.data.token,
+                    tokenType: 'Bearer',
+                    expiresIn: res.data.expiresIn ? res.data.expiresIn : 480,
+                    authState: res.data,
+                })
+            ) {
+                navigate('/dodawanie')
+            } else {
+                messageApi.error(
+                    'Ups! Wystąpił błąd logowania, spróbuj ponownie później!'
+                )
+            }
         } else {
             messageApi.error(
                 'Ups! Wystąpił błąd logowania, spróbuj ponownie później!'
