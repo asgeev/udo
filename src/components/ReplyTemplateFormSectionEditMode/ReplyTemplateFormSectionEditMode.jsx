@@ -9,10 +9,13 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
     const quillRef = useRef()
     const context = useContext(EditFormContext)
     const initialValue = context?.initialFormData?.template_main_text
+    const editForm = Form.useFormInstance()
 
     const setInitialValues = (value) => {
         const editor = quillRef?.current?.getEditor()
-        editor?.clipboard?.dangerouslyPasteHTML(initialValue)
+        editor?.clipboard?.dangerouslyPasteHTML(value)
+        /*Fix scrool behavior when pass value to richtext editor */
+        editForm.scrollToField('rpw', { block: 'center' })
     }
 
     useLayoutEffect(() => {

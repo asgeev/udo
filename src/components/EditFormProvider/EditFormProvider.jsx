@@ -12,10 +12,10 @@ export const EditFormContext = createContext({
 
 export const EditFormProvider = ({ children, recordId, open }) => {
     const [formDisabled, setFormDisabled] = useState(false)
+    const [editFormLoading, setEditFormLoading] = useState(false)
+    const [onSubmitLoading, setOnSubmitLoading] = useState(false)
     const [initialFormData, setInitalFormData] = useState(null)
     const [editForm] = Form.useForm()
-
-    console.log('EditFormProvider render')
 
     useLayoutEffect(() => {
         const fetchDataRequest = () => {
@@ -52,6 +52,7 @@ export const EditFormProvider = ({ children, recordId, open }) => {
         }
         console.log(payload)
         setFormDisabled(true)
+        setOnSubmitLoading(true)
         WP_Instance.put(
             `/udo/v1/dataRequest/?data_request_id=${recordId}`,
             payload
@@ -84,11 +85,19 @@ export const EditFormProvider = ({ children, recordId, open }) => {
                 }
                 console.log(error.config)
             })
+            .finally(() => {
+                setOnSubmitLoading(false)
+                setFormDisabled(false)
+            })
     }
 
     const onFinishFailed = (values) => {
         // messageApi.error('Wypełnij wszystkie wymagane pola', 7)
         console.log('Failed:', values)
+    }
+
+    const onChange = (values, a) => {
+        console.log(values)
     }
 
     return (
@@ -99,6 +108,9 @@ export const EditFormProvider = ({ children, recordId, open }) => {
                 onFinishFailed,
                 editForm,
                 initialFormData,
+                onChange,
+                editFormLoading,
+                onSubmitLoading,
             }}
         >
             {children}
