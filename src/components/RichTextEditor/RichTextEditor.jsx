@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Form } from 'antd'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
@@ -25,6 +26,7 @@ export const RichTextEditor = ({
     quillRef,
     editorContent,
     setEditorContent,
+    initialValue,
 }) => {
     const editForm = Form.useFormInstance()
 
@@ -57,7 +59,6 @@ export const RichTextEditor = ({
                 theme="snow"
                 placeholder="Wpisz swoją odpowiedź"
                 modules={modules}
-                value={editorContent}
                 preserveWhitespace
                 onChange={(value, delta, source, editor) =>
                     handleChangeContent(value, delta, source, editor)

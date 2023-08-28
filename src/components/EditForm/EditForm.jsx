@@ -26,6 +26,7 @@ export const EditForm = () => {
                 onValuesChange={(changedValues) => {
                     console.log(changedValues)
                 }}
+                onFieldsChange={context.onChange}
                 layout="vertical"
             >
                 <InflowFormSection editMode />
@@ -55,6 +56,7 @@ export const EditForm = () => {
                                 </Button>
                                 <Button
                                     type="primary"
+                                    loading={context.onSubmitLoading}
                                     htmlType="submit"
                                     size="large"
                                 >
