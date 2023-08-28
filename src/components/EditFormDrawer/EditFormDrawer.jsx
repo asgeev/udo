@@ -4,11 +4,9 @@ import { EditForm } from '../EditForm/EditForm'
 import { EditFormSecondDrawer } from '../EditFormSecondDrawer/EditFormSecondDrawer'
 import { EditFormDrawerSkeletons } from '../EditFormDrawerSkeletons/EditFormDrawerSkeletons'
 import { EditFormProvider } from '../EditFormProvider/EditFormProvider'
-import { EditFormContext } from '../EditFormProvider/EditFormProvider'
 
 export const EditFormDrawer = ({ recordId, drawerOpen, onDrawerClose }) => {
     const [secondDrawerOpen, setSecondDrawerOpen] = useState(false)
-    const context = useContext(EditFormContext)
 
     // console.log(contexti)
 
@@ -24,7 +22,7 @@ export const EditFormDrawer = ({ recordId, drawerOpen, onDrawerClose }) => {
         <>
             <Drawer
                 title={`Edytuj zapytanie dla sprawy nr ${recordId}`}
-                width={1000}
+                width={900}
                 // push={{ distance: '100' }}
                 open={drawerOpen}
                 destroyOnClose={true}

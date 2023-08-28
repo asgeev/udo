@@ -1,4 +1,3 @@
-import { useState, useRef, useLayoutEffect } from 'react'
 import { Form } from 'antd'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
@@ -33,14 +32,12 @@ export const RichTextEditor = ({
         event.preventDefault()
         const editor = quillRef?.current?.getEditor()
         const selection = editor?.getSelection(true)
-
         editor?.updateContents(delta(selection, data))
     }
 
-    const handleContent = (content) => {
-        editForm.setFieldValue('template_main_text', editorContent)
-
-        setEditorContent(content)
+    const handleChangeContent = (content, delta, source, editor) => {
+        editForm.setFieldValue('template_main_text', editor.getHTML())
+        setEditorContent(editor.getHTML())
     }
 
     return (
@@ -60,9 +57,11 @@ export const RichTextEditor = ({
                 theme="snow"
                 placeholder="Wpisz swoją odpowiedź"
                 modules={modules}
-                preserveWhitespace
                 value={editorContent}
-                onChange={handleContent}
+                preserveWhitespace
+                onChange={(value, delta, source, editor) =>
+                    handleChangeContent(value, delta, source, editor)
+                }
             />
         </>
     )

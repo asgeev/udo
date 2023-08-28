@@ -50,11 +50,6 @@ export const EditForm = () => {
                                     onClick={() =>
                                         downloadFile(context.recordId)
                                     }
-                                    // href={`${
-                                    //     import.meta.env.VITE_WP_URL
-                                    // }/udo/v1/generateWord?id=${
-                                    //     context.recordId
-                                    // }&Authorization=Bearer${auth().token}`}
                                 >
                                     Wygeneruj plik
                                 </Button>

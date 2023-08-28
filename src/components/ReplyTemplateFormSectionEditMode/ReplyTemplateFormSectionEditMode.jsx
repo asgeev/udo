@@ -1,19 +1,26 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useContext, useLayoutEffect, useRef, useState } from 'react'
 import { FormSection } from '../FormSection/FormSection'
-import { Alert, Form, Input } from 'antd'
-import { FullCheckboxForm } from '../FullCheckboxForm/FullCheckboxForm'
+import { Form, Input } from 'antd'
 import { RichTextEditor } from '../RichTextEditor/RichTextEditor'
+import { EditFormContext } from '../EditFormProvider/EditFormProvider'
 
 export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
     const [editorContent, setEditorContent] = useState('')
     const quillRef = useRef()
+    const context = useContext(EditFormContext)
+    const initialValue = context?.initialFormData?.template_main_text
 
-    // const editForm = Form.useFormInstance()
+    const setInitialValues = (value) => {
+        const editor = quillRef?.current?.getEditor()
+        editor?.clipboard?.dangerouslyPasteHTML(initialValue)
+    }
 
-    // useLayoutEffect(() => {
-    //     editForm.setFieldValue('signature_id', '1')
-    //     editForm.setFieldValue('template_main_text', editorContent)
-    // }, [editorContent])
+    useLayoutEffect(() => {
+        if (initialValue) {
+            setInitialValues(initialValue)
+        }
+    }, [initialValue])
+
     return (
         <FormSection editMode={editMode} sectionName="Dane szablonu odpowiedzi">
             <Form.Item name="template_main_text">
