@@ -48,23 +48,21 @@ export const InflowFormSection = ({ editMode }) => {
                         <Input placeholder="numer RPW z EZD" />
                     </Form.Item>
                     <Form.Item
-                        name="id_koszulki"
+                        name="inflow_nr_koszulki"
                         label="Id koszulki"
                         rules={[
                             { required: true, message: 'Podaj numer koszulki' },
                         ]}
                     >
-                        <Space>
-                            <Input placeholder="id koszulki" />
-                            <Tooltip title="Synchronizuj z EZD">
-                                <Button
-                                    disabled
-                                    type="primary"
-                                    icon={<SyncOutlined />}
-                                />
-                            </Tooltip>
-                        </Space>
+                        <Input placeholder="id koszulki" />
                     </Form.Item>
+                    <Tooltip title="Synchronizuj z EZD">
+                        <Button
+                            disabled
+                            type="primary"
+                            icon={<SyncOutlined />}
+                        />
+                    </Tooltip>
                 </Space>
                 <Space>
                     <Form.Item

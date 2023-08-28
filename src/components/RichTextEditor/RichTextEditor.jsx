@@ -1,4 +1,3 @@
-import { useState, useRef } from 'react'
 import { Form } from 'antd'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
@@ -22,41 +21,47 @@ const modules = {
     ],
 }
 
-export const RichTextEditor = ({ formField }) => {
-    const [content, setContent] = useState('')
-    const quillRef = useRef()
-    const form = Form.useFormInstance()
-    const aaa = 'asfasf'
+export const RichTextEditor = ({
+    quillRef,
+    editorContent,
+    setEditorContent,
+}) => {
+    const editForm = Form.useFormInstance()
 
     const addTextToEditor = (event, delta, data) => {
         event.preventDefault()
         const editor = quillRef?.current?.getEditor()
         const selection = editor?.getSelection(true)
-
         editor?.updateContents(delta(selection, data))
     }
 
-    const handleContent = (value) => {
-        setContent(value)
-        form.setFieldValue(formField, value)
+    const handleChangeContent = (content, delta, source, editor) => {
+        editForm.setFieldValue('template_main_text', editor.getHTML())
+        setEditorContent(editor.getHTML())
     }
 
     return (
         <>
-            <button onClick={() => addTextToEditor(event, templateText1, aaa)}>
-                Click
+            <button
+                onClick={() => {
+                    addTextToEditor(event, templateText1)
+                }}
+            >
+                Szablon 1
             </button>
-            <button onClick={() => addTextToEditor(event, templateText2, aaa)}>
-                Click 2
+            <button onClick={() => addTextToEditor(event, templateText2)}>
+                Szablon 2
             </button>
             <ReactQuill
                 ref={quillRef}
                 theme="snow"
                 placeholder="Wpisz swoją odpowiedź"
                 modules={modules}
+                value={editorContent}
                 preserveWhitespace
-                value={content}
-                onChange={handleContent}
+                onChange={(value, delta, source, editor) =>
+                    handleChangeContent(value, delta, source, editor)
+                }
             />
         </>
     )

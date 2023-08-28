@@ -1,13 +1,14 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { Drawer, Button } from 'antd'
 import { EditForm } from '../EditForm/EditForm'
 import { EditFormSecondDrawer } from '../EditFormSecondDrawer/EditFormSecondDrawer'
 import { EditFormDrawerSkeletons } from '../EditFormDrawerSkeletons/EditFormDrawerSkeletons'
 import { EditFormProvider } from '../EditFormProvider/EditFormProvider'
 
-export const EditFormDrawer = ({ recordId, open, onDrawerClose }) => {
+export const EditFormDrawer = ({ recordId, drawerOpen, onDrawerClose }) => {
     const [secondDrawerOpen, setSecondDrawerOpen] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
+
+    // console.log(contexti)
 
     const showSecondDrawer = () => {
         setSecondDrawerOpen(true)
@@ -21,25 +22,23 @@ export const EditFormDrawer = ({ recordId, open, onDrawerClose }) => {
         <>
             <Drawer
                 title={`Edytuj zapytanie dla sprawy nr ${recordId}`}
-                width={800}
-                push={{ distance: '360' }}
-                open={open}
+                width={900}
+                // push={{ distance: '100' }}
+                open={drawerOpen}
                 destroyOnClose={true}
                 onClose={onDrawerClose}
             >
                 <Button type="primary" onClick={showSecondDrawer}>
                     Open second drawer
                 </Button>
-                {isLoading ? (
-                    <EditFormDrawerSkeletons />
-                ) : (
-                    <EditFormProvider
-                        recordId={recordId}
-                        setIsLoading={setIsLoading}
-                    >
-                        <EditForm />
-                    </EditFormProvider>
-                )}
+
+                <EditFormProvider
+                    recordId={recordId}
+                    // setIsLoading={setIsLoading}
+                    open={open}
+                >
+                    <EditForm />
+                </EditFormProvider>
 
                 <EditFormSecondDrawer
                     onSecondDrawerClose={onSecondDrawerClose}
