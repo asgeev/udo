@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useLayoutEffect } from 'react'
 import { Form } from 'antd'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
@@ -22,11 +22,12 @@ const modules = {
     ],
 }
 
-export const RichTextEditor = ({ formField }) => {
-    const [content, setContent] = useState('')
-    const quillRef = useRef()
-    const form = Form.useFormInstance()
-    const aaa = 'asfasf'
+export const RichTextEditor = ({
+    quillRef,
+    editorContent,
+    setEditorContent,
+}) => {
+    const editForm = Form.useFormInstance()
 
     const addTextToEditor = (event, delta, data) => {
         event.preventDefault()
@@ -36,18 +37,23 @@ export const RichTextEditor = ({ formField }) => {
         editor?.updateContents(delta(selection, data))
     }
 
-    const handleContent = (value) => {
-        setContent(value)
-        form.setFieldValue(formField, value)
+    const handleContent = (content) => {
+        editForm.setFieldValue('template_main_text', editorContent)
+
+        setEditorContent(content)
     }
 
     return (
         <>
-            <button onClick={() => addTextToEditor(event, templateText1, aaa)}>
-                Click
+            <button
+                onClick={() => {
+                    addTextToEditor(event, templateText1)
+                }}
+            >
+                Szablon 1
             </button>
-            <button onClick={() => addTextToEditor(event, templateText2, aaa)}>
-                Click 2
+            <button onClick={() => addTextToEditor(event, templateText2)}>
+                Szablon 2
             </button>
             <ReactQuill
                 ref={quillRef}
@@ -55,7 +61,7 @@ export const RichTextEditor = ({ formField }) => {
                 placeholder="Wpisz swoją odpowiedź"
                 modules={modules}
                 preserveWhitespace
-                value={content}
+                value={editorContent}
                 onChange={handleContent}
             />
         </>

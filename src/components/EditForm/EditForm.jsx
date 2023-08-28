@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useLayoutEffect } from 'react'
 import { EditFormContext } from '../EditFormProvider/EditFormProvider'
 import { Form, Button, Col, Row, Divider, Spin, Space } from 'antd'
 import { InflowFormSection } from '../InflowFormSection/InflowFormSection'
@@ -7,12 +7,11 @@ import { CompanyDataFormSection } from '../CompanyDataFormSection/CompanyDataFor
 import { ReplyTemplateFormSectionEditMode } from '../ReplyTemplateFormSectionEditMode/ReplyTemplateFormSectionEditMode'
 import { EzdDataFormSection } from '../EzdDataFormSection/EzdDataFormSection'
 import { AdditionalInfoFormSection } from '../AdditionalInfoFormSection/AdditionalInfoFormSection'
+import { downloadFile } from '../../helpers/downloadFile'
+import { useAuthUser } from 'react-auth-kit'
 
 export const EditForm = () => {
     const context = useContext(EditFormContext)
-    const setError = null
-
-    console.log(context)
 
     return (
         <>
@@ -23,33 +22,42 @@ export const EditForm = () => {
                 onFinishFailed={context.onFinishFailed}
                 autoComplete="off"
                 disabled={context.formDisabled}
-                initialValues={context.initialValues}
                 scrollToFirstError={{ block: 'center', behavior: 'smooth' }}
-                // onValuesChange={(changedValues) => {
-                //     console.log(changedValues)
-                // }}
+                onValuesChange={(changedValues) => {
+                    console.log(changedValues)
+                }}
                 layout="vertical"
             >
                 <InflowFormSection editMode />
                 <Divider />
                 <PersonDataFormSection editMode />
                 <Divider />
-                <CompanyDataFormSection editMode setError={setError} />
+                <CompanyDataFormSection editMode />
                 <Divider />
-                <ReplyTemplateFormSectionEditMode
-                    editMode
-                    // setError={setError}
-                />
+                <ReplyTemplateFormSectionEditMode editMode />
                 <Divider />
-                <EzdDataFormSection editMode setError={setError} />
+                <EzdDataFormSection editMode />
                 <Divider />
-                <AdditionalInfoFormSection editMode setError={setError} />
+                <AdditionalInfoFormSection editMode />
 
                 <Row style={{ marginTop: 50 }} justify="end">
                     <Col>
                         <Form.Item>
                             <Space>
-                                {/* {loading && <Spin indicator={antIcon} />} */}
+                                <Button
+                                    type="primary"
+                                    size="large"
+                                    onClick={() =>
+                                        downloadFile(context.recordId)
+                                    }
+                                    // href={`${
+                                    //     import.meta.env.VITE_WP_URL
+                                    // }/udo/v1/generateWord?id=${
+                                    //     context.recordId
+                                    // }&Authorization=Bearer${auth().token}`}
+                                >
+                                    Wygeneruj plik
+                                </Button>
                                 <Button
                                     type="primary"
                                     htmlType="submit"

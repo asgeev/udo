@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from 'react'
+import { useState, useLayoutEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Table } from 'antd'
 import WP_Instance from '../../services/WP_Instance'
@@ -19,9 +19,7 @@ export const RecordsView = () => {
     const [recordId, setRecordId] = useState(null)
     let location = useLocation()
     const navigate = useNavigate()
-    const recordIdFromLink = location.state?.recordId
-
-    console.log('Record id from link: ' + recordIdFromLink)
+    // const recordIdFromLink = location.state?.recordId
 
     const columns = [
         {
@@ -74,17 +72,17 @@ export const RecordsView = () => {
     }
     const onDrawerClose = () => {
         setDrawerOpen(false)
-        navigate(location.pathname, {})
+        // navigate(location.pathname, {})
     }
 
-    useLayoutEffect(() => {
-        console.log(recordIdFromLink)
-        if (recordIdFromLink) {
-            showDrawer(recordIdFromLink)
-        }
-    }, [recordIdFromLink])
+    // useEffect(() => {
+    //     console.log(recordIdFromLink)
+    //     if (recordIdFromLink) {
+    //         showDrawer(recordIdFromLink)
+    //     }
+    // }, [recordIdFromLink])
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         setIsLoading(true)
         WP_Instance.get(
             `/udo/v1/getDataRequestList?page=${currentPage}&per_page=${pageSize}`
@@ -130,7 +128,7 @@ export const RecordsView = () => {
             />
             <EditFormDrawer
                 recordId={recordId}
-                open={drawerOpen}
+                drawerOpen={drawerOpen}
                 onDrawerClose={onDrawerClose}
             />
         </>
