@@ -1,16 +1,16 @@
 import { useState, useLayoutEffect, createContext } from 'react'
 import { Form } from 'antd'
-import WP_Instance from '../../services/WP_Instance'
-import { createNewObjectWithValidDate } from '../../helpers/createNewObjectWithValidDate'
+import WP_Instance from '../../../services/WP_Instance'
+import { createNewObjectWithValidDate } from '../../../helpers/createNewObjectWithValidDate'
 export const EditFormContext = createContext({
     recordId: null,
     editForm: null,
     onSubmit: () => {},
     onFinishFailed: () => {},
-    initialFormData: [],
+    initialFormData: null,
 })
 
-export const EditFormProvider = ({ children, recordId, open }) => {
+export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
     const [formDisabled, setFormDisabled] = useState(false)
     const [editFormLoading, setEditFormLoading] = useState(false)
     const [onSubmitLoading, setOnSubmitLoading] = useState(false)
@@ -30,8 +30,9 @@ export const EditFormProvider = ({ children, recordId, open }) => {
                 })
                 .finally(() => {})
         }
-
-        fetchDataRequest()
+        if (recordId) {
+            fetchDataRequest()
+        }
     }, [recordId])
 
     useLayoutEffect(() => {
@@ -39,7 +40,7 @@ export const EditFormProvider = ({ children, recordId, open }) => {
     }, [initialFormData])
 
     const setInitialEditFormFieldsValues = (values) => {
-        editForm.setFieldsValue(values)
+        editForm?.setFieldsValue(values)
     }
 
     const onSubmit = (values) => {
@@ -96,7 +97,7 @@ export const EditFormProvider = ({ children, recordId, open }) => {
         console.log('Failed:', values)
     }
 
-    const onChange = (values, a) => {
+    const onChange = (values) => {
         console.log(values)
     }
 
@@ -111,6 +112,8 @@ export const EditFormProvider = ({ children, recordId, open }) => {
                 onChange,
                 editFormLoading,
                 onSubmitLoading,
+                formDisabled,
+                showSecondDrawer,
             }}
         >
             {children}
