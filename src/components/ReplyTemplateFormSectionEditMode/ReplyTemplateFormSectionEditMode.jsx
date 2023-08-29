@@ -1,42 +1,84 @@
-import { useContext, useLayoutEffect, useRef, useState } from 'react'
+import { useContext, useLayoutEffect } from 'react'
 import { FormSection } from '../FormSection/FormSection'
-import { Form, Input } from 'antd'
+import { Form, Input, Space, Button } from 'antd'
 import { RichTextEditor } from '../RichTextEditor/RichTextEditor'
-import { EditFormContext } from '../EditFormProvider/EditFormProvider'
+import { EditFormContext } from '../Providers/EditFormProvider/EditFormProvider'
+import { RichTextContext } from '../Providers/RichTextProvider/RichTextProvider'
+import {
+    templateText1,
+    templateText2,
+} from '../RichTextEditor/TemplatesRichTextEditor/TemplatesRichTextEditor'
 
 export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
-    const [editorContent, setEditorContent] = useState('')
-    const quillRef = useRef()
-    const context = useContext(EditFormContext)
-    const initialValue = context?.initialFormData?.template_main_text
+    const { initialFormData, showSecondDrawer } = useContext(EditFormContext)
+    const {
+        mainEditor,
+        handleChangeContent,
+        attachmentsEditor,
+        setInitialValues,
+        addTextToEditor,
+    } = useContext(RichTextContext)
     const editForm = Form.useFormInstance()
+    const initialValue = initialFormData
 
-    const setInitialValues = (value) => {
-        const editor = quillRef?.current?.getEditor()
-        editor?.clipboard?.dangerouslyPasteHTML(value)
-        /*Fix scrool behavior when pass value to richtext editor */
-        editForm.scrollToField('rpw', { block: 'center' })
-    }
-
+    //${editForm} varialble passed only for prevent scrolling to rich text editor
     useLayoutEffect(() => {
         if (initialValue) {
-            setInitialValues(initialValue)
+            setInitialValues(
+                initialValue?.template_main_text,
+                mainEditor,
+                editForm
+            )
+            setInitialValues(
+                initialValue?.template_attachments_text,
+                attachmentsEditor,
+                editForm
+            )
         }
     }, [initialValue])
 
     return (
         <FormSection editMode={editMode} sectionName="Dane szablonu odpowiedzi">
+            <Space>
+                <Button
+                    onClick={() =>
+                        addTextToEditor(event, templateText1, mainEditor)
+                    }
+                >
+                    Szablon 1
+                </Button>
+                <Button
+                    onClick={() =>
+                        addTextToEditor(event, templateText2, mainEditor)
+                    }
+                >
+                    Szablon 2
+                </Button>
+            </Space>
+            <button onClick={showSecondDrawer}>Mock CWU</button>
             <Form.Item name="template_main_text">
-                <>
-                    <RichTextEditor
-                        quillRef={quillRef}
-                        editorContent={editorContent}
-                        setEditorContent={setEditorContent}
-                    />
-                </>
+                <RichTextEditor
+                    quillRef={mainEditor}
+                    onChange={(value, delta, source, editor) => {
+                        handleChangeContent(
+                            editor,
+                            editForm,
+                            'template_main_text'
+                        )
+                    }}
+                />
             </Form.Item>
+
             <Form.Item name="signature_id">
                 <Input />
+            </Form.Item>
+            <Form.Item name="template_attachments_text">
+                <RichTextEditor
+                    quillRef={attachmentsEditor}
+                    onChange={(value, delta, source, editor) => {
+                        handleChangeContent(editor, editForm, 'aaa')
+                    }}
+                />
             </Form.Item>
         </FormSection>
     )
