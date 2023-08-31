@@ -22,7 +22,7 @@ export const EditFormSecondDrawer = ({
         >
             <Space direction="vertical" style={{ width: '100%' }}>
                 <Alert
-                    message="Tutaj będą wyświetlały się dane z CWU. Po kliknięciu w przycisk szablon wypełniony danymi z CWU wstawiany będzie do głownego edytora"
+                    message="Tutaj będą wyświetlały się dane z CWU. Po kliknięciu w przycisk, szablon zostanie wypełniony danymi z CWU i wstawiony do głównego edytora"
                     type="info"
                     showIcon
                 />

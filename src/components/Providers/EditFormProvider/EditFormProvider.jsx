@@ -1,5 +1,5 @@
 import { useState, useLayoutEffect, createContext } from 'react'
-import { Form } from 'antd'
+import { Form, message } from 'antd'
 import WP_Instance from '../../../services/WP_Instance'
 import { createNewObjectWithValidDate } from '../../../helpers/createNewObjectWithValidDate'
 export const EditFormContext = createContext({
@@ -13,9 +13,12 @@ export const EditFormContext = createContext({
 export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
     const [formDisabled, setFormDisabled] = useState(false)
     const [editFormLoading, setEditFormLoading] = useState(false)
-    const [onSubmitLoading, setOnSubmitLoading] = useState(false)
+    const [onSubmitLoading, setSubmitLoading] = useState(false)
     const [initialFormData, setInitalFormData] = useState(null)
+    const [error, setError] = useState(false)
+    const [messageApi, contextHolder] = message.useMessage()
     const [editForm] = Form.useForm()
+    const [editMode, setEditMode] = useState(true)
 
     useLayoutEffect(() => {
         const fetchDataRequest = () => {
@@ -53,19 +56,20 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
         }
         console.log(payload)
         setFormDisabled(true)
-        setOnSubmitLoading(true)
+        setSubmitLoading(true)
         WP_Instance.put(
             `/udo/v1/dataRequest/?data_request_id=${recordId}`,
             payload
         )
             .then((response) => {
                 console.log(response)
+                messageApi.success(response?.data?.message)
             })
             .catch((error) => {
                 setFormDisabled(false)
-                // messageApi.error(error?.resp?.message, 6, () =>
-                //     setFormDisabled(false)
-                // )
+                messageApi.error(error?.resp?.message, 6, () =>
+                    setFormDisabled(false)
+                )
 
                 if (error.response) {
                     // The request was made and the server responded with a status code
@@ -87,7 +91,7 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
                 console.log(error.config)
             })
             .finally(() => {
-                setOnSubmitLoading(false)
+                setSubmitLoading(false)
                 setFormDisabled(false)
             })
     }
@@ -114,8 +118,12 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
                 onSubmitLoading,
                 formDisabled,
                 showSecondDrawer,
+                error,
+                setError,
+                editMode,
             }}
         >
+            {contextHolder}
             {children}
         </EditFormContext.Provider>
     )

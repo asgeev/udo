@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { EditFormContext } from '../Providers/EditFormProvider/EditFormProvider'
-import { Form, Button, Col, Row, Divider, Spin, Space } from 'antd'
+import { Form, Button, Col, Row, Divider, Spin, Space, Alert } from 'antd'
 import { InflowFormSection } from '../InflowFormSection/InflowFormSection'
 import { PersonDataFormSection } from '../PersonDataFormSection/PersonDataFormSection'
 import { CompanyDataFormSection } from '../CompanyDataFormSection/CompanyDataFormSection'
@@ -14,6 +14,14 @@ export const EditForm = () => {
 
     return (
         <>
+            {context.error && (
+                <Alert
+                    message="Ups! Wystąpił błąd"
+                    description="Podczas pobierania danych formularza wystapił błąd, spróbuj przeładować stronę naciskając przyciski CTRL + F5. Jeżeli problem będzie występował nadal prosimy o kontakt z administratorami strony."
+                    type="error"
+                    showIcon
+                />
+            )}
             <Form
                 form={context.editForm}
                 name="mainEditForm"
@@ -28,7 +36,7 @@ export const EditForm = () => {
                 onFieldsChange={context.onChange}
                 layout="vertical"
             >
-                <InflowFormSection editMode />
+                <InflowFormSection />
                 <Divider />
                 <PersonDataFormSection editMode />
                 <Divider />
