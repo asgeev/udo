@@ -5,14 +5,8 @@ import '../RichTextEditor/customStylesRichTextEditor.css'
 
 const modules = {
     toolbar: [
-        [{ header: [1, 2, 3, 4, 5, false] }],
-        ['bold', 'italic', 'underline', 'strike'],
-        [
-            { list: 'ordered' },
-            { list: 'bullet' },
-            { indent: '-1' },
-            { indent: '+1' },
-        ],
+        ['bold', 'italic', 'underline'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
     ],
 }
 
@@ -24,8 +18,8 @@ export const RichTextEditor = ({ quillRef, onChange }) => {
                 theme="snow"
                 placeholder="Wpisz swoją odpowiedź"
                 modules={modules}
-                preserveWhitespace
                 onChange={onChange}
+                defaultValue={null}
             />
         </>
     )

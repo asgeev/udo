@@ -1,13 +1,11 @@
 import { useContext, useLayoutEffect } from 'react'
 import { FormSection } from '../FormSection/FormSection'
-import { Form, Input, Space, Button } from 'antd'
+import { Form, Input, Space, Button, Divider, Tabs } from 'antd'
 import { RichTextEditor } from '../RichTextEditor/RichTextEditor'
 import { EditFormContext } from '../Providers/EditFormProvider/EditFormProvider'
 import { RichTextContext } from '../Providers/RichTextProvider/RichTextProvider'
-import {
-    templateText1,
-    templateText2,
-} from '../RichTextEditor/TemplatesRichTextEditor/TemplatesRichTextEditor'
+import { PasteButtons } from '../PasteButtons/PasteButtons'
+import { AndroidOutlined, AppleOutlined } from '@ant-design/icons'
 
 export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
     const { initialFormData, showSecondDrawer } = useContext(EditFormContext)
@@ -16,10 +14,51 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
         handleChangeContent,
         attachmentsEditor,
         setInitialValues,
-        addTextToEditor,
     } = useContext(RichTextContext)
     const editForm = Form.useFormInstance()
     const initialValue = initialFormData
+    const items = [
+        {
+            key: '1',
+            label: (
+                <span>
+                    <AndroidOutlined /> Odpowiedź
+                </span>
+            ),
+
+            children: (
+                <Form.Item name="template_main_text">
+                    <>
+                        <PasteButtons />
+                        <RichTextEditor
+                            quillRef={mainEditor}
+                            onChange={(value, delta, source, editor) => {
+                                handleChangeContent(
+                                    editor,
+                                    editForm,
+                                    'template_main_text'
+                                )
+                            }}
+                        />
+                    </>
+                </Form.Item>
+            ),
+        },
+        {
+            key: '2',
+            label: 'Załączniki',
+            children: (
+                <Form.Item label="Załączniki" name="template_attachments_text">
+                    <RichTextEditor
+                        quillRef={attachmentsEditor}
+                        onChange={(value, delta, source, editor) => {
+                            handleChangeContent(editor, editForm, 'aaa')
+                        }}
+                    />
+                </Form.Item>
+            ),
+        },
+    ]
 
     //${editForm} varialble passed only for prevent scrolling to rich text editor
     useLayoutEffect(() => {
@@ -37,48 +76,23 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
         }
     }, [initialValue])
 
+    const onChange = (key) => {
+        console.log(key)
+    }
     return (
         <FormSection editMode={editMode} sectionName="Dane szablonu odpowiedzi">
-            <Space>
-                <Button
-                    onClick={() =>
-                        addTextToEditor(event, templateText1, mainEditor)
-                    }
-                >
-                    Szablon 1
-                </Button>
-                <Button
-                    onClick={() =>
-                        addTextToEditor(event, templateText2, mainEditor)
-                    }
-                >
-                    Szablon 2
-                </Button>
-            </Space>
-            <button onClick={showSecondDrawer}>Mock CWU</button>
-            <Form.Item name="template_main_text">
-                <RichTextEditor
-                    quillRef={mainEditor}
-                    onChange={(value, delta, source, editor) => {
-                        handleChangeContent(
-                            editor,
-                            editForm,
-                            'template_main_text'
-                        )
-                    }}
-                />
-            </Form.Item>
-
+            <Button
+                type="primary"
+                onClick={() => {
+                    showSecondDrawer()
+                }}
+            >
+                CWU
+            </Button>
+            <Divider />
+            <Tabs onChange={onChange} type="card" items={items} />
             <Form.Item name="signature_id">
                 <Input />
-            </Form.Item>
-            <Form.Item name="template_attachments_text">
-                <RichTextEditor
-                    quillRef={attachmentsEditor}
-                    onChange={(value, delta, source, editor) => {
-                        handleChangeContent(editor, editForm, 'aaa')
-                    }}
-                />
             </Form.Item>
         </FormSection>
     )

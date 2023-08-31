@@ -23,7 +23,7 @@ export const EditFormDrawer = ({ recordId, drawerOpen, onDrawerClose }) => {
                 <Drawer
                     title={`Edytuj zapytanie dla sprawy nr ${recordId}`}
                     width={900}
-                    // push={{ distance: '100' }}
+                    push={{ distance: '100' }}
                     open={drawerOpen}
                     destroyOnClose={true}
                     onClose={onDrawerClose}

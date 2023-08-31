@@ -1,9 +1,9 @@
 import { useContext } from 'react'
 import { RichTextContext } from '../Providers/RichTextProvider/RichTextProvider'
-import { Drawer } from 'antd'
+import { Drawer, Button, Space, Alert } from 'antd'
 import {
-    templateText1,
-    templateText2,
+    template2,
+    template4,
 } from '../RichTextEditor/TemplatesRichTextEditor/TemplatesRichTextEditor'
 
 export const EditFormSecondDrawer = ({
@@ -15,25 +15,32 @@ export const EditFormSecondDrawer = ({
 
     return (
         <Drawer
-            width={400}
+            width={600}
             title="Dane z systemu"
             open={secondDrawerOpen}
             onClose={onSecondDrawerClose}
         >
-            <button
-                onClick={() =>
-                    addTextToEditor(event, templateText1, mainEditor)
-                }
-            >
-                Szablon 1
-            </button>
-            <button
-                onClick={() =>
-                    addTextToEditor(event, templateText1, attachmentsEditor)
-                }
-            >
-                Szablon 2
-            </button>
+            <Space direction="vertical" style={{ width: '100%' }}>
+                <Alert
+                    message="Tutaj będą wyświetlały się dane z CWU. Po kliknięciu w przycisk szablon wypełniony danymi z CWU wstawiany będzie do głownego edytora"
+                    type="info"
+                    showIcon
+                />
+                <Space>
+                    <Button
+                        onClick={() => addTextToEditor(mainEditor, template2)}
+                    >
+                        Dane z CWU 1
+                    </Button>
+                    <br />
+
+                    <Button
+                        onClick={() => addTextToEditor(mainEditor, template4)}
+                    >
+                        Dane z CWU 2
+                    </Button>
+                </Space>
+            </Space>
         </Drawer>
     )
 }
