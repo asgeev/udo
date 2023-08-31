@@ -43,6 +43,7 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
     }, [initialFormData])
 
     const setInitialEditFormFieldsValues = (values) => {
+        console.log(values)
         editForm?.setFieldsValue(values)
     }
 
@@ -121,6 +122,7 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
                 error,
                 setError,
                 editMode,
+                setEditMode,
             }}
         >
             {contextHolder}

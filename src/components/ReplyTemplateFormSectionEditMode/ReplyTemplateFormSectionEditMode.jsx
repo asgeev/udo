@@ -38,6 +38,22 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
             })
     }, [])
 
+    //${editForm} varialble passed only for prevent scrolling to rich text editor
+    useEffect(() => {
+        if (initialValue) {
+            setInitialValues(
+                initialValue?.template_main_text,
+                mainEditor,
+                editForm
+            )
+            setInitialValues(
+                initialValue?.template_attachments_text,
+                attachmentsEditor,
+                editForm
+            )
+        }
+    }, [initialValue])
+
     const collapseItems = [
         {
             key: '1',
@@ -47,7 +63,7 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
     ]
     const tabsItems = [
         {
-            key: '1',
+            key: 1,
             label: (
                 <span>
                     <SisternodeOutlined />
@@ -78,7 +94,7 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
             ),
         },
         {
-            key: '2',
+            key: 2,
             label: (
                 <span>
                     <PaperClipOutlined />
@@ -90,14 +106,21 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
                     <RichTextEditor
                         quillRef={attachmentsEditor}
                         onChange={(value, delta, source, editor) => {
-                            handleChangeContent(editor, editForm, 'aaa')
+                            handleChangeContent(
+                                editor,
+                                editForm,
+                                'template_attachments_text'
+                            )
                         }}
+                        defaultValue={editForm?.getFieldValue(
+                            'template_attachments_text'
+                        )}
                     />
                 </Form.Item>
             ),
         },
         {
-            key: '3',
+            key: 3,
             label: (
                 <span>
                     <IdcardOutlined />
@@ -107,22 +130,6 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
             disabled: true,
         },
     ]
-
-    //${editForm} varialble passed only for prevent scrolling to rich text editor
-    useLayoutEffect(() => {
-        if (initialValue) {
-            setInitialValues(
-                initialValue?.template_main_text,
-                mainEditor,
-                editForm
-            )
-            setInitialValues(
-                initialValue?.template_attachments_text,
-                attachmentsEditor,
-                editForm
-            )
-        }
-    }, [initialValue])
 
     return (
         <FormSection
@@ -158,7 +165,7 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
                 </Button>
             </Space>
 
-            <Tabs items={tabsItems} />
+            <Tabs animated items={tabsItems} />
 
             <Form.Item name="signature_id" label="Podpis na piśmie">
                 <Select
