@@ -46,9 +46,9 @@ export const AddForm = ({
 }) => {
     return (
         <>
-            <Link to="/podglad" state={{ recordId: 111 }}>
+            {/* <Link to="/podglad" state={{ recordId: 111 }}>
                 show record 2
-            </Link>
+            </Link> */}
             <Form
                 form={form}
                 name="mainAddForm"

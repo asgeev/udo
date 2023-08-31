@@ -71,6 +71,7 @@ export const CompanyDataFormSection = ({ setError, editMode }) => {
         <FormSection
             editMode={editMode}
             sectionName="Dane wnioskodawcy"
+            subTitle="Podaj dane dotyczące podmiotu wnioskującego"
             backgroundColor={colors.color_card_7}
             style={{ gridRow: 2 / 12, gridColumn: 1 }}
         >

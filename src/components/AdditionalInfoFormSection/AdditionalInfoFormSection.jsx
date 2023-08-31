@@ -11,6 +11,7 @@ export const AdditionalInfoFormSection = ({ setError, editMode }) => {
         <FormSection
             editMode={editMode}
             sectionName="Dodatkowe informacje"
+            subTitle="Dodatkowe informacje pomagające identyfikację sprawy"
             backgroundColor={colors.color_card_2}
         >
             <Form.Item label="Czas odpowiedzi" name="max_finish_date">

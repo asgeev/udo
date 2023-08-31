@@ -1,9 +1,9 @@
-export const createJrwaDataOptions = (jrwaData) => {
+export const createInflowWayDataOptions = (data) => {
     let newData = []
 
-    jrwaData?.forEach((element, index) => {
+    data?.forEach((element) => {
         newData.push({
-            key: index,
+            key: element?.id,
             value: element?.id,
             label: element?.name,
         })

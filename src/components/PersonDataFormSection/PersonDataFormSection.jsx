@@ -128,7 +128,7 @@ export const PersonDataFormSection = ({ editMode }) => {
                         </Form.Item>
                     </Space>
                     <Space direction="horizontal">
-                        <Form.Item name="preson_postcode">
+                        <Form.Item name="person_postcode">
                             <Input placeholder="kod pocztowy" />
                         </Form.Item>
                         <Form.Item name="person_city">

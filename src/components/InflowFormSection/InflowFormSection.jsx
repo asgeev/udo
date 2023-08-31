@@ -1,20 +1,29 @@
+import { useContext, useEffect, useState } from 'react'
 import { FormSection } from '../FormSection/FormSection'
 import { Space, Form, Input, DatePicker, Select, Button, Tooltip } from 'antd'
 import { SyncOutlined } from '@ant-design/icons'
-import dayjs from 'dayjs'
-import 'dayjs/locale/pl'
-import locale from 'antd/es/date-picker/locale/pl_PL'
+import { EditFormContext } from '../Providers/EditFormProvider/EditFormProvider'
+import WP_Instance from '../../services/WP_Instance'
+import { createInflowWayDataOptions } from '../../helpers/createInflowWayDataOptions'
 
 const rpwRegex = '^RPW/'
 const isFieldValid = new RegExp(rpwRegex, 'i')
 
-const inflowTypeOptions = [
-    { value: 'epuap', label: 'epuap' },
-    { value: 'poczta', lable: 'poczta' },
-    { value: 'e-mail', label: 'e-mail' },
-]
+export const InflowFormSection = () => {
+    const { editMode, setError } = useContext(EditFormContext)
+    const [inflowWayList, setInflowaWayList] = useState([])
 
-export const InflowFormSection = ({ editMode }) => {
+    useEffect(() => {
+        WP_Instance.get(`/udo/v1/getInflowWayList`)
+            .then((response) => {
+                setInflowaWayList(response?.data)
+            })
+            .catch((error) => {
+                console.error(error)
+                setError(true)
+            })
+    }, [])
+
     return (
         <FormSection
             editMode={editMode}
@@ -26,7 +35,6 @@ export const InflowFormSection = ({ editMode }) => {
                     <Form.Item
                         label="RPW"
                         name="rpw"
-                        hasFeedback
                         validateTrigger={['onBlur', 'onChange']}
                         rules={[
                             {
@@ -45,24 +53,35 @@ export const InflowFormSection = ({ editMode }) => {
                             }),
                         ]}
                     >
-                        <Input placeholder="numer RPW z EZD" />
+                        <Input
+                            disabled={editMode}
+                            placeholder="numer RPW z EZD"
+                        />
                     </Form.Item>
                     <Form.Item
-                        name="inflow_nr_koszulki"
-                        label="Id koszulki"
+                        name="inflow_koszulka_id"
+                        label="Id koszulki wpływu"
                         rules={[
-                            { required: true, message: 'Podaj numer koszulki' },
+                            {
+                                required: true,
+                                message: 'Podaj numer koszulki wpływającej',
+                            },
                         ]}
                     >
-                        <Input placeholder="id koszulki" />
-                    </Form.Item>
-                    <Tooltip title="Synchronizuj z EZD">
-                        <Button
-                            disabled
-                            type="primary"
-                            icon={<SyncOutlined />}
+                        <Input
+                            disabled={editMode}
+                            placeholder="id koszulki wpływającej"
                         />
-                    </Tooltip>
+                    </Form.Item>
+                    {!editMode && (
+                        <Tooltip title="Synchronizuj z EZD">
+                            <Button
+                                disabled
+                                type="primary"
+                                icon={<SyncOutlined />}
+                            />
+                        </Tooltip>
+                    )}
                 </Space>
                 <Space>
                     <Form.Item
@@ -77,16 +96,17 @@ export const InflowFormSection = ({ editMode }) => {
                         ]}
                     >
                         <DatePicker
+                            disabled={editMode}
                             format={'YYYY-MM-DD'}
                             placeholder="data wpływu"
                         />
                     </Form.Item>
                 </Space>
                 <Space>
-                    <Form.Item name="inflow_type" label="Sposób dostarczenia">
+                    <Form.Item name="inflow_way_id" label="Sposób dostarczenia">
                         <Select
                             placeholder="sposób dostarczenia"
-                            options={inflowTypeOptions}
+                            options={createInflowWayDataOptions(inflowWayList)}
                             allowClear
                         />
                     </Form.Item>

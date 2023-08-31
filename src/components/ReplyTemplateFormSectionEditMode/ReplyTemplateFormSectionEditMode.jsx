@@ -1,14 +1,23 @@
-import { useContext, useLayoutEffect } from 'react'
+import { useContext, useEffect, useLayoutEffect, useState } from 'react'
 import { FormSection } from '../FormSection/FormSection'
-import { Form, Input, Space, Button, Divider, Tabs } from 'antd'
+import { Form, Select, Space, Button, Tabs, Collapse, Tooltip } from 'antd'
 import { RichTextEditor } from '../RichTextEditor/RichTextEditor'
 import { EditFormContext } from '../Providers/EditFormProvider/EditFormProvider'
 import { RichTextContext } from '../Providers/RichTextProvider/RichTextProvider'
 import { PasteButtons } from '../PasteButtons/PasteButtons'
-import { AndroidOutlined, AppleOutlined } from '@ant-design/icons'
+import {
+    PaperClipOutlined,
+    SisternodeOutlined,
+    IdcardOutlined,
+    TeamOutlined,
+} from '@ant-design/icons'
+import WP_Instance from '../../services/WP_Instance'
+import { createSignaturesDataOptions } from '../../helpers/createSignaturesDataOptions'
 
 export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
-    const { initialFormData, showSecondDrawer } = useContext(EditFormContext)
+    const { initialFormData, showSecondDrawer, setError } =
+        useContext(EditFormContext)
+    const [signatures, setSignatures] = useState(null)
     const {
         mainEditor,
         handleChangeContent,
@@ -17,19 +26,43 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
     } = useContext(RichTextContext)
     const editForm = Form.useFormInstance()
     const initialValue = initialFormData
-    const items = [
+
+    useEffect(() => {
+        WP_Instance.get(`/udo/v1/getSignatureList`)
+            .then((response) => {
+                setSignatures(createSignaturesDataOptions(response?.data))
+            })
+            .catch((error) => {
+                console.error(error)
+                setError(true)
+            })
+    }, [])
+
+    const collapseItems = [
+        {
+            key: '1',
+            label: 'Rozwiń aby dodać szablon do treści',
+            children: <PasteButtons />,
+        },
+    ]
+    const tabsItems = [
         {
             key: '1',
             label: (
                 <span>
-                    <AndroidOutlined /> Odpowiedź
+                    <SisternodeOutlined />
+                    Odpowiedź
                 </span>
             ),
 
             children: (
                 <Form.Item name="template_main_text">
-                    <>
-                        <PasteButtons />
+                    <Space
+                        size="large"
+                        direction="vertical"
+                        style={{ width: '100%' }}
+                    >
+                        <Collapse ghost size="small" items={collapseItems} />
                         <RichTextEditor
                             quillRef={mainEditor}
                             onChange={(value, delta, source, editor) => {
@@ -40,15 +73,20 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
                                 )
                             }}
                         />
-                    </>
+                    </Space>
                 </Form.Item>
             ),
         },
         {
             key: '2',
-            label: 'Załączniki',
+            label: (
+                <span>
+                    <PaperClipOutlined />
+                    Załączniki
+                </span>
+            ),
             children: (
-                <Form.Item label="Załączniki" name="template_attachments_text">
+                <Form.Item name="template_attachments_text">
                     <RichTextEditor
                         quillRef={attachmentsEditor}
                         onChange={(value, delta, source, editor) => {
@@ -57,6 +95,16 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
                     />
                 </Form.Item>
             ),
+        },
+        {
+            key: '3',
+            label: (
+                <span>
+                    <IdcardOutlined />
+                    Adresat
+                </span>
+            ),
+            disabled: true,
         },
     ]
 
@@ -76,23 +124,49 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
         }
     }, [initialValue])
 
-    const onChange = (key) => {
-        console.log(key)
-    }
     return (
-        <FormSection editMode={editMode} sectionName="Dane szablonu odpowiedzi">
-            <Button
-                type="primary"
-                onClick={() => {
-                    showSecondDrawer()
+        <FormSection
+            editMode={editMode}
+            sectionName="Dane szablonu odpowiedzi"
+            subTitle={'Wpisz poniżej odpowiedź która znajdzie się na piśmie'}
+        >
+            <Space
+                direction="horizontal"
+                style={{
+                    marginBottom: 20,
                 }}
             >
-                CWU
-            </Button>
-            <Divider />
-            <Tabs onChange={onChange} type="card" items={items} />
-            <Form.Item name="signature_id">
-                <Input />
+                <Tooltip title="Pokaż dane z CWU">
+                    <Button
+                        icon={<TeamOutlined />}
+                        type="primary"
+                        onClick={() => {
+                            showSecondDrawer()
+                        }}
+                    >
+                        CWU
+                    </Button>
+                </Tooltip>
+                <Button type="primary" disabled>
+                    Koszty leczenia
+                </Button>
+                <Button type="primary" disabled>
+                    SoFU
+                </Button>
+                <Button type="primary" disabled>
+                    BO
+                </Button>
+            </Space>
+
+            <Tabs items={tabsItems} />
+
+            <Form.Item name="signature_id" label="Podpis na piśmie">
+                <Select
+                    style={{ maxWidth: 200 }}
+                    placeholder="wybierz podpis"
+                    allowClear
+                    options={signatures}
+                ></Select>
             </Form.Item>
         </FormSection>
     )
