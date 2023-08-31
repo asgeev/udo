@@ -10,7 +10,7 @@ const modules = {
     ],
 }
 
-export const RichTextEditor = ({ quillRef, onChange }) => {
+export const RichTextEditor = ({ quillRef, onChange, defaultValue }) => {
     return (
         <>
             <ReactQuill
@@ -19,7 +19,7 @@ export const RichTextEditor = ({ quillRef, onChange }) => {
                 placeholder="Wpisz swoją odpowiedź"
                 modules={modules}
                 onChange={onChange}
-                defaultValue={null}
+                defaultValue={defaultValue}
             />
         </>
     )

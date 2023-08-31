@@ -36,7 +36,7 @@ export const RichTextProvider = ({ children }) => {
     }
 
     const handleChangeContent = (editor, form, fieldName) => {
-        form?.setFieldValue(fieldName, editor?.getHTML())
+        form.setFieldValue(fieldName, editor?.getHTML())
     }
 
     const setInitialValues = (values, editorName, editForm) => {
