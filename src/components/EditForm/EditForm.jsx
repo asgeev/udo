@@ -22,9 +22,9 @@ export const EditForm = () => {
                 autoComplete="off"
                 disabled={context.formDisabled}
                 scrollToFirstError={{ block: 'center', behavior: 'smooth' }}
-                onValuesChange={(changedValues) => {
-                    console.log(changedValues)
-                }}
+                // onValuesChange={(changedValues) => {
+                //     console.log(changedValues)
+                // }}
                 onFieldsChange={context.onChange}
                 layout="vertical"
             >

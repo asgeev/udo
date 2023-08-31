@@ -98,7 +98,7 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
     }
 
     const onChange = (values) => {
-        console.log(values)
+        // console.log(values)
     }
 
     return (
