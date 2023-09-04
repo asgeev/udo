@@ -2,7 +2,7 @@ import { Alert } from 'antd'
 import { FormSection } from '@molecules/FormSection/FormSection'
 import { CheckboxExtended } from '@atoms/CheckboxExtended/CheckboxExtended'
 
-export const ReplyTemplateFormSection = ({ setError, editMode }) => {
+export const ReplyTemplateFormSection = ({ editMode = false, setError }) => {
     return (
         <FormSection editMode={editMode} sectionName="Dane szablonu odpowiedzi">
             {/* <Form.Item label="Cel udostępnienia" name="reason_of_request">

@@ -1,16 +1,14 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Space, Form, Input, DatePicker, Select, Button, Tooltip } from 'antd'
 import { SyncOutlined } from '@ant-design/icons'
 import WP_Instance from '@services/WP_Instance'
 import { FormSection } from '@molecules/FormSection/FormSection'
-import { EditFormContext } from '@providers/EditFormProvider'
 import { createInflowWayDataOptions } from '@helpers/createInflowWayDataOptions'
 
 const rpwRegex = '^RPW/'
 const isFieldValid = new RegExp(rpwRegex, 'i')
 
-export const InflowFormSection = () => {
-    const { editMode, setError } = useContext(EditFormContext)
+export const InflowFormSection = ({ editMode = false, setError }) => {
     const [inflowWayList, setInflowaWayList] = useState([])
 
     useEffect(() => {
@@ -33,7 +31,7 @@ export const InflowFormSection = () => {
             <Space direction="vertical">
                 <Space wrap>
                     <Form.Item
-                        name="inflow_nr_koszulki"
+                        name="inflow_koszulka_id"
                         label="Id koszulki"
                         rules={[
                             {
@@ -95,18 +93,11 @@ export const InflowFormSection = () => {
                     </Form.Item>
                     <Form.Item
                         label="Data na piśmie wpływającym"
-                        name="inflow_date"
-                        rules={[
-                            {
-                                type: 'date',
-                                required: true,
-                                message: 'Podaj datę wpływu',
-                            },
-                        ]}
+                        name="requestor_act_date"
                     >
                         <DatePicker
                             format={'YYYY-MM-DD'}
-                            placeholder="data wpływu"
+                            placeholder="data na piśmie"
                         />
                     </Form.Item>
                 </Space>
