@@ -63,7 +63,7 @@ export const MainAdd = () => {
         console.log(payload)
         setLoading(true)
         setFormDisabled(true)
-        WP_Instance.post('/udo/v1/dataRequest', payload)
+        WP_Instance.post(`/udo/v1/dataRequest`, payload)
             .then((response) => {
                 console.log(response)
                 setLoading(false)

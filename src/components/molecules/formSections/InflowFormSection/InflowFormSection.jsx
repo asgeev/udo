@@ -33,34 +33,8 @@ export const InflowFormSection = () => {
             <Space direction="vertical">
                 <Space wrap>
                     <Form.Item
-                        label="RPW"
-                        name="rpw"
-                        validateTrigger={['onBlur', 'onChange']}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Podaj numer RPW',
-                            },
-                            () => ({
-                                validator(_, rpw) {
-                                    if (!rpw || isFieldValid.test(rpw)) {
-                                        return Promise.resolve()
-                                    }
-                                    return Promise.reject(
-                                        new Error('Błędny numer RPW')
-                                    )
-                                },
-                            }),
-                        ]}
-                    >
-                        <Input
-                            disabled={editMode}
-                            placeholder="numer RPW z EZD"
-                        />
-                    </Form.Item>
-                    <Form.Item
-                        name="inflow_koszulka_id"
-                        label="Id koszulki wpływu"
+                        name="inflow_nr_koszulki"
+                        label="Id koszulki"
                         rules={[
                             {
                                 required: true,
@@ -101,6 +75,9 @@ export const InflowFormSection = () => {
                             placeholder="data wpływu"
                         />
                     </Form.Item>
+                    <Form.Item label="RPW" name="rpw">
+                        <Input placeholder="numer RPW z EZD" />
+                    </Form.Item>
                 </Space>
                 <Space>
                     <Form.Item name="inflow_way_id" label="Sposób dostarczenia">
@@ -115,6 +92,22 @@ export const InflowFormSection = () => {
                         label="Sygnatura akt"
                     >
                         <Input placeholder="sygnatura akt" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Data na piśmie wpływającym"
+                        name="inflow_date"
+                        rules={[
+                            {
+                                type: 'date',
+                                required: true,
+                                message: 'Podaj datę wpływu',
+                            },
+                        ]}
+                    >
+                        <DatePicker
+                            format={'YYYY-MM-DD'}
+                            placeholder="data wpływu"
+                        />
                     </Form.Item>
                 </Space>
             </Space>
