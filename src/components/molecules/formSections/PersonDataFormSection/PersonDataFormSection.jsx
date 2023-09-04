@@ -2,7 +2,7 @@ import { Form, Input, Row, Col, Space, DatePicker, Alert } from 'antd'
 import { useTheme } from 'styled-components'
 import { FormSection } from '@molecules/FormSection/FormSection'
 
-export const PersonDataFormSection = ({ editMode }) => {
+export const PersonDataFormSection = ({ editMode = false, setError }) => {
     const { colors } = useTheme()
 
     return (

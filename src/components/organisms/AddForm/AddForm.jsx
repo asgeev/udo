@@ -1,6 +1,8 @@
-import { Form, Button, Col, Row, Divider, Spin, Space } from 'antd'
+import { useContext } from 'react'
+import { Form, Button, Col, Row, Divider, Spin, Space, Alert } from 'antd'
 import 'dayjs/locale/pl'
 import { GridWrapper, antIcon } from './AddFrom.styles'
+import { AddFormContext } from '@providers/AddFormProvider'
 //Import form sections
 import { InflowFormSection } from '@molecules/formSections/InflowFormSection/InflowFormSection'
 import { PersonDataFormSection } from '@molecules/formSections/PersonDataFormSection/PersonDataFormSection'
@@ -9,36 +11,41 @@ import { ReplyTemplateFormSection } from '@molecules/formSections/ReplyTemplateF
 import { EzdDataFormSection } from '@molecules/formSections/EzdDataFormSection/EzdDataFormSection'
 import { AdditionalInfoFormSection } from '@molecules/formSections/AdditionalInfoFormSection/AdditionalInfoFormSection'
 
-export const AddForm = ({
-    onSubmit,
-    onFinishFailed,
-    loading,
-    formDisabled,
-    setError,
-    form,
-}) => {
+export const AddForm = () => {
+    const {
+        error,
+        setError,
+        addForm,
+        onSubmit,
+        onFinishFailed,
+        formDisabled,
+        submitLoading,
+    } = useContext(AddFormContext)
+
     return (
         <>
-            {/* <Link to="/podglad" state={{ recordId: 111 }}>
-                show record 2
-            </Link> */}
+            {error && (
+                <Alert
+                    message="Ups! Wystąpił błąd"
+                    description="Podczas pobierania danych formularza wystapił błąd, spróbuj przeładować stronę naciskając przyciski CTRL + F5. Jeżeli problem będzie występował nadal prosimy o kontakt z administratorami strony."
+                    type="error"
+                    showIcon
+                />
+            )}
             <Form
-                form={form}
+                form={addForm}
                 name="mainAddForm"
                 onFinish={onSubmit}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
                 disabled={formDisabled}
                 scrollToFirstError={{ block: 'center', behavior: 'smooth' }}
-                // onValuesChange={(changedValues) => {
-                //     console.log(changedValues)
-                // }}
                 layout="vertical"
             >
                 <GridWrapper>
-                    <InflowFormSection />
+                    <InflowFormSection setError={setError} />
                     <Divider />
-                    <PersonDataFormSection />
+                    <PersonDataFormSection setError={setError} />
                     <Divider />
                     <CompanyDataFormSection setError={setError} />
                     <Divider />
@@ -52,7 +59,7 @@ export const AddForm = ({
                     <Col>
                         <Form.Item>
                             <Space>
-                                {loading && <Spin indicator={antIcon} />}
+                                {submitLoading && <Spin indicator={antIcon} />}
                                 <Button
                                     type="primary"
                                     htmlType="submit"

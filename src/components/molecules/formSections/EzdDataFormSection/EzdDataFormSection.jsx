@@ -1,13 +1,11 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import { Form, Select, Input, Space } from 'antd'
 import WP_Instance from '@services/WP_Instance'
 import { FormSection } from '@molecules/FormSection/FormSection'
 import { createJrwaDataOptions } from '@helpers/createJrwaDataOptions'
-import { EditFormContext } from '@providers/EditFormProvider'
 
-export const EzdDataFormSection = () => {
+export const EzdDataFormSection = ({ editMode = false, setError }) => {
     const [jrwaData, setJrwaData] = useState([])
-    const { editMode, setError } = useContext(EditFormContext)
 
     useEffect(() => {
         WP_Instance.get(`/udo/v1/getJRWAList`)

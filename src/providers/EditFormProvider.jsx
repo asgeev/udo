@@ -98,7 +98,7 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
     }
 
     const onFinishFailed = (values) => {
-        // messageApi.error('Wypełnij wszystkie wymagane pola', 7)
+        messageApi.error('Wypełnij wszystkie wymagane pola', 7)
         console.log('Failed:', values)
     }
 

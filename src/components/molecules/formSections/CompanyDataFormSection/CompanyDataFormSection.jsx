@@ -6,7 +6,7 @@ import { FormSection } from '@molecules/FormSection/FormSection'
 import { createCompanyDataOptions } from '@helpers/createCompanyDataOptions'
 import { createCompanyTypeIdOptions } from '@helpers/createCompanyTypeIdOptions'
 
-export const CompanyDataFormSection = ({ setError, editMode }) => {
+export const CompanyDataFormSection = ({ editMode = false, setError }) => {
     const { colors } = useTheme()
     const form = Form.useFormInstance()
     const [companyData, setCompanyData] = useState(null)

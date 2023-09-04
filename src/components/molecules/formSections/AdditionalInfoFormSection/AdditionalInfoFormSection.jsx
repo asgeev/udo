@@ -2,7 +2,7 @@ import { Form, DatePicker, Input } from 'antd'
 import { useTheme } from 'styled-components'
 import { FormSection } from '@molecules/FormSection/FormSection'
 
-export const AdditionalInfoFormSection = ({ setError, editMode }) => {
+export const AdditionalInfoFormSection = ({ editMode = false }) => {
     const { TextArea } = Input
     const { colors } = useTheme()
 
