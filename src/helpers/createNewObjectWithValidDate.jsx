@@ -12,6 +12,9 @@ export const createNewObjectWithValidDate = (initialFormData) => {
         max_finish_date:
             initialFormData.max_finish_date &&
             dayjs(initialFormData.max_finish_date),
+        requestor_act_date:
+            initialFormData.requestor_act_date &&
+            dayjs(initialFormData.requestor_act_date),
     }
 
     return newObject
