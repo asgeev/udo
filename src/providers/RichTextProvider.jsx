@@ -1,5 +1,4 @@
 import { useState, useRef, createContext } from 'react'
-import { Quill } from 'react-quill'
 
 export const RichTextContext = createContext({
     mainEditor: null,
@@ -15,7 +14,6 @@ export const RichTextProvider = ({ children }) => {
     const [attachmentsEditorValue, setAttachmentsEditorValue] = useState('')
     const [requestorTemplateEditorValue, setRequestorTemplateEditorValue] =
         useState('')
-
     const mainEditorRef = useRef()
     const attachmentsEditorRef = useRef()
     const requestorTemplateEditorRef = useRef()

@@ -1,10 +1,4 @@
-import {
-    useState,
-    useEffect,
-    useLayoutEffect,
-    createContext,
-    useContext,
-} from 'react'
+import { useState, useEffect, useLayoutEffect, createContext } from 'react'
 import { Form, message } from 'antd'
 import WP_Instance from '@services/WP_Instance'
 import { createNewObjectWithValidDate } from '@helpers/createNewObjectWithValidDate'
@@ -26,26 +20,32 @@ export const EditFormContext = createContext({
 
 export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
     const [formDisabled, setFormDisabled] = useState(false)
-    const [dataLoading, setDataLoading] = useState(false)
     const [submitLoading, setSubmitLoading] = useState(false)
     const [error, setError] = useState(false)
     const [initialFormData, setInitalFormData] = useState(null)
     const [messageApi, contextHolder] = message.useMessage()
     const [editForm] = Form.useForm()
     const [editMode, setEditMode] = useState(true)
+    const [dataLoading, setDataLoading] = useState(true)
 
     useEffect(() => {
         const fetchDataRequest = () => {
             WP_Instance.get(`/udo/v1/dataRequest?id=${recordId}`)
+                // WP_Instance.get(`/udo/v1/dataRequest?id=9999`)
+
                 .then((response) => {
                     setInitalFormData(
                         createNewObjectWithValidDate(response.data)
                     )
+                    setError(false)
                 })
                 .catch((error) => {
                     console.error(error)
+                    setError(true)
                 })
-                .finally(() => {})
+                .finally(() => {
+                    setDataLoading(false)
+                })
         }
         if (recordId) {
             fetchDataRequest()
@@ -58,7 +58,6 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
 
     const setInitialEditFormFieldsValues = (values) => {
         editForm?.setFieldsValue(values)
-        // console.log(editForm.getFieldsValue())
     }
 
     const onSubmit = (values) => {
@@ -130,8 +129,8 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
                 setDataLoading,
             }}
         >
-            {contextHolder}
             {children}
+            {contextHolder}
         </EditFormContext.Provider>
     )
 }
