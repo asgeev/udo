@@ -1,32 +1,32 @@
-import { useContext, useEffect, useLayoutEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { Form, Select, Space, Button, Tabs, Collapse, Tooltip } from 'antd'
 import {
     PaperClipOutlined,
     SisternodeOutlined,
     IdcardOutlined,
     TeamOutlined,
 } from '@ant-design/icons'
-import { Form, Select, Space, Button, Tabs, Collapse, Tooltip } from 'antd'
+import ReactQuill from 'react-quill'
 import WP_Instance from '@services/WP_Instance'
 import { FormSection } from '@molecules/FormSection/FormSection'
-import { RichTextEditor } from '@molecules/RichTextEditor/RichTextEditor'
-import { EditFormContext } from '@organisms/Providers/EditFormProvider'
-import { RichTextContext } from '@organisms/Providers/RichTextProvider'
+import { EditFormContext } from '@providers/EditFormProvider'
+import { RichTextContext } from '@providers/RichTextProvider'
 import { PasteButtons } from '@molecules/PasteButtons/PasteButtons'
+import { createSignaturesDataOptions } from '@helpers/createSignaturesDataOptions'
+import { RichTextEditor } from '@molecules/RichTextEditor/RichTextEditor'
 
-import { createSignaturesDataOptions } from '../../../../helpers/createSignaturesDataOptions'
+const modules = {
+    toolbar: [
+        ['bold', 'italic', 'underline'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+    ],
+}
 
 export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
-    const { initialFormData, showSecondDrawer, setError } =
-        useContext(EditFormContext)
+    const { showSecondDrawer, setError } = useContext(EditFormContext)
+    const { mainEditorRef, attachmentsEditorRef } = useContext(RichTextContext)
+
     const [signatures, setSignatures] = useState(null)
-    const {
-        mainEditor,
-        handleChangeContent,
-        attachmentsEditor,
-        setInitialValues,
-    } = useContext(RichTextContext)
-    const editForm = Form.useFormInstance()
-    const initialValue = initialFormData
 
     useEffect(() => {
         WP_Instance.get(`/udo/v1/getSignatureList`)
@@ -38,33 +38,6 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
                 setError(true)
             })
     }, [])
-
-    //${editForm} varialble passed only for prevent scrolling to rich text editor
-    // useLayoutEffect(() => {
-    //     if (initialValue) {
-    //         setInitialValues(
-    //             initialValue.template_main_text,
-    //             mainEditor,
-    //             editForm,
-    //             true
-    //         )
-    //         setInitialValues(
-    //             initialValue.template_attachments_text,
-    //             attachmentsEditor,
-    //             editForm,
-    //             true
-    //         )
-    //     }
-    // }, [initialValue])
-
-    // const updateSecondEditor = () => {
-    //     setInitialValues(
-    //         initialValue.template_attachments_text,
-    //         attachmentsEditor,
-    //         editForm,
-    //         true
-    //     )
-    // }
 
     const collapseItems = [
         {
@@ -82,28 +55,25 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
                     Odpowiedź
                 </span>
             ),
-
+            forceRender: true,
             children: (
-                <Form.Item name="template_main_text">
+                <>
                     <Space
                         size="large"
                         direction="vertical"
-                        style={{ width: '100%' }}
+                        style={{ width: '100%', marginBottom: 10 }}
                     >
                         <Collapse ghost size="small" items={collapseItems} />
-                        <RichTextEditor
-                            quillRef={mainEditor}
-                            onChange={(value, delta, source, editor) => {
-                                handleChangeContent(
-                                    editor,
-                                    editForm,
-                                    'template_main_text'
-                                )
-                            }}
-                            content={initialFormData?.template_main_text}
-                        />
                     </Space>
-                </Form.Item>
+                    <Form.Item name="template_main_text">
+                        <ReactQuill
+                            ref={mainEditorRef}
+                            modules={modules}
+                            id="template_main_text"
+                            placeholder="Tutaj wpisz swoją odpowiedź"
+                        />
+                    </Form.Item>
+                </>
             ),
         },
         {
@@ -114,18 +84,14 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
                     Załączniki
                 </span>
             ),
+            forceRender: true,
             children: (
                 <Form.Item name="template_attachments_text">
-                    <RichTextEditor
-                        quillRef={attachmentsEditor}
-                        onChange={(value, delta, source, editor) => {
-                            handleChangeContent(
-                                editor,
-                                editForm,
-                                'template_attachments_text'
-                            )
-                        }}
-                        content={initialFormData?.template_attachments_text}
+                    <ReactQuill
+                        ref={attachmentsEditorRef}
+                        modules={modules}
+                        id="template_attachments_text"
+                        placeholder="Tutaj wpisz listę załączników"
                     />
                 </Form.Item>
             ),

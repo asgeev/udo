@@ -1,20 +1,31 @@
 import { useContext } from 'react'
 import { Form, Button, Col, Row, Divider, Spin, Space, Alert } from 'antd'
 import { EditFormContext } from '@providers/EditFormProvider'
-import { InflowFormSection } from '@molecules/formSections/InflowFormSection/InflowFormSection'
-import { PersonDataFormSection } from '@molecules/formSections/PersonDataFormSection/PersonDataFormSection'
-import { CompanyDataFormSection } from '@molecules/formSections/CompanyDataFormSection/CompanyDataFormSection'
-import { ReplyTemplateFormSectionEditMode } from '@molecules/formSections/ReplyTemplateFormSectionEditMode/ReplyTemplateFormSectionEditMode'
-import { EzdDataFormSection } from '@molecules/formSections/EzdDataFormSection/EzdDataFormSection'
-import { AdditionalInfoFormSection } from '@molecules/formSections/AdditionalInfoFormSection/AdditionalInfoFormSection'
+import { InflowFormSection } from '@molecules/FormSections/InflowFormSection/InflowFormSection'
+import { PersonDataFormSection } from '@molecules/FormSections/PersonDataFormSection/PersonDataFormSection'
+import { CompanyDataFormSection } from '@molecules/FormSections/CompanyDataFormSection/CompanyDataFormSection'
+import { ReplyTemplateFormSectionEditMode } from '@molecules/FormSections/ReplyTemplateFormSectionEditMode/ReplyTemplateFormSectionEditMode'
+import { EzdDataFormSection } from '@molecules/FormSections/EzdDataFormSection/EzdDataFormSection'
+import { AdditionalInfoFormSection } from '@molecules/FormSections/AdditionalInfoFormSection/AdditionalInfoFormSection'
 import { downloadFile } from '@helpers/downloadFile'
 
 export const EditForm = () => {
-    const context = useContext(EditFormContext)
+    const {
+        error,
+        setError,
+        editForm,
+        editMode,
+        onSubmit,
+        submitLoading,
+        onFinishFailed,
+        formDisabled,
+        onChange,
+        recordId,
+    } = useContext(EditFormContext)
 
     return (
         <>
-            {context.error && (
+            {error && (
                 <Alert
                     message="Ups! Wystąpił błąd"
                     description="Podczas pobierania danych formularza wystapił błąd, spróbuj przeładować stronę naciskając przyciski CTRL + F5. Jeżeli problem będzie występował nadal prosimy o kontakt z administratorami strony."
@@ -23,30 +34,42 @@ export const EditForm = () => {
                 />
             )}
             <Form
-                form={context.editForm}
+                form={editForm}
                 name="mainEditForm"
-                onFinish={context.onSubmit}
-                onFinishFailed={context.onFinishFailed}
+                onFinish={onSubmit}
+                onFinishFailed={onFinishFailed}
                 autoComplete="off"
-                disabled={context.formDisabled}
+                disabled={formDisabled}
                 scrollToFirstError={{ block: 'center', behavior: 'smooth' }}
                 // onValuesChange={(changedValues) => {
                 //     console.log(changedValues)
                 // }}
-                onFieldsChange={context.onChange}
+                onFieldsChange={onChange}
                 layout="vertical"
             >
-                <InflowFormSection />
+                <InflowFormSection editMode={editMode} setError={setError} />
                 <Divider />
-                <PersonDataFormSection editMode />
+                <PersonDataFormSection
+                    editMode={editMode}
+                    setError={setError}
+                />
                 <Divider />
-                <CompanyDataFormSection editMode />
+                <CompanyDataFormSection
+                    editMode={editMode}
+                    setError={setError}
+                />
                 <Divider />
-                <ReplyTemplateFormSectionEditMode editMode />
+                <ReplyTemplateFormSectionEditMode
+                    editMode={editMode}
+                    setError={setError}
+                />
                 <Divider />
-                <EzdDataFormSection editMode />
+                <EzdDataFormSection editMode={editMode} setError={setError} />
                 <Divider />
-                <AdditionalInfoFormSection editMode />
+                <AdditionalInfoFormSection
+                    editMode={editMode}
+                    setError={setError}
+                />
 
                 <Row style={{ marginTop: 50 }} justify="end">
                     <Col>
@@ -55,15 +78,13 @@ export const EditForm = () => {
                                 <Button
                                     type="primary"
                                     size="large"
-                                    onClick={() =>
-                                        downloadFile(context.recordId)
-                                    }
+                                    onClick={() => downloadFile(recordId)}
                                 >
                                     Wygeneruj plik
                                 </Button>
                                 <Button
                                     type="primary"
-                                    loading={context.onSubmitLoading}
+                                    loading={submitLoading}
                                     htmlType="submit"
                                     size="large"
                                 >

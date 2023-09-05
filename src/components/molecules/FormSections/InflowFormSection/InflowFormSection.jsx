@@ -24,7 +24,7 @@ export const InflowFormSection = ({ editMode = false, setError }) => {
 
     return (
         <FormSection
-            editMode={editMode}
+            editMode={true}
             sectionName="Dane wpływu"
             subTitle="Wprowadź dane dotyczące sprawy"
         >

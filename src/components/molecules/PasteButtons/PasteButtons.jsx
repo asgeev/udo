@@ -17,46 +17,70 @@ import {
 } from '@molecules/RichTextEditor/TemplatesRichTextEditor/TemplatesRichTextEditor'
 
 export const PasteButtons = () => {
-    const { mainEditor, addTextToEditor } = useContext(RichTextContext)
+    const { mainEditorRef, addTextToEditor } = useContext(RichTextContext)
     return (
-        <Space direction="vertical">
+        <Space direction="vertical" style={{ marginBottom: 15 }}>
             <Space wrap>
-                <Button onClick={() => addTextToEditor(mainEditor, template1)}>
+                <Button
+                    onClick={() => addTextToEditor(mainEditorRef, template1)}
+                >
                     Szanowny Panie...
                 </Button>
             </Space>
             <Space wrap>
-                <Button onClick={() => addTextToEditor(mainEditor, template2)}>
+                <Button
+                    onClick={() => addTextToEditor(mainEditorRef, template2)}
+                >
                     Informacja o leczeniu
                 </Button>
-                <Button onClick={() => addTextToEditor(mainEditor, template5)}>
+                <Button
+                    onClick={() => addTextToEditor(mainEditorRef, template5)}
+                >
                     Informacja o leczeniu 2
                 </Button>
-                <Button onClick={() => addTextToEditor(mainEditor, template9)}>
+                <Button
+                    onClick={() => addTextToEditor(mainEditorRef, template9)}
+                >
                     Informacja o leczeniu 2 zał.
                 </Button>
-                <Button onClick={() => addTextToEditor(mainEditor, template3)}>
+                <Button
+                    onClick={() => addTextToEditor(mainEditorRef, template3)}
+                >
                     Ubezpieczenie
                 </Button>
-                <Button onClick={() => addTextToEditor(mainEditor, template4)}>
+                <Button
+                    onClick={() => addTextToEditor(mainEditorRef, template4)}
+                >
                     Dane adresowe
                 </Button>
-                <Button onClick={() => addTextToEditor(mainEditor, template6)}>
+                <Button
+                    onClick={() => addTextToEditor(mainEditorRef, template6)}
+                >
                     Realizacja recept
                 </Button>
-                <Button onClick={() => addTextToEditor(mainEditor, template7)}>
+                <Button
+                    onClick={() => addTextToEditor(mainEditorRef, template7)}
+                >
                     Ubezpieczenie zdrowotne
                 </Button>
-                <Button onClick={() => addTextToEditor(mainEditor, template8)}>
+                <Button
+                    onClick={() => addTextToEditor(mainEditorRef, template8)}
+                >
                     Deklaracja POZ
                 </Button>
-                <Button onClick={() => addTextToEditor(mainEditor, template10)}>
+                <Button
+                    onClick={() => addTextToEditor(mainEditorRef, template10)}
+                >
                     Wyjaśnienie CWU
                 </Button>
-                <Button onClick={() => addTextToEditor(mainEditor, template11)}>
+                <Button
+                    onClick={() => addTextToEditor(mainEditorRef, template11)}
+                >
                     Dane zweryfikowane
                 </Button>
-                <Button onClick={() => addTextToEditor(mainEditor, template12)}>
+                <Button
+                    onClick={() => addTextToEditor(mainEditorRef, template12)}
+                >
                     Przetwarzanie danych
                 </Button>
             </Space>

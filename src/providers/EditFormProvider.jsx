@@ -1,4 +1,10 @@
-import { useState, useLayoutEffect, createContext } from 'react'
+import {
+    useState,
+    useEffect,
+    useLayoutEffect,
+    createContext,
+    useContext,
+} from 'react'
 import { Form, message } from 'antd'
 import WP_Instance from '@services/WP_Instance'
 import { createNewObjectWithValidDate } from '@helpers/createNewObjectWithValidDate'
@@ -8,19 +14,27 @@ export const EditFormContext = createContext({
     onSubmit: () => {},
     onFinishFailed: () => {},
     initialFormData: null,
+    onChange: () => {},
+    editFormLoading: false,
+    formDisabled: false,
+    showSecondDrawer: () => {},
+    error: false,
+    setError: () => {},
+    editModel: false,
+    setEditMode: () => {},
 })
 
 export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
     const [formDisabled, setFormDisabled] = useState(false)
-    const [editFormLoading, setEditFormLoading] = useState(false)
-    const [onSubmitLoading, setSubmitLoading] = useState(false)
-    const [initialFormData, setInitalFormData] = useState(null)
+    const [dataLoading, setDataLoading] = useState(false)
+    const [submitLoading, setSubmitLoading] = useState(false)
     const [error, setError] = useState(false)
+    const [initialFormData, setInitalFormData] = useState(null)
     const [messageApi, contextHolder] = message.useMessage()
     const [editForm] = Form.useForm()
     const [editMode, setEditMode] = useState(true)
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         const fetchDataRequest = () => {
             WP_Instance.get(`/udo/v1/dataRequest?id=${recordId}`)
                 .then((response) => {
@@ -43,8 +57,8 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
     }, [initialFormData])
 
     const setInitialEditFormFieldsValues = (values) => {
-        console.log(values)
         editForm?.setFieldsValue(values)
+        // console.log(editForm.getFieldsValue())
     }
 
     const onSubmit = (values) => {
@@ -54,8 +68,9 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
             inflow_date: values['inflow_date']?.format('YYYY-MM-DD'),
             birth_date: values['birth_date']?.format('YYYY-MM-DD'),
             max_finish_date: values['max_finish_date']?.format('YYYY-MM-DD'),
+            requestor_act_date:
+                values['requestor_act_date']?.format('YYYY-MM-DD'),
         }
-        console.log(payload)
         setFormDisabled(true)
         setSubmitLoading(true)
         WP_Instance.put(
@@ -67,29 +82,18 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
                 messageApi.success(response?.data?.message)
             })
             .catch((error) => {
-                setFormDisabled(false)
-                messageApi.error(error?.resp?.message, 6, () =>
-                    setFormDisabled(false)
-                )
-
+                console.log(error)
                 if (error.response) {
-                    // The request was made and the server responded with a status code
-                    // that falls out of the range of 2xx
-                    // messageApi.error(error.response?.data?.message, 4)
+                    messageApi.error(error.response?.data?.message, 6)
 
                     console.log(error.response.data)
                     console.log(error.response.status)
                     console.log(error.response.headers)
-                } else if (error.request) {
-                    // The request was made but no response was received
-                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                    // http.ClientRequest in node.js
-                    console.log(error.request)
                 } else {
-                    // Something happened in setting up the request that triggered an Error
-                    console.log('Error', error.message)
+                    messageApi.error(
+                        'USP, wystąpił problem z zapisem formualrza, proszę spróbować później!'
+                    )
                 }
-                console.log(error.config)
             })
             .finally(() => {
                 setSubmitLoading(false)
@@ -103,7 +107,7 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
     }
 
     const onChange = (values) => {
-        // console.log(values)
+        console.log(values)
     }
 
     return (
@@ -115,14 +119,15 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
                 editForm,
                 initialFormData,
                 onChange,
-                editFormLoading,
-                onSubmitLoading,
+                submitLoading,
                 formDisabled,
                 showSecondDrawer,
                 error,
                 setError,
                 editMode,
                 setEditMode,
+                dataLoading,
+                setDataLoading,
             }}
         >
             {contextHolder}
