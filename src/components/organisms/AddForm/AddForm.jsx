@@ -18,7 +18,6 @@ export const AddForm = () => {
         addForm,
         onSubmit,
         onFinishFailed,
-        formDisabled,
         submitLoading,
     } = useContext(AddFormContext)
 
@@ -38,23 +37,24 @@ export const AddForm = () => {
                 onFinish={onSubmit}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
-                disabled={formDisabled}
                 scrollToFirstError={{ block: 'center', behavior: 'smooth' }}
                 layout="vertical"
             >
-                <GridWrapper>
-                    <InflowFormSection setError={setError} />
-                    <Divider />
-                    <PersonDataFormSection setError={setError} />
-                    <Divider />
-                    <CompanyDataFormSection setError={setError} />
-                    <Divider />
-                    <ReplyTemplateFormSection setError={setError} />
-                    <Divider />
-                    <EzdDataFormSection setError={setError} />
-                    <Divider />
-                    <AdditionalInfoFormSection setError={setError} />
-                </GridWrapper>
+                <Spin spinning={submitLoading} size="large">
+                    <GridWrapper>
+                        <InflowFormSection setError={setError} />
+                        <Divider />
+                        <PersonDataFormSection setError={setError} />
+                        <Divider />
+                        <CompanyDataFormSection setError={setError} />
+                        <Divider />
+                        <ReplyTemplateFormSection setError={setError} />
+                        <Divider />
+                        <EzdDataFormSection setError={setError} />
+                        <Divider />
+                        <AdditionalInfoFormSection setError={setError} />
+                    </GridWrapper>
+                </Spin>
                 <Row style={{ marginTop: 50 }} justify="end">
                     <Col>
                         <Form.Item>

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Form, message, Modal, Typography } from 'antd'
 import WP_Instance from '@services/WP_Instance'
 import { ModalStepsView } from '@molecules/ModalStepsView/ModalStepsView'
-
+import { createNewObjectWithValidDateFromEzd } from '@helpers/createNewObjectWithValidDateFromEzd'
 export const AddFormContext = createContext({
     addForm: null,
     onSubmit: () => {},
@@ -15,7 +15,6 @@ export const AddFormContext = createContext({
 })
 
 export const AddFormProvider = ({ children }) => {
-    const [formDisabled, setFormDisabled] = useState(false)
     const [submitLoading, setSubmitLoading] = useState(false)
     const [error, setError] = useState(false)
     const [addForm] = Form.useForm()
@@ -31,12 +30,11 @@ export const AddFormProvider = ({ children }) => {
             inflow_date: values['inflow_date']?.format('YYYY-MM-DD'),
             birth_date: values['birth_date']?.format('YYYY-MM-DD'),
             max_finish_date: values['max_finish_date']?.format('YYYY-MM-DD'),
-            requstor_act_date:
+            requestor_act_date:
                 values['requestor_act_date']?.format('YYYY-MM-DD'),
         }
         console.log(payload)
         setSubmitLoading(true)
-        setFormDisabled(true)
         WP_Instance.post(`/udo/v1/dataRequest`, payload)
             .then((response) => {
                 console.log(response)
@@ -60,7 +58,6 @@ export const AddFormProvider = ({ children }) => {
             })
             .finally(() => {
                 setSubmitLoading(false)
-                setFormDisabled(false)
             })
     }
 
@@ -76,7 +73,6 @@ export const AddFormProvider = ({ children }) => {
             addForm.resetFields()
             instance.destroy()
             window.scrollTo({ top: '0', behavior: 'smooth' })
-            setFormDisabled(false)
         }
         const instance = modal.confirm({
             title: (
@@ -100,6 +96,45 @@ export const AddFormProvider = ({ children }) => {
         })
     }
 
+    const showLoadingMessage = () => {
+        messageApi
+            .open({
+                key: 'loading',
+                type: 'loading',
+                content: 'Pobieranie danych z ezd...',
+                duration: 0,
+            })
+            .then(() => message.success('Dane z EZD zostały wstawione ', 4))
+    }
+
+    const setFormFields = (data) => {
+        const fieldsValue = createNewObjectWithValidDateFromEzd(data)
+        addForm.setFieldsValue(fieldsValue)
+    }
+
+    const getMetaDataFromEzd = () => {
+        const idKoszulka = addForm.getFieldValue('inflow_koszulka_id')
+        if (idKoszulka) {
+            showLoadingMessage()
+            setSubmitLoading(true)
+            // WP_Instance.get(`udo/v1/getDataFromKoszulka?id=975`)
+            WP_Instance.get(`udo/v1/getDataFromKoszulka?id=${idKoszulka}`)
+                .then((response) => {
+                    setFormFields(response?.data)
+                    messageApi.destroy('loading')
+                })
+                .catch((error) => {
+                    console.log(error)
+                    message.error('Niestety nie udało się pobrać danych z EZD')
+                })
+                .finally(() => {
+                    setSubmitLoading(false)
+                })
+        } else {
+            messageApi.error('Podaj nr koszulki wpływającej')
+        }
+    }
+
     return (
         <AddFormContext.Provider
             value={{
@@ -107,9 +142,9 @@ export const AddFormProvider = ({ children }) => {
                 onSubmit,
                 onFinishFailed,
                 submitLoading,
-                formDisabled,
                 error,
                 setError,
+                getMetaDataFromEzd,
             }}
         >
             {messageContextHolder}

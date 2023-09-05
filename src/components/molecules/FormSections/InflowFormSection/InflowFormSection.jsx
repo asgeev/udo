@@ -1,20 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { Space, Form, Input, DatePicker, Select, Button, Tooltip } from 'antd'
 import { SyncOutlined } from '@ant-design/icons'
 import WP_Instance from '@services/WP_Instance'
 import { FormSection } from '@molecules/FormSection/FormSection'
 import { createInflowWayDataOptions } from '@helpers/createInflowWayDataOptions'
+import { AddFormContext } from '@providers/AddFormProvider'
 
 const rpwRegex = '^RPW/'
 const isFieldValid = new RegExp(rpwRegex, 'i')
 
 export const InflowFormSection = ({ editMode = false, setError }) => {
-    const [inflowWayList, setInflowaWayList] = useState([])
+    const [inflowWayList, setInflowWayList] = useState([])
+    const { getMetaDataFromEzd } = useContext(AddFormContext)
 
     useEffect(() => {
         WP_Instance.get(`/udo/v1/getInflowWayList`)
             .then((response) => {
-                setInflowaWayList(response?.data)
+                setInflowWayList(response?.data)
             })
             .catch((error) => {
                 console.error(error)
@@ -24,7 +26,7 @@ export const InflowFormSection = ({ editMode = false, setError }) => {
 
     return (
         <FormSection
-            editMode={true}
+            editMode={editMode}
             sectionName="Dane wpływu"
             subTitle="Wprowadź dane dotyczące sprawy"
         >
@@ -46,11 +48,11 @@ export const InflowFormSection = ({ editMode = false, setError }) => {
                         />
                     </Form.Item>
                     {!editMode && (
-                        <Tooltip title="Synchronizuj z EZD">
+                        <Tooltip title="Pobierz dane z EZD">
                             <Button
-                                disabled
                                 type="primary"
                                 icon={<SyncOutlined />}
+                                onClick={getMetaDataFromEzd}
                             />
                         </Tooltip>
                     )}
@@ -77,7 +79,7 @@ export const InflowFormSection = ({ editMode = false, setError }) => {
                         <Input placeholder="numer RPW z EZD" />
                     </Form.Item>
                 </Space>
-                <Space>
+                <Space wrap>
                     <Form.Item name="inflow_way_id" label="Sposób dostarczenia">
                         <Select
                             placeholder="sposób dostarczenia"
