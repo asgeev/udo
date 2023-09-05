@@ -1,4 +1,5 @@
-import ReactQuill from 'react-quill'
+import { useState, React } from 'react'
+import ReactQuill, { Quill } from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 //Custom css for quill rich text editor
 import '@molecules/RichTextEditor/customStylesRichTextEditor.css'
@@ -10,17 +11,14 @@ const modules = {
     ],
 }
 
-export const RichTextEditor = ({ quillRef, onChange, content }) => {
+export const RichTextEditor = ({ ref, id, placeholder }) => {
     return (
-        <>
-            <ReactQuill
-                ref={quillRef}
-                theme="snow"
-                placeholder="Wpisz swoją odpowiedź"
-                modules={modules}
-                onChange={onChange}
-                defaultValue={content}
-            />
-        </>
+        <ReactQuill
+            ref={React.forwardRef(ref)}
+            id={id}
+            modules={modules}
+            theme="snow"
+            placeholder="Wpisz swoją odpowiedź"
+        />
     )
 }

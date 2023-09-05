@@ -1,4 +1,10 @@
-import { useState, useLayoutEffect, createContext } from 'react'
+import {
+    useState,
+    useEffect,
+    useLayoutEffect,
+    createContext,
+    useContext,
+} from 'react'
 import { Form, message } from 'antd'
 import WP_Instance from '@services/WP_Instance'
 import { createNewObjectWithValidDate } from '@helpers/createNewObjectWithValidDate'
@@ -20,14 +26,15 @@ export const EditFormContext = createContext({
 
 export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
     const [formDisabled, setFormDisabled] = useState(false)
+    const [dataLoading, setDataLoading] = useState(false)
     const [submitLoading, setSubmitLoading] = useState(false)
-    const [initialFormData, setInitalFormData] = useState(null)
     const [error, setError] = useState(false)
+    const [initialFormData, setInitalFormData] = useState(null)
     const [messageApi, contextHolder] = message.useMessage()
     const [editForm] = Form.useForm()
     const [editMode, setEditMode] = useState(true)
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         const fetchDataRequest = () => {
             WP_Instance.get(`/udo/v1/dataRequest?id=${recordId}`)
                 .then((response) => {
@@ -50,11 +57,12 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
     }, [initialFormData])
 
     const setInitialEditFormFieldsValues = (values) => {
-        console.log(values)
         editForm?.setFieldsValue(values)
+        // console.log(editForm.getFieldsValue())
     }
 
     const onSubmit = (values) => {
+        console.log(values)
         const payload = {
             ...values,
             inflow_date: values['inflow_date']?.format('YYYY-MM-DD'),
@@ -99,7 +107,7 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
     }
 
     const onChange = (values) => {
-        // console.log(values)
+        console.log(values)
     }
 
     return (
@@ -118,6 +126,8 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
                 setError,
                 editMode,
                 setEditMode,
+                dataLoading,
+                setDataLoading,
             }}
         >
             {contextHolder}

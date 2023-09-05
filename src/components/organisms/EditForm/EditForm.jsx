@@ -1,12 +1,12 @@
 import { useContext } from 'react'
 import { Form, Button, Col, Row, Divider, Spin, Space, Alert } from 'antd'
 import { EditFormContext } from '@providers/EditFormProvider'
-import { InflowFormSection } from '@molecules/formSections/InflowFormSection/InflowFormSection'
-import { PersonDataFormSection } from '@molecules/formSections/PersonDataFormSection/PersonDataFormSection'
-import { CompanyDataFormSection } from '@molecules/formSections/CompanyDataFormSection/CompanyDataFormSection'
-import { ReplyTemplateFormSectionEditMode } from '@molecules/formSections/ReplyTemplateFormSectionEditMode/ReplyTemplateFormSectionEditMode'
-import { EzdDataFormSection } from '@molecules/formSections/EzdDataFormSection/EzdDataFormSection'
-import { AdditionalInfoFormSection } from '@molecules/formSections/AdditionalInfoFormSection/AdditionalInfoFormSection'
+import { InflowFormSection } from '@molecules/FormSections/InflowFormSection/InflowFormSection'
+import { PersonDataFormSection } from '@molecules/FormSections/PersonDataFormSection/PersonDataFormSection'
+import { CompanyDataFormSection } from '@molecules/FormSections/CompanyDataFormSection/CompanyDataFormSection'
+import { ReplyTemplateFormSectionEditMode } from '@molecules/FormSections/ReplyTemplateFormSectionEditMode/ReplyTemplateFormSectionEditMode'
+import { EzdDataFormSection } from '@molecules/FormSections/EzdDataFormSection/EzdDataFormSection'
+import { AdditionalInfoFormSection } from '@molecules/FormSections/AdditionalInfoFormSection/AdditionalInfoFormSection'
 import { downloadFile } from '@helpers/downloadFile'
 
 export const EditForm = () => {

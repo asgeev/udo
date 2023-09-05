@@ -4,12 +4,12 @@ import 'dayjs/locale/pl'
 import { GridWrapper, antIcon } from './AddFrom.styles'
 import { AddFormContext } from '@providers/AddFormProvider'
 //Import form sections
-import { InflowFormSection } from '@molecules/formSections/InflowFormSection/InflowFormSection'
-import { PersonDataFormSection } from '@molecules/formSections/PersonDataFormSection/PersonDataFormSection'
-import { CompanyDataFormSection } from '@molecules/formSections/CompanyDataFormSection/CompanyDataFormSection'
-import { ReplyTemplateFormSection } from '@molecules/formSections/ReplyTemplateFormSection/ReplyTemplateFormSection'
-import { EzdDataFormSection } from '@molecules/formSections/EzdDataFormSection/EzdDataFormSection'
-import { AdditionalInfoFormSection } from '@molecules/formSections/AdditionalInfoFormSection/AdditionalInfoFormSection'
+import { InflowFormSection } from '@molecules/FormSections/InflowFormSection/InflowFormSection'
+import { PersonDataFormSection } from '@molecules/FormSections/PersonDataFormSection/PersonDataFormSection'
+import { CompanyDataFormSection } from '@molecules/FormSections/CompanyDataFormSection/CompanyDataFormSection'
+import { ReplyTemplateFormSection } from '@molecules/FormSections/ReplyTemplateFormSection/ReplyTemplateFormSection'
+import { EzdDataFormSection } from '@molecules/FormSections/EzdDataFormSection/EzdDataFormSection'
+import { AdditionalInfoFormSection } from '@molecules/FormSections/AdditionalInfoFormSection/AdditionalInfoFormSection'
 
 export const AddForm = () => {
     const {
