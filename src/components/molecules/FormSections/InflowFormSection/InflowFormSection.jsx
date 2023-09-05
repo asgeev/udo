@@ -32,7 +32,7 @@ export const InflowFormSection = ({ editMode = false, setError }) => {
                 <Space wrap>
                     <Form.Item
                         name="inflow_koszulka_id"
-                        label="Id koszulki"
+                        label="Id koszulki wpływającej"
                         rules={[
                             {
                                 required: true,

@@ -21,6 +21,7 @@ export const EditForm = () => {
         formDisabled,
         onChange,
         recordId,
+        dataLoading,
     } = useContext(EditFormContext)
 
     return (
@@ -33,68 +34,76 @@ export const EditForm = () => {
                     showIcon
                 />
             )}
-            <Form
-                form={editForm}
-                name="mainEditForm"
-                onFinish={onSubmit}
-                onFinishFailed={onFinishFailed}
-                autoComplete="off"
-                disabled={formDisabled}
-                scrollToFirstError={{ block: 'center', behavior: 'smooth' }}
-                // onValuesChange={(changedValues) => {
-                //     console.log(changedValues)
-                // }}
-                onFieldsChange={onChange}
-                layout="vertical"
-            >
-                <InflowFormSection editMode={editMode} setError={setError} />
-                <Divider />
-                <PersonDataFormSection
-                    editMode={editMode}
-                    setError={setError}
-                />
-                <Divider />
-                <CompanyDataFormSection
-                    editMode={editMode}
-                    setError={setError}
-                />
-                <Divider />
-                <ReplyTemplateFormSectionEditMode
-                    editMode={editMode}
-                    setError={setError}
-                />
-                <Divider />
-                <EzdDataFormSection editMode={editMode} setError={setError} />
-                <Divider />
-                <AdditionalInfoFormSection
-                    editMode={editMode}
-                    setError={setError}
-                />
+            <Spin spinning={dataLoading} size="large">
+                <Form
+                    form={editForm}
+                    name="mainEditForm"
+                    onFinish={onSubmit}
+                    onFinishFailed={onFinishFailed}
+                    autoComplete="off"
+                    disabled={formDisabled || error}
+                    scrollToFirstError={{ block: 'center', behavior: 'smooth' }}
+                    // onValuesChange={(changedValues) => {
+                    //     console.log(changedValues)
+                    // }}
+                    onFieldsChange={onChange}
+                    layout="vertical"
+                >
+                    <InflowFormSection
+                        editMode={editMode}
+                        setError={setError}
+                    />
+                    <Divider />
+                    <PersonDataFormSection
+                        editMode={editMode}
+                        setError={setError}
+                    />
+                    <Divider />
+                    <CompanyDataFormSection
+                        editMode={editMode}
+                        setError={setError}
+                    />
+                    <Divider />
+                    <ReplyTemplateFormSectionEditMode
+                        editMode={editMode}
+                        setError={setError}
+                    />
+                    <Divider />
+                    <EzdDataFormSection
+                        editMode={editMode}
+                        setError={setError}
+                    />
+                    <Divider />
+                    <AdditionalInfoFormSection
+                        editMode={editMode}
+                        setError={setError}
+                    />
 
-                <Row style={{ marginTop: 50 }} justify="end">
-                    <Col>
-                        <Form.Item>
-                            <Space>
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                    onClick={() => downloadFile(recordId)}
-                                >
-                                    Wygeneruj plik
-                                </Button>
-                                <Button
-                                    type="primary"
-                                    loading={submitLoading}
-                                    htmlType="submit"
-                                    size="large"
-                                >
-                                    Zapisz
-                                </Button>
-                            </Space>
-                        </Form.Item>
-                    </Col>
-                </Row>
-            </Form>
+                    <Row style={{ marginTop: 50 }} justify="end">
+                        <Col>
+                            <Form.Item>
+                                <Space>
+                                    <Button
+                                        type="primary"
+                                        size="large"
+                                        onClick={() => downloadFile(recordId)}
+                                    >
+                                        Wygeneruj plik
+                                    </Button>
+                                    <Button
+                                        type="primary"
+                                        loading={submitLoading}
+                                        htmlType="submit"
+                                        size="large"
+                                    >
+                                        Zapisz
+                                    </Button>
+                                </Space>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Form>
+            </Spin>
         </>
     )
 }

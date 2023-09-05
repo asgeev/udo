@@ -1,5 +1,4 @@
-import { useState, React } from 'react'
-import ReactQuill, { Quill } from 'react-quill'
+import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 //Custom css for quill rich text editor
 import '@molecules/RichTextEditor/customStylesRichTextEditor.css'
@@ -14,7 +13,7 @@ const modules = {
 export const RichTextEditor = ({ ref, id, placeholder }) => {
     return (
         <ReactQuill
-            ref={React.forwardRef(ref)}
+            // ref={React.forwardRef(ref)}
             id={id}
             modules={modules}
             theme="snow"
