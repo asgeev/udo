@@ -108,7 +108,7 @@ export const PersonDataFormSection = ({ editMode = false, setError }) => {
             </Row>
             <Form.Item label="Adres">
                 <Space direction="vertical" style={{ rowGap: 0 }}>
-                    <Space direction="horizontal">
+                    <Space direction="horizontal" wrap>
                         <Form.Item name="person_street">
                             <Input placeholder="ulica" style={{ width: 250 }} />
                         </Form.Item>
