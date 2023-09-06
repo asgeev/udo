@@ -1,45 +1,35 @@
-import { useState } from 'react'
 import { Drawer } from 'antd'
 import { EditForm } from '@organisms/EditForm/EditForm'
-import { EditFormSecondDrawer } from '@molecules/EditFormSecondDrawer/EditFormSecondDrawer'
+import { SecondDrawer } from '@molecules/EditFormSecondDrawer/EditFormSecondDrawer'
 import { EditFormProvider } from '@providers/EditFormProvider'
 import { RichTextProvider } from '@providers/RichTextProvider'
+import { useEditDrawerContext } from '@hooks/useEditDrawerContext'
+import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
 
-export const EditFormDrawer = ({ recordId, drawerOpen, onDrawerClose }) => {
-    const [secondDrawerOpen, setSecondDrawerOpen] = useState(false)
-
-    const showSecondDrawer = () => {
-        setSecondDrawerOpen(true)
-    }
-
-    const onSecondDrawerClose = () => {
-        setSecondDrawerOpen(false)
-    }
+export const EditFormDrawer = () => {
+    const { currentRecordId } = useRecordsViewContext()
+    const { isDrawerVisible, closeDrawer, showSecondDrawer } =
+        useEditDrawerContext()
 
     return (
-        <>
-            <RichTextProvider>
-                <Drawer
-                    title={`Edytuj zapytanie dla sprawy nr ${recordId}`}
-                    width={900}
-                    push={{ distance: '100' }}
-                    open={drawerOpen}
-                    destroyOnClose={true}
-                    onClose={onDrawerClose}
+        <RichTextProvider>
+            <Drawer
+                title={`Edytuj zapytanie dla sprawy nr ${currentRecordId}`}
+                width={900}
+                push={{ distance: '100' }}
+                open={isDrawerVisible}
+                destroyOnClose={true}
+                onClose={closeDrawer}
+            >
+                <EditFormProvider
+                    recordId={currentRecordId}
+                    showSecondDrawer={showSecondDrawer}
                 >
-                    <EditFormProvider
-                        recordId={recordId}
-                        showSecondDrawer={showSecondDrawer}
-                    >
-                        <EditForm />
-                    </EditFormProvider>
+                    <EditForm />
+                </EditFormProvider>
 
-                    <EditFormSecondDrawer
-                        onSecondDrawerClose={onSecondDrawerClose}
-                        secondDrawerOpen={secondDrawerOpen}
-                    />
-                </Drawer>
-            </RichTextProvider>
-        </>
+                <SecondDrawer />
+            </Drawer>
+        </RichTextProvider>
     )
 }

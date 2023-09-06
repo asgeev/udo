@@ -14,6 +14,7 @@ import { RichTextContext } from '@providers/RichTextProvider'
 import { PasteButtons } from '@molecules/PasteButtons/PasteButtons'
 import { createSignaturesDataOptions } from '@helpers/createSignaturesDataOptions'
 import { RichTextEditor } from '@molecules/RichTextEditor/RichTextEditor'
+import { useEditDrawerContext } from '@hooks/useEditDrawerContext'
 
 const modules = {
     toolbar: [
@@ -23,7 +24,8 @@ const modules = {
 }
 
 export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
-    const { showSecondDrawer, setError } = useContext(EditFormContext)
+    const { openSecondDrawer } = useEditDrawerContext()
+    const { setError } = useContext(EditFormContext)
     const { mainEditorRef, attachmentsEditorRef } = useContext(RichTextContext)
 
     const [signatures, setSignatures] = useState(null)
@@ -124,9 +126,7 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
                     <Button
                         icon={<TeamOutlined />}
                         type="primary"
-                        onClick={() => {
-                            showSecondDrawer()
-                        }}
+                        onClick={openSecondDrawer}
                     >
                         CWU
                     </Button>

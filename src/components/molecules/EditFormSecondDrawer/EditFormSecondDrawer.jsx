@@ -5,20 +5,19 @@ import {
     template2,
     template4,
 } from '@molecules/RichTextEditor/TemplatesRichTextEditor/TemplatesRichTextEditor'
+import { useEditDrawerContext } from '@hooks/useEditDrawerContext'
 
-export const EditFormSecondDrawer = ({
-    secondDrawerOpen,
-    onSecondDrawerClose,
-}) => {
+export const SecondDrawer = () => {
     const { addTextToEditor, mainEditor, attachmentsEditor } =
         useContext(RichTextContext)
+    const { isSecondDrawerVisible, closeSecondDrawer } = useEditDrawerContext()
 
     return (
         <Drawer
             width={600}
             title="Dane z systemu"
-            open={secondDrawerOpen}
-            onClose={onSecondDrawerClose}
+            open={isSecondDrawerVisible}
+            onClose={closeSecondDrawer}
         >
             <Space direction="vertical" style={{ width: '100%' }}>
                 <Alert
