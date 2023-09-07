@@ -1,17 +1,25 @@
-import { Space, Tooltip, Button } from 'antd'
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import { Space, Tooltip, Button, Badge } from 'antd'
+import {
+    EditOutlined,
+    DeleteOutlined,
+    NodeExpandOutlined,
+    SisternodeOutlined,
+} from '@ant-design/icons'
 
 export const TableActionButtons = ({
-    recordId,
+    record,
     openDrawer,
     setCurrentRecordId,
+    createNew,
+    createKoszulka,
+    ezdAction,
 }) => {
     return (
-        <Space>
+        <Space size={0}>
             <Tooltip title="Edytuj" color="blue">
                 <Button
                     onClick={() => {
-                        setCurrentRecordId(recordId)
+                        setCurrentRecordId(record.key)
                         openDrawer()
                     }}
                     type="text"
@@ -27,6 +35,30 @@ export const TableActionButtons = ({
                     onClick={() => console.log('Clicked delete button')}
                 />
             </Tooltip>
+
+            {!record.koszulka_id && (
+                <Badge dot>
+                    <Tooltip title="Utwórz koszulkę" color="purple">
+                        <Button
+                            type="text"
+                            icon={<SisternodeOutlined />}
+                            onClick={() => ezdAction(record.key, 'koszulka')}
+                        />
+                    </Tooltip>
+                </Badge>
+            )}
+            {!record.nr_sprawy && (
+                <Badge dot>
+                    <Tooltip title="Utwórz sprawę" color="magenta">
+                        <Button
+                            type="text"
+                            disabled={record.koszulka_id ? false : true}
+                            icon={<NodeExpandOutlined />}
+                            onClick={() => ezdAction(record.key, 'sprawa')}
+                        />
+                    </Tooltip>
+                </Badge>
+            )}
         </Space>
     )
 }

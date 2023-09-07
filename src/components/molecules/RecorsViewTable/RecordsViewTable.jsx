@@ -17,6 +17,7 @@ export const RecordsViewTable = () => {
         setCurrentPage,
         setPageSize,
         setCurrentRecordId,
+        ezdAction,
     } = useRecordsViewContext()
 
     const columns = [
@@ -24,42 +25,50 @@ export const RecordsViewTable = () => {
             title: 'Id',
             dataIndex: 'data_request_id',
             key: 'data_request_id',
-        },
-        {
-            title: 'Pesel',
-            dataIndex: 'pesel',
-            key: 'pesel',
+            width: 60,
         },
         {
             title: 'Imię',
             dataIndex: 'first_name',
             key: 'first_name',
+            ellipsis: true,
         },
         {
             title: 'Nazwisko',
             dataIndex: 'last_name',
             key: 'last_name',
+            ellipsis: true,
         },
         {
-            title: 'RPW',
-            dataIndex: 'rpw',
-            key: 'rpw',
+            title: 'Wnioskodawca',
+            dataIndex: 'requestor_name',
+            key: 'requestor_name',
+            ellipsis: true,
+        },
+        {
+            title: 'Data końca realizacji',
+            dataIndex: 'max_finish_date',
+            key: 'max_finish_date',
+            ellipsis: true,
         },
         {
             title: 'Status',
             dataIndex: 'status',
-            key: 'nr_sprawy',
-            render: (_, record) => <ShowTableStatusTags />,
+            key: 'status',
+            ellipsis: true,
+            render: (_, record) => <ShowTableStatusTags record={record} />,
         },
         {
             title: 'Akcja',
             dataIndex: 'action',
             key: 'action',
+            width: 180,
             render: (_, record) => (
                 <TableActionButtons
-                    recordId={record.key}
+                    record={record}
                     openDrawer={openDrawer}
                     setCurrentRecordId={setCurrentRecordId}
+                    ezdAction={ezdAction}
                 />
             ),
         },

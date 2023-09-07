@@ -1,10 +1,14 @@
-import { Space, Tag } from 'antd'
-import { CheckCircleOutlined, SyncOutlined } from '@ant-design/icons'
+import { Space, Tag, Tooltip } from 'antd'
+import {
+    CheckCircleOutlined,
+    SyncOutlined,
+    WarningOutlined,
+} from '@ant-design/icons'
 
-export const ShowTableStatusTags = ({ finished_status = 0 }) => {
+export const ShowTableStatusTags = ({ record }) => {
     return (
-        <Space>
-            {finished_status ? (
+        <Space wrap>
+            {!record.finished_status ? (
                 <Tag icon={<CheckCircleOutlined />} color="success">
                     zakończono
                 </Tag>
@@ -13,7 +17,16 @@ export const ShowTableStatusTags = ({ finished_status = 0 }) => {
                     w trakcie
                 </Tag>
             )}
-            <Tag color="red">pilne</Tag>
+            {(!record.koszulka_id || !record.nr_sprawy) && (
+                <Tooltip
+                    title="Brak utworzonej koszulki lub sprawy"
+                    color="red"
+                >
+                    <Tag icon={<WarningOutlined />} color="error">
+                        Błąd
+                    </Tag>
+                </Tooltip>
+            )}
         </Space>
     )
 }
