@@ -32,7 +32,7 @@ export const TableRowDescription = ({ data }) => {
         },
         {
             key: '3',
-            label: 'RPW',
+            label: 'RPW wpływu',
             span: 4,
             children: rpw,
         },
@@ -54,7 +54,7 @@ export const TableRowDescription = ({ data }) => {
             span: 8,
             children: (
                 <>
-                    ulica: {requestor_street} {requestor_house}
+                    {requestor_street} {requestor_house}
                     {requestor_apartment && `/ ${requestor_apartment}`}
                     <Divider type="vertical" />
                     {requestor_postcode} {requestor_city}

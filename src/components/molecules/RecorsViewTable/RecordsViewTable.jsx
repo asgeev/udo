@@ -4,6 +4,7 @@ import { useEditDrawerContext } from '@hooks/useEditDrawerContext'
 import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
 import { ShowTableStatusTags } from '@atoms/ShowTableStatusTags/ShowTableStatusTags'
 import { TableActionButtons } from '@atoms/TableActionButtons/TableActionButtons'
+import { FiltersForm } from '@molecules/FiltersForm/FiltersForm'
 
 export const RecordsViewTable = () => {
     const { openDrawer } = useEditDrawerContext()
@@ -12,12 +13,12 @@ export const RecordsViewTable = () => {
         total,
         tableData,
         showDrawer,
-        currentPage,
-        pageSize,
-        setCurrentPage,
-        setPageSize,
         setCurrentRecordId,
         ezdAction,
+        currentPage,
+        perPage,
+        onPaginationChange,
+        onFiltersChange,
     } = useRecordsViewContext()
 
     const columns = [
@@ -73,30 +74,32 @@ export const RecordsViewTable = () => {
             ),
         },
     ]
+
     return (
-        <Table
-            loading={isLoading}
-            dataSource={tableData}
-            columns={columns}
-            showDrawer={showDrawer}
-            expandable={{
-                expandedRowRender: (record) => {
-                    return <TableRowDescription data={record} />
-                },
-            }}
-            size="medium"
-            pagination={{
-                current: currentPage,
-                pageSize: pageSize,
-                total: total,
-                showSizeChanger: true,
-                onChange: (page) => {
-                    setCurrentPage(page)
-                },
-                onShowSizeChange: (current, size) => {
-                    setPageSize(size)
-                },
-            }}
-        />
+        <>
+            <FiltersForm onFiltersChange={onFiltersChange} />
+
+            <Table
+                loading={isLoading}
+                dataSource={tableData}
+                columns={columns}
+                showDrawer={showDrawer}
+                expandable={{
+                    expandedRowRender: (record) => {
+                        return <TableRowDescription data={record} />
+                    },
+                }}
+                size="medium"
+                pagination={{
+                    current: parseInt(currentPage),
+                    pageSize: parseInt(perPage),
+                    total: total,
+                    showSizeChanger: true,
+                    onChange: (currentPage, pageSize) => {
+                        onPaginationChange(currentPage, pageSize)
+                    },
+                }}
+            />
+        </>
     )
 }

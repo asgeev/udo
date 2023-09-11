@@ -1,35 +1,40 @@
 import { useState, useEffect, createContext } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { message } from 'antd'
 import WP_Instance from '@services/WP_Instance'
 import { newDataTableWithKey } from '@helpers/newDataTableWithKey'
 
-export const RecordsViewContext = createContext({})
+export const RecordsViewContext = createContext({
+    onFiltersChange: () => {},
+})
 
 export const RecordsViewProvider = ({ children }) => {
     const [currentRecordId, setCurrentRecordId] = useState(null)
     const [tableData, setTableData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-    const [currentPage, setCurrentPage] = useState(1)
-    const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
     const [messageApi, messageContextHolder] = message.useMessage()
+    const initialSearchParams = { page: 1, per_page: 10, search_query: '' }
+    const [searchParams, setSearchParams] = useSearchParams(initialSearchParams)
+    const currentPage = searchParams.get('page')
+    const perPage = searchParams.get('per_page')
 
     useEffect(() => {
-        setIsLoading(true)
-        WP_Instance.get(
-            `/udo/v1/getDataRequestList?page=${currentPage}&per_page=${pageSize}`
-        )
-            .then((response) => {
-                setTableData(newDataTableWithKey(response?.data?.data))
-                setTotal(response?.data?.total)
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-            .finally(() => {
-                setIsLoading(false)
-            })
-    }, [currentPage, pageSize])
+        if (searchParams) {
+            setIsLoading(true)
+            WP_Instance.get(`/udo/v1/getDataRequestList?${searchParams}`)
+                .then((response) => {
+                    setTableData(newDataTableWithKey(response?.data?.data))
+                    setTotal(response?.data?.total)
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
+                .finally(() => {
+                    setIsLoading(false)
+                })
+        }
+    }, [searchParams])
 
     const showMessage = (text, type, onClose) => {
         switch (type) {
@@ -115,19 +120,42 @@ export const RecordsViewProvider = ({ children }) => {
         }
     }
 
+    const onFiltersChange = (changedFields) => {
+        setSearchParams((searchParams) => {
+            searchParams.set('page', 1)
+            for (const [key, value] of Object.entries(changedFields)) {
+                searchParams.set(key, value)
+            }
+            return searchParams
+        })
+    }
+    // const onFiltersChange = (a) => {
+    //     console.log(a)
+    // }
+
+    const onPaginationChange = (currentPage, pageSize) => {
+        setSearchParams((searchParams) => {
+            searchParams.set('page', currentPage)
+            searchParams.set('per_page', pageSize)
+            return searchParams
+        })
+    }
+
     return (
         <RecordsViewContext.Provider
             value={{
                 isLoading,
                 tableData,
-                currentPage,
-                pageSize,
                 total,
-                setCurrentPage,
-                setPageSize,
                 currentRecordId,
                 setCurrentRecordId,
                 ezdAction,
+                currentPage,
+                perPage,
+                searchParams,
+                setSearchParams,
+                onFiltersChange,
+                onPaginationChange,
             }}
         >
             {messageContextHolder}
