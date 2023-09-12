@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Layout, Menu, Typography, Tag } from 'antd'
-import { FileAddOutlined, HomeOutlined } from '@ant-design/icons'
+import {
+    PlusOutlined,
+    HomeOutlined,
+    RiseOutlined,
+    SearchOutlined,
+} from '@ant-design/icons'
 import logoUDO from '@assets/LogoUDO.png'
 import { LogoContainer } from './Navigation.styles'
 
@@ -16,13 +21,19 @@ const menuItems = [
     },
     {
         key: '/dodawanie',
-        icon: <FileAddOutlined />,
+        icon: <PlusOutlined />,
         label: 'Dodawanie',
     },
     {
         key: '/podglad',
-        icon: <FileAddOutlined />,
+        icon: <SearchOutlined />,
         label: 'Podgląd',
+    },
+    {
+        key: '/statystyka',
+        icon: <RiseOutlined />,
+        label: 'Statystyka',
+        disabled: true,
     },
 ]
 
