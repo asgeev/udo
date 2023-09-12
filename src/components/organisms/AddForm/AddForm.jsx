@@ -1,8 +1,6 @@
-import { useContext } from 'react'
 import { Form, Button, Col, Row, Divider, Spin, Space, Alert } from 'antd'
 import 'dayjs/locale/pl'
 import { GridWrapper, antIcon } from './AddFrom.styles'
-import { AddFormContext } from '@providers/AddFormProvider'
 //Import form sections
 import { InflowFormSection } from '@molecules/FormSections/InflowFormSection/InflowFormSection'
 import { PersonDataFormSection } from '@molecules/FormSections/PersonDataFormSection/PersonDataFormSection'
@@ -10,6 +8,7 @@ import { CompanyDataFormSection } from '@molecules/FormSections/CompanyDataFormS
 import { ReplyTemplateFormSection } from '@molecules/FormSections/ReplyTemplateFormSection/ReplyTemplateFormSection'
 import { EzdDataFormSection } from '@molecules/FormSections/EzdDataFormSection/EzdDataFormSection'
 import { AdditionalInfoFormSection } from '@molecules/FormSections/AdditionalInfoFormSection/AdditionalInfoFormSection'
+import { useAddFormContext } from '@hooks/useAddFormContext'
 
 export const AddForm = () => {
     const {
@@ -19,7 +18,8 @@ export const AddForm = () => {
         onSubmit,
         onFinishFailed,
         submitLoading,
-    } = useContext(AddFormContext)
+        updateEzdNameValue,
+    } = useAddFormContext()
 
     return (
         <>
@@ -50,7 +50,11 @@ export const AddForm = () => {
                         <Divider />
                         <ReplyTemplateFormSection setError={setError} />
                         <Divider />
-                        <EzdDataFormSection setError={setError} />
+                        <EzdDataFormSection
+                            setError={setError}
+                            form={addForm}
+                            updateEzdNameValue={updateEzdNameValue}
+                        />
                         <Divider />
                         <AdditionalInfoFormSection setError={setError} />
                     </GridWrapper>

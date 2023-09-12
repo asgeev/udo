@@ -23,6 +23,8 @@ export const AddFormProvider = ({ children }) => {
     const [messageApi, messageContextHolder] = message.useMessage()
     const { Title } = Typography
 
+    console.log('render ...')
+
     // On submit form
     const onSubmit = (values) => {
         const payload = {
@@ -117,7 +119,6 @@ export const AddFormProvider = ({ children }) => {
         if (idKoszulka) {
             showLoadingMessage()
             setSubmitLoading(true)
-            // WP_Instance.get(`udo/v1/getDataFromKoszulka?id=975`)
             WP_Instance.get(`udo/v1/getDataFromKoszulka?id=${idKoszulka}`)
                 .then((response) => {
                     setFormFields(response?.data)
@@ -135,6 +136,15 @@ export const AddFormProvider = ({ children }) => {
         }
     }
 
+    const updateEzdNameValue = (personFirstName, personLastName) => {
+        addForm.setFieldValue(
+            'ezd_name',
+            `UDO - ${personFirstName ? personFirstName : 'imię'} ${
+                personLastName ? personLastName : 'nazwisko'
+            }`
+        )
+    }
+
     return (
         <AddFormContext.Provider
             value={{
@@ -145,6 +155,7 @@ export const AddFormProvider = ({ children }) => {
                 error,
                 setError,
                 getMetaDataFromEzd,
+                updateEzdNameValue,
             }}
         >
             {messageContextHolder}

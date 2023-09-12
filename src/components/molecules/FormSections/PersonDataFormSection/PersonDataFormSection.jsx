@@ -4,7 +4,6 @@ import { FormSection } from '@molecules/FormSection/FormSection'
 
 export const PersonDataFormSection = ({ editMode = false, setError }) => {
     const { colors } = useTheme()
-
     return (
         <FormSection
             editMode={editMode}
