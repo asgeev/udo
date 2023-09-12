@@ -65,7 +65,7 @@ export const InflowFormSection = ({ editMode = false, setError }) => {
                         />
                     </Form.Item>
                     {!editMode && (
-                        <Tooltip title="Pobierz dane z EZD">
+                        <Tooltip title="Wstaw dane z EZD">
                             <Button
                                 type="primary"
                                 icon={<SyncOutlined />}
