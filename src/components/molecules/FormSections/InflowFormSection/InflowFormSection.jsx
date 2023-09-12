@@ -1,5 +1,14 @@
 import { useEffect, useState, useContext } from 'react'
-import { Space, Form, Input, DatePicker, Select, Button, Tooltip } from 'antd'
+import {
+    Space,
+    Form,
+    Input,
+    DatePicker,
+    Select,
+    Button,
+    Tooltip,
+    Alert,
+} from 'antd'
 import { SyncOutlined } from '@ant-design/icons'
 import WP_Instance from '@services/WP_Instance'
 import { FormSection } from '@molecules/FormSection/FormSection'
@@ -31,6 +40,14 @@ export const InflowFormSection = ({ editMode = false, setError }) => {
             subTitle="Wprowadź dane dotyczące sprawy"
         >
             <Space direction="vertical">
+                {!editMode && (
+                    <Alert
+                        message="Uwaga! W fazie testowej w pole Id koszulki wpływającej prosimy wpisywać podane nr koszulek: 3686, 3687, 3688"
+                        type="warning"
+                        showIcon
+                        closable
+                    />
+                )}
                 <Space wrap>
                     <Form.Item
                         name="inflow_koszulka_id"
