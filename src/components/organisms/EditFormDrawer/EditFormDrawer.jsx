@@ -1,6 +1,6 @@
 import { Drawer } from 'antd'
 import { EditForm } from '@organisms/EditForm/EditForm'
-import { SecondDrawer } from '@molecules/EditFormSecondDrawer/EditFormSecondDrawer'
+import { SecondDrawer } from '@organisms/EditFormSecondDrawer/EditFormSecondDrawer'
 import { EditFormProvider } from '@providers/EditFormProvider'
 import { RichTextProvider } from '@providers/RichTextProvider'
 import { useEditDrawerContext } from '@hooks/useEditDrawerContext'

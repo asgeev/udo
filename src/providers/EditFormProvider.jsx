@@ -31,8 +31,6 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
     useEffect(() => {
         const fetchDataRequest = () => {
             WP_Instance.get(`/udo/v1/dataRequest?id=${recordId}`)
-                // WP_Instance.get(`/udo/v1/dataRequest?id=9999`)
-
                 .then((response) => {
                     setInitalFormData(
                         createNewObjectWithValidDate(response.data)
@@ -61,7 +59,6 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
     }
 
     const onSubmit = (values) => {
-        console.log(values)
         const payload = {
             ...values,
             inflow_date: values['inflow_date']?.format('YYYY-MM-DD'),
