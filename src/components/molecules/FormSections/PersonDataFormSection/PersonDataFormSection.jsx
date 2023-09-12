@@ -18,40 +18,7 @@ export const PersonDataFormSection = ({ editMode = false, setError }) => {
                 closable
                 style={{ marginBottom: 10 }}
             />
-            <Form.Item
-                label="Pesel"
-                name="pesel"
-                validateTrigger={['onBlur', 'onChange']}
-                hasFeedback
-                rules={
-                    [
-                        // {
-                        //     validator(_, pesel) {
-                        //         if (pesel?.length < 12) {
-                        //             return Promise.resolve()
-                        //         }
-                        //         return Promise.reject(
-                        //             'Uwaga pesel zawiera więcej niż 11 znaków'
-                        //         )
-                        //     },
-                        // },
-                        // {
-                        //     validator(_, pesel) {
-                        //         if (
-                        //             !pesel ||
-                        //             validatePesel(pesel) ||
-                        //             pesel?.length > 11
-                        //         ) {
-                        //             return Promise.resolve()
-                        //         }
-                        //         return Promise.reject(
-                        //             new Error('Błędny numer pesel')
-                        //         )
-                        //     },
-                        // },
-                    ]
-                }
-            >
+            <Form.Item label="Pesel" name="pesel">
                 <Input placeholder="pesel" style={{ maxWidth: 200 }} />
             </Form.Item>
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 import { message } from 'antd'
 import WP_Instance from '@services/WP_Instance'
 import { newDataTableWithKey } from '@helpers/newDataTableWithKey'
@@ -22,19 +22,23 @@ export const RecordsViewProvider = ({ children }) => {
     useEffect(() => {
         if (searchParams) {
             setIsLoading(true)
-            WP_Instance.get(`/udo/v1/getDataRequestList?${searchParams}`)
-                .then((response) => {
-                    setTableData(newDataTableWithKey(response?.data?.data))
-                    setTotal(response?.data?.total)
-                })
-                .catch((error) => {
-                    console.error(error)
-                })
-                .finally(() => {
-                    setIsLoading(false)
-                })
+            fetchDataTable()
         }
     }, [searchParams])
+
+    const fetchDataTable = () => {
+        WP_Instance.get(`/udo/v1/getDataRequestList?${searchParams}`)
+            .then((response) => {
+                setTableData(newDataTableWithKey(response?.data?.data))
+                setTotal(response?.data?.total)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+            .finally(() => {
+                setIsLoading(false)
+            })
+    }
 
     const showMessage = (text, type, onClose) => {
         switch (type) {
@@ -103,6 +107,7 @@ export const RecordsViewProvider = ({ children }) => {
             )
                 .then(({ data }) => {
                     messageApi.destroy('loading')
+                    fetchDataTable()
                     showMessage(data?.description, 'success')
                 })
                 .catch((error) => {
@@ -129,9 +134,6 @@ export const RecordsViewProvider = ({ children }) => {
             return searchParams
         })
     }
-    // const onFiltersChange = (a) => {
-    //     console.log(a)
-    // }
 
     const onPaginationChange = (currentPage, pageSize) => {
         setSearchParams((searchParams) => {
