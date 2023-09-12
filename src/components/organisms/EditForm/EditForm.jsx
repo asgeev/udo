@@ -1,6 +1,5 @@
-import { useContext } from 'react'
 import { Form, Button, Col, Row, Divider, Spin, Space, Alert } from 'antd'
-import { EditFormContext } from '@providers/EditFormProvider'
+import { useEditFormContext } from '@hooks/useEditFormContext'
 import { InflowFormSection } from '@molecules/FormSections/InflowFormSection/InflowFormSection'
 import { PersonDataFormSection } from '@molecules/FormSections/PersonDataFormSection/PersonDataFormSection'
 import { CompanyDataFormSection } from '@molecules/FormSections/CompanyDataFormSection/CompanyDataFormSection'
@@ -22,7 +21,7 @@ export const EditForm = () => {
         onChange,
         recordId,
         dataLoading,
-    } = useContext(EditFormContext)
+    } = useEditFormContext()
 
     return (
         <>
@@ -72,6 +71,7 @@ export const EditForm = () => {
                     <EzdDataFormSection
                         editMode={editMode}
                         setError={setError}
+                        form={editForm}
                     />
                     <Divider />
                     <AdditionalInfoFormSection
@@ -83,6 +83,9 @@ export const EditForm = () => {
                         <Col>
                             <Form.Item>
                                 <Space>
+                                    <Button size="large" disabled>
+                                        Zakończ
+                                    </Button>
                                     <Button
                                         type="primary"
                                         size="large"
