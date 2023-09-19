@@ -1,17 +1,17 @@
 import { useState, createContext } from 'react'
 
-export const EditDrawerContext = createContext({})
+export const DrawersContext = createContext({})
 
-export const EditDrawerProvider = ({ children }) => {
-    const [isDrawerVisible, setIsDrawerVisible] = useState(null)
+export const DrawersProvider = ({ children }) => {
+    const [isFirstDrawerVisible, setIsFirstDrawerVisible] = useState(null)
     const [isSecondDrawerVisible, setIsSecondDrawerVisible] = useState(false)
 
     const openDrawer = () => {
-        setIsDrawerVisible(true)
+        setIsFirstDrawerVisible(true)
     }
 
     const closeDrawer = () => {
-        setIsDrawerVisible(false)
+        setIsFirstDrawerVisible(false)
     }
 
     const openSecondDrawer = () => {
@@ -23,9 +23,9 @@ export const EditDrawerProvider = ({ children }) => {
     }
 
     return (
-        <EditDrawerContext.Provider
+        <DrawersContext.Provider
             value={{
-                isDrawerVisible,
+                isFirstDrawerVisible,
                 openDrawer,
                 closeDrawer,
                 isSecondDrawerVisible,
@@ -34,6 +34,6 @@ export const EditDrawerProvider = ({ children }) => {
             }}
         >
             {children}
-        </EditDrawerContext.Provider>
+        </DrawersContext.Provider>
     )
 }

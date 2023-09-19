@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Form, Select, Space, Button, Tabs, Collapse, Tooltip } from 'antd'
 import {
     PaperClipOutlined,
@@ -9,12 +9,11 @@ import {
 import ReactQuill from 'react-quill'
 import WP_Instance from '@services/WP_Instance'
 import { FormSection } from '@molecules/FormSection/FormSection'
-import { EditFormContext } from '@providers/EditFormProvider'
-import { RichTextContext } from '@providers/RichTextProvider'
+import { useRichTextContext } from '@hooks/useRichTextContext'
 import { PasteButtons } from '@molecules/PasteButtons/PasteButtons'
 import { createSignaturesDataOptions } from '@helpers/createSignaturesDataOptions'
 import { RichTextEditor } from '@molecules/RichTextEditor/RichTextEditor'
-import { useEditDrawerContext } from '@hooks/useEditDrawerContext'
+import { useDrawersContext } from '@hooks/useDrawersContext'
 
 const modules = {
     toolbar: [
@@ -23,10 +22,11 @@ const modules = {
     ],
 }
 
-export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
-    const { openSecondDrawer } = useEditDrawerContext()
-    const { setError } = useContext(EditFormContext)
-    const { mainEditorRef, attachmentsEditorRef } = useContext(RichTextContext)
+export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
+    const { openSecondDrawer } = useDrawersContext()
+    const { mainEditorRef, attachmentsEditorRef } = useRichTextContext()
+    const editForm = Form.useFormInstance()
+    const pesel = editForm.getFieldValue('pesel')
 
     const [signatures, setSignatures] = useState(null)
 
@@ -127,6 +127,7 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
                         icon={<TeamOutlined />}
                         type="primary"
                         onClick={openSecondDrawer}
+                        disabled={pesel ? false : true}
                     >
                         CWU
                     </Button>
@@ -142,7 +143,7 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
                 </Button>
             </Space>
 
-            <Tabs animated items={tabsItems} />
+            <Tabs items={tabsItems} animated />
 
             <Form.Item name="signature_id" label="Podpis na piśmie">
                 <Select
@@ -150,7 +151,7 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode }) => {
                     placeholder="wybierz podpis"
                     allowClear
                     options={signatures}
-                ></Select>
+                />
             </Form.Item>
         </FormSection>
     )

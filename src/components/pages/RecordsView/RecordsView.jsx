@@ -1,17 +1,17 @@
 import { PageTitleHeader } from '@atoms/PageTitleHeader/PageTitleHeader'
-import { EditFormDrawer } from '@organisms/EditFormDrawer/EditFormDrawer'
 import { RecordsViewProvider } from '@providers/RecordsViewProvider'
-import { EditDrawerProvider } from '@providers/EditDrawerProvider'
+import { DrawersProvider } from '@providers/DrawersProvider'
 import { RecordsViewTable } from '@molecules/RecorsViewTable/RecordsViewTable'
+import { FirstDrawer } from '@organisms/FirstDrawer/FirstDrawer'
 
 export const RecordsView = () => {
     return (
         <RecordsViewProvider>
-            <EditDrawerProvider>
+            <DrawersProvider>
                 <PageTitleHeader title="Podgląd zapisanych spraw" />
                 <RecordsViewTable />
-                <EditFormDrawer />
-            </EditDrawerProvider>
+                <FirstDrawer />
+            </DrawersProvider>
         </RecordsViewProvider>
     )
 }

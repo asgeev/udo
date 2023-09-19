@@ -1,15 +1,16 @@
 import { Drawer } from 'antd'
 import { EditForm } from '@organisms/EditForm/EditForm'
-import { SecondDrawer } from '@organisms/EditFormSecondDrawer/EditFormSecondDrawer'
 import { EditFormProvider } from '@providers/EditFormProvider'
 import { RichTextProvider } from '@providers/RichTextProvider'
-import { useEditDrawerContext } from '@hooks/useEditDrawerContext'
+import { useDrawersContext } from '@hooks/useDrawersContext'
 import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
+import { SecondDrawerProvider } from '@providers/SecondDrawerProvider'
+import { SecondDrawer } from '@organisms/SecondDrawer/SecondDrawer'
 
-export const EditFormDrawer = () => {
+export const FirstDrawer = () => {
     const { currentRecordId } = useRecordsViewContext()
-    const { isDrawerVisible, closeDrawer, showSecondDrawer } =
-        useEditDrawerContext()
+    const { isFirstDrawerVisible, closeDrawer, showSecondDrawer } =
+        useDrawersContext()
 
     return (
         <RichTextProvider>
@@ -17,7 +18,7 @@ export const EditFormDrawer = () => {
                 title={`Edytuj zapytanie dla sprawy nr ${currentRecordId}`}
                 width={900}
                 push={{ distance: '100' }}
-                open={isDrawerVisible}
+                open={isFirstDrawerVisible}
                 destroyOnClose={true}
                 onClose={closeDrawer}
             >
@@ -27,8 +28,9 @@ export const EditFormDrawer = () => {
                 >
                     <EditForm />
                 </EditFormProvider>
-
-                <SecondDrawer />
+                <SecondDrawerProvider>
+                    <SecondDrawer />
+                </SecondDrawerProvider>
             </Drawer>
         </RichTextProvider>
     )
