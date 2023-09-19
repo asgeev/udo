@@ -29,30 +29,29 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
     const [dataLoading, setDataLoading] = useState(true)
 
     useEffect(() => {
-        const fetchDataRequest = () => {
-            WP_Instance.get(`/udo/v1/dataRequest?id=${recordId}`)
-                .then((response) => {
-                    setInitalFormData(
-                        createNewObjectWithValidDate(response.data)
-                    )
-                    setError(false)
-                })
-                .catch((error) => {
-                    console.error(error)
-                    setError(true)
-                })
-                .finally(() => {
-                    setDataLoading(false)
-                })
-        }
         if (recordId) {
-            fetchDataRequest()
+            fetchData()
         }
     }, [recordId])
 
     useLayoutEffect(() => {
         setInitialEditFormFieldsValues(initialFormData)
     }, [initialFormData])
+
+    const fetchData = () => {
+        WP_Instance.get(`/udo/v1/dataRequest?id=${recordId}`)
+            .then((response) => {
+                setInitalFormData(createNewObjectWithValidDate(response.data))
+                setError(false)
+            })
+            .catch((error) => {
+                console.error(error)
+                setError(true)
+            })
+            .finally(() => {
+                setDataLoading(false)
+            })
+    }
 
     const setInitialEditFormFieldsValues = (values) => {
         editForm?.setFieldsValue(values)
@@ -81,19 +80,19 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
                 console.log(error)
                 if (error.response) {
                     messageApi.error(error.response?.data?.message, 6)
-
                     console.log(error.response.data)
                     console.log(error.response.status)
                     console.log(error.response.headers)
                 } else {
                     messageApi.error(
-                        'USP, wystąpił problem z zapisem formualrza, proszę spróbować później!'
+                        'UPS!, wystąpił problem z zapisem formualrza, proszę spróbować później!'
                     )
                 }
             })
             .finally(() => {
                 setSubmitLoading(false)
                 setFormDisabled(false)
+                fetchData()
             })
     }
 

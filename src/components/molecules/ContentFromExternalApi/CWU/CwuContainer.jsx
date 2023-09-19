@@ -1,24 +1,17 @@
-import { Drawer, Button, Space, Alert, Card, Divider } from 'antd'
-import { useRichTextContext } from '@hooks/useRichTextContext'
-import { useEditDrawerContext } from '@hooks/useEditDrawerContext'
+import { Space, Card, Button, Alert, Divider } from 'antd'
 import { CopyOutlined } from '@ant-design/icons'
 import {
     template2,
     template4,
 } from '@molecules/RichTextEditor/TemplatesRichTextEditor/TemplatesRichTextEditor'
+import { useRichTextContext } from '@hooks/useRichTextContext'
 
-export const SecondDrawer = () => {
+export const CwuContainer = () => {
     const { addTextToEditor, mainEditor, attachmentsEditor } =
         useRichTextContext
-    const { isSecondDrawerVisible, closeSecondDrawer } = useEditDrawerContext()
 
     return (
-        <Drawer
-            width={600}
-            title="Dane z systemu"
-            open={isSecondDrawerVisible}
-            onClose={closeSecondDrawer}
-        >
+        <>
             <Space direction="vertical" style={{ width: '100%' }} size={30}>
                 <Alert
                     message="Tutaj będą wyświetlały się dane z CWU. Po kliknięciu w przycisk 'kopuj', szablon zostanie wypełniony danymi z CWU i wstawiony do głównego edytora"
@@ -69,16 +62,16 @@ export const SecondDrawer = () => {
                     <p>
                         W Centralnym Wykazie Ubezpieczonych widnieją następujące
                         adresy ww. osoby:
-                        <ol>
-                            <li>adres zamieszkania...</li>
-                            <li>adres zameldowania...</li>
-
-                            <li>adres do korespondencji...</li>
-                        </ol>
                     </p>
+                    <ol>
+                        <li>adres zamieszkania...</li>
+                        <li>adres zameldowania...</li>
+
+                        <li>adres do korespondencji...</li>
+                    </ol>
                 </Card>
                 <Divider plain>więcej już niedługo</Divider>
             </Space>
-        </Drawer>
+        </>
     )
 }
