@@ -30,6 +30,8 @@ export const EditFormProvider = ({ children }) => {
 
     const { currentRecordId } = useRecordsViewContext()
 
+    console.log(currentRecordId)
+
     useEffect(() => {
         if (currentRecordId) {
             fetchData(currentRecordId)
@@ -41,18 +43,24 @@ export const EditFormProvider = ({ children }) => {
     }, [initialFormData])
 
     const fetchData = (currentRecordId) => {
-        WP_Instance.get(`/udo/v1/dataRequest?id=${currentRecordId}`)
-            .then((response) => {
-                setInitalFormData(createNewObjectWithValidDate(response.data))
-                setError(false)
-            })
-            .catch((error) => {
-                console.error(error)
-                setError(true)
-            })
-            .finally(() => {
-                setDataLoading(false)
-            })
+        if (currentRecordId && currentRecordId >= 0) {
+            WP_Instance.get(`/udo/v1/dataRequest?id=${currentRecordId}`)
+                .then((response) => {
+                    setInitalFormData(
+                        createNewObjectWithValidDate(response.data)
+                    )
+                    setError(false)
+                })
+                .catch((error) => {
+                    console.error(error)
+                    setError(true)
+                })
+                .finally(() => {
+                    setDataLoading(false)
+                })
+        } else {
+            console.error('Invalid current record id!')
+        }
     }
 
     const setInitialEditFormFieldsValues = (values) => {
@@ -71,7 +79,7 @@ export const EditFormProvider = ({ children }) => {
         setFormDisabled(true)
         setSubmitLoading(true)
         WP_Instance.put(
-            `/udo/v1/dataRequest/?data_request_id=${recordId}`,
+            `/udo/v1/dataRequest?data_request_id=${currentRecordId}`,
             payload
         )
             .then((response) => {
@@ -94,7 +102,6 @@ export const EditFormProvider = ({ children }) => {
             .finally(() => {
                 setSubmitLoading(false)
                 setFormDisabled(false)
-                fetchData()
             })
     }
 
