@@ -1,6 +1,7 @@
 import { useState, useEffect, useLayoutEffect, createContext } from 'react'
 import { Form, message } from 'antd'
 import WP_Instance from '@services/WP_Instance'
+import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
 import { createNewObjectWithValidDate } from '@helpers/createNewObjectWithValidDate'
 export const EditFormContext = createContext({
     recordId: null,
@@ -11,14 +12,13 @@ export const EditFormContext = createContext({
     onChange: () => {},
     editFormLoading: false,
     formDisabled: false,
-    showSecondDrawer: () => {},
     error: false,
     setError: () => {},
     editModel: false,
     setEditMode: () => {},
 })
 
-export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
+export const EditFormProvider = ({ children }) => {
     const [formDisabled, setFormDisabled] = useState(false)
     const [submitLoading, setSubmitLoading] = useState(false)
     const [error, setError] = useState(false)
@@ -28,18 +28,20 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
     const [editMode, setEditMode] = useState(true)
     const [dataLoading, setDataLoading] = useState(true)
 
+    const { currentRecordId } = useRecordsViewContext()
+
     useEffect(() => {
-        if (recordId) {
-            fetchData()
+        if (currentRecordId) {
+            fetchData(currentRecordId)
         }
-    }, [recordId])
+    }, [currentRecordId])
 
     useLayoutEffect(() => {
         setInitialEditFormFieldsValues(initialFormData)
     }, [initialFormData])
 
-    const fetchData = () => {
-        WP_Instance.get(`/udo/v1/dataRequest?id=${recordId}`)
+    const fetchData = (currentRecordId) => {
+        WP_Instance.get(`/udo/v1/dataRequest?id=${currentRecordId}`)
             .then((response) => {
                 setInitalFormData(createNewObjectWithValidDate(response.data))
                 setError(false)
@@ -108,7 +110,6 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
     return (
         <EditFormContext.Provider
             value={{
-                recordId,
                 onSubmit,
                 onFinishFailed,
                 editForm,
@@ -116,7 +117,6 @@ export const EditFormProvider = ({ children, recordId, showSecondDrawer }) => {
                 onChange,
                 submitLoading,
                 formDisabled,
-                showSecondDrawer,
                 error,
                 setError,
                 editMode,

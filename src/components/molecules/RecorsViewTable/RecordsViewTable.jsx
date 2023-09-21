@@ -1,13 +1,13 @@
 import { Table } from 'antd'
 import { TableRowDescription } from '@atoms/TableRowDescription/TableRowDescription'
-import { useDrawersContext } from '@hooks/useDrawersContext'
+import { useFirstDrawerContext } from '@hooks/useFirstDrawerContext'
 import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
 import { ShowTableStatusTags } from '@atoms/ShowTableStatusTags/ShowTableStatusTags'
 import { TableActionButtons } from '@atoms/TableActionButtons/TableActionButtons'
 import { FiltersForm } from '@molecules/FiltersForm/FiltersForm'
 
 export const RecordsViewTable = () => {
-    const { openDrawer } = useDrawersContext()
+    const { openDrawer } = useFirstDrawerContext()
     const {
         isLoading,
         total,
