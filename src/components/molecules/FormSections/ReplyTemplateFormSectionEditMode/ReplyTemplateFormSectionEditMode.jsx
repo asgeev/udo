@@ -30,7 +30,8 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
     const { openSecondDrawer } = useSecondDrawerContext()
     const { mainEditorRef, attachmentsEditorRef } = useRichTextContext()
     const editForm = Form.useFormInstance()
-    const pesel = editForm.getFieldValue('pesel')
+    // const pesel = editForm.getFieldValue('pesel')
+    const pesel = Form.useWatch(['pesel'])
 
     const [signatures, setSignatures] = useState(null)
 
@@ -152,7 +153,7 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
 
             <Tabs items={tabsItems} animated />
 
-            <Form.Item name="signature_id" label="Podpis na piśmie">
+            <Form.Item required name="signature_id" label="Podpis na piśmie">
                 <Select
                     style={{ maxWidth: 200 }}
                     placeholder="wybierz podpis"
