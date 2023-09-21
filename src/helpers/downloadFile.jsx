@@ -21,6 +21,7 @@ const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
 }
 
 export const downloadFile = (id, filename = 'Opowiedz dla wnioskodawcy') => {
+    console.log(id)
     if (id && id > 0) {
         WP_Instance.get(`/udo/v1/generateWord?id=${id}`).then((response) => {
             const blob = b64toBlob(
