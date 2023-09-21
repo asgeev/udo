@@ -1,4 +1,12 @@
 import { useEffect, useState } from 'react'
+import ReactQuill from 'react-quill'
+//Import contexts
+import { useRichTextContext } from '@hooks/useRichTextContext'
+import { useSecondDrawerContext } from '@hooks/useSecondDrawerContext'
+//Import all styles and functions for QullRichText
+import { RichTextEditor } from '@molecules/RichTextEditor/RichTextEditor'
+
+import WP_Instance from '@services/WP_Instance'
 import { Form, Select, Space, Button, Tabs, Collapse, Tooltip } from 'antd'
 import {
     PaperClipOutlined,
@@ -6,14 +14,10 @@ import {
     IdcardOutlined,
     TeamOutlined,
 } from '@ant-design/icons'
-import ReactQuill from 'react-quill'
-import WP_Instance from '@services/WP_Instance'
+//Import components
 import { FormSection } from '@molecules/FormSection/FormSection'
-import { useRichTextContext } from '@hooks/useRichTextContext'
 import { PasteButtons } from '@molecules/PasteButtons/PasteButtons'
 import { createSignaturesDataOptions } from '@helpers/createSignaturesDataOptions'
-import { RichTextEditor } from '@molecules/RichTextEditor/RichTextEditor'
-import { useDrawersContext } from '@hooks/useDrawersContext'
 
 const modules = {
     toolbar: [
@@ -23,7 +27,7 @@ const modules = {
 }
 
 export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
-    const { openSecondDrawer } = useDrawersContext()
+    const { openSecondDrawer } = useSecondDrawerContext()
     const { mainEditorRef, attachmentsEditorRef } = useRichTextContext()
     const editForm = Form.useFormInstance()
     const pesel = editForm.getFieldValue('pesel')
@@ -126,7 +130,10 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
                     <Button
                         icon={<TeamOutlined />}
                         type="primary"
-                        onClick={openSecondDrawer}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            openSecondDrawer(1)
+                        }}
                         disabled={pesel ? false : true}
                     >
                         CWU
