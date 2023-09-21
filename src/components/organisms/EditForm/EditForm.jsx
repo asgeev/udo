@@ -1,5 +1,6 @@
 import { Form, Button, Col, Row, Divider, Spin, Space, Alert } from 'antd'
 import { useEditFormContext } from '@hooks/useEditFormContext'
+import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
 import { InflowFormSection } from '@molecules/FormSections/InflowFormSection/InflowFormSection'
 import { PersonDataFormSection } from '@molecules/FormSections/PersonDataFormSection/PersonDataFormSection'
 import { CompanyDataFormSection } from '@molecules/FormSections/CompanyDataFormSection/CompanyDataFormSection'
@@ -19,9 +20,9 @@ export const EditForm = () => {
         onFinishFailed,
         formDisabled,
         onChange,
-        recordId,
         dataLoading,
     } = useEditFormContext()
+    const { currentRecordId } = useRecordsViewContext()
 
     return (
         <>
@@ -89,7 +90,9 @@ export const EditForm = () => {
                                     <Button
                                         type="primary"
                                         size="large"
-                                        onClick={() => downloadFile(recordId)}
+                                        onClick={() =>
+                                            downloadFile(currentRecordId)
+                                        }
                                     >
                                         Wygeneruj plik
                                     </Button>
