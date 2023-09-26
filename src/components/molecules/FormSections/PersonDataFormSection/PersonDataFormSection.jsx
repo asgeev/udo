@@ -12,7 +12,7 @@ export const PersonDataFormSection = ({ editMode = false, setError }) => {
             subTitle="Wprowadź dane dotyczące osoby której dotyczy zapytanie"
         >
             <Alert
-                message="Jeżeli podano błędny pesel to pole będzie wyświetlało się na czerwono ale zgłoszenie uda się zapisać"
+                message="Jeżeli pole pesel uzupełnisz dopiero w trybie edycji, pamiętaj, aby zapisać sprawę."
                 type="info"
                 showIcon
                 closable
