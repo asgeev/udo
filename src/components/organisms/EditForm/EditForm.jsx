@@ -1,13 +1,11 @@
 import { Form, Button, Col, Row, Divider, Spin, Space, Alert } from 'antd'
 import { useEditFormContext } from '@hooks/useEditFormContext'
-import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
 import { InflowFormSection } from '@molecules/FormSections/InflowFormSection/InflowFormSection'
 import { PersonDataFormSection } from '@molecules/FormSections/PersonDataFormSection/PersonDataFormSection'
 import { CompanyDataFormSection } from '@molecules/FormSections/CompanyDataFormSection/CompanyDataFormSection'
 import { ReplyTemplateFormSectionEditMode } from '@molecules/FormSections/ReplyTemplateFormSectionEditMode/ReplyTemplateFormSectionEditMode'
 import { EzdDataFormSection } from '@molecules/FormSections/EzdDataFormSection/EzdDataFormSection'
 import { AdditionalInfoFormSection } from '@molecules/FormSections/AdditionalInfoFormSection/AdditionalInfoFormSection'
-import { downloadFile } from '@helpers/downloadFile'
 
 export const EditForm = () => {
     const {
@@ -21,8 +19,8 @@ export const EditForm = () => {
         formDisabled,
         onChange,
         dataLoading,
+        saveFormAndDownloadFile,
     } = useEditFormContext()
-    const { currentRecordId } = useRecordsViewContext()
 
     return (
         <>
@@ -43,10 +41,10 @@ export const EditForm = () => {
                     autoComplete="off"
                     disabled={formDisabled || error}
                     scrollToFirstError={{ block: 'center', behavior: 'smooth' }}
-                    // onValuesChange={(changedValues) => {
-                    //     console.log(changedValues)
-                    // }}
-                    onFieldsChange={onChange}
+                    onValuesChange={(changedValues) => {
+                        onChange(changedValues)
+                    }}
+                    // onFieldsChange={onChange}
                     layout="vertical"
                 >
                     <InflowFormSection
@@ -90,9 +88,7 @@ export const EditForm = () => {
                                     <Button
                                         type="primary"
                                         size="large"
-                                        onClick={() =>
-                                            downloadFile(currentRecordId)
-                                        }
+                                        onClick={saveFormAndDownloadFile}
                                     >
                                         Wygeneruj plik
                                     </Button>
