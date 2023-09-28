@@ -2,6 +2,8 @@ import { useState, useEffect, useLayoutEffect, createContext } from 'react'
 import { Form, message } from 'antd'
 import WP_Instance from '@services/WP_Instance'
 import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
+import { useFirstDrawerContext } from '@hooks/useFirstDrawerContext'
+
 import { createNewObjectWithValidDate } from '@helpers/createNewObjectWithValidDate'
 import { b64toBlob } from '@helpers/b64toBlob'
 
@@ -31,6 +33,8 @@ export const EditFormProvider = ({ children }) => {
     const [messageApi, contextHolder] = message.useMessage()
     const [editForm] = Form.useForm()
     const { currentRecordId } = useRecordsViewContext()
+
+    const { setIsFormChanged } = useFirstDrawerContext()
 
     useEffect(() => {
         if (currentRecordId) {
@@ -143,7 +147,10 @@ export const EditFormProvider = ({ children }) => {
         console.log('Failed:', values)
     }
 
-    const onChange = (values) => {}
+    const onValuesChange = (values) => {
+        console.log(values)
+        setIsFormChanged(true)
+    }
 
     const saveFormAndDownloadFile = async () => {
         const values = editForm.getFieldsValue(true)
@@ -173,6 +180,7 @@ export const EditFormProvider = ({ children }) => {
                     block: 'center',
                     behavior: 'smooth',
                 })
+                onFinishFailed(error.errorFields)
             })
         }
     }
@@ -184,7 +192,7 @@ export const EditFormProvider = ({ children }) => {
                 onFinishFailed,
                 editForm,
                 initialFormData,
-                onChange,
+                onValuesChange,
                 submitLoading,
                 formDisabled,
                 error,

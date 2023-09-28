@@ -11,21 +11,21 @@ export const SecondDrawer = () => {
         isSecondDrawerVisible,
         closeSecondDrawer,
         apiId,
+        setInitalState,
     } = useSecondDrawerContext()
-
-    console.log(apiId)
-    console.log(drawerData)
 
     return (
         <Drawer
             width={600}
             title={`Dane z systemu nr ${apiId}`}
             open={isSecondDrawerVisible}
-            onClose={closeSecondDrawer}
             destroyOnClose={true}
+            onClose={closeSecondDrawer}
             afterOpenChange={(open) => {
                 if (open) {
                     fetchDataForSecondDrawer()
+                } else {
+                    setInitalState()
                 }
             }}
         >
@@ -33,46 +33,45 @@ export const SecondDrawer = () => {
                 direction="vertical"
                 style={{ marginBottom: 30, width: '100%' }}
             >
-                {error && (
+                {error.state && (
                     <Alert
                         showIcon
-                        message="Error Text"
-                        description={error}
+                        message="Błąd"
+                        description={error.message}
                         type="error"
                     />
                 )}
-                {/* {!error && (
+                {!error.state && (
                     <Alert
                         type="warning"
                         showIcon
-                        description="Uwaga! Wyświetlane dane w tym oknie są danymi testowymi dlatego, te same dane wyświetlają się dla każdej zarejestrowanej sprawy"
+                        description="Uwaga! Wyświetlane dane są danymi testowymi!"
                     />
-                )} */}
+                )}
             </Space>
 
             <Spin spinning={isDrawerLoading}>
-                {drawerData &&
-                    (() => {
-                        switch (apiId) {
-                            case 1:
-                                return <CwuContainer />
-                            case 2:
-                                return <p>Case 2</p>
-                            case 3:
-                                return <p>Case 3</p>
-                            case 4:
-                                return <p>Case 4</p>
-                            default:
-                                return (
-                                    <Alert
-                                        showIcon
-                                        type="error"
-                                        message="Błąd"
-                                        description="Ups! Coś poszło nie tak!"
-                                    />
-                                )
-                        }
-                    })()}
+                {(() => {
+                    switch (apiId) {
+                        case 1:
+                            return <CwuContainer data={drawerData} />
+                        case 2:
+                            return <p>Case 2</p>
+                        case 3:
+                            return <p>Case 3</p>
+                        case 4:
+                            return <p>Case 4</p>
+                        default:
+                            return (
+                                <Alert
+                                    showIcon
+                                    type="error"
+                                    message="Błąd"
+                                    description="Ups! Coś poszło nie tak!"
+                                />
+                            )
+                    }
+                })()}
             </Spin>
         </Drawer>
     )

@@ -17,7 +17,7 @@ export const EditForm = () => {
         submitLoading,
         onFinishFailed,
         formDisabled,
-        onChange,
+        onValuesChange,
         dataLoading,
         saveFormAndDownloadFile,
     } = useEditFormContext()
@@ -42,7 +42,7 @@ export const EditForm = () => {
                     disabled={formDisabled || error}
                     scrollToFirstError={{ block: 'center', behavior: 'smooth' }}
                     onValuesChange={(changedValues) => {
-                        onChange(changedValues)
+                        onValuesChange(changedValues)
                     }}
                     // onFieldsChange={onChange}
                     layout="vertical"
@@ -90,7 +90,7 @@ export const EditForm = () => {
                                         size="large"
                                         onClick={saveFormAndDownloadFile}
                                     >
-                                        Wygeneruj plik
+                                        Zapisz i wygeneruj plik
                                     </Button>
                                     <Button
                                         type="primary"

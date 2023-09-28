@@ -1,31 +1,31 @@
 import { Space, Card, Button, Alert, Divider } from 'antd'
 import { CopyOutlined } from '@ant-design/icons'
 import {
-    template2,
     template4,
+    template7,
 } from '@molecules/RichTextEditor/TemplatesRichTextEditor/TemplatesRichTextEditor'
 import { useRichTextContext } from '@hooks/useRichTextContext'
 
-export const CwuContainer = () => {
+export const CwuContainer = ({ data = {} }) => {
     const { addTextToEditor, mainEditor, attachmentsEditor } =
-        useRichTextContext
+        useRichTextContext()
+
+    const templateUbezpieczenie = template7(data)
+    const templateDaneAdresowe = template4(data)
 
     return (
         <>
             <Space direction="vertical" style={{ width: '100%' }} size={30}>
-                <Alert
-                    message="Tutaj będą wyświetlały się dane z CWU. Po kliknięciu w przycisk 'kopuj', szablon zostanie wypełniony danymi z CWU i wstawiony do głównego edytora"
-                    type="info"
-                    showIcon
-                />
                 <Card
                     title="Ubezpieczenie zdrowotne"
                     extra={
                         <Button
-                            disabled
                             icon={<CopyOutlined />}
                             onClick={() =>
-                                addTextToEditor(mainEditor, template4)
+                                addTextToEditor(
+                                    mainEditor,
+                                    templateDaneAdresowe
+                                )
                             }
                         >
                             kopuj
@@ -35,21 +35,22 @@ export const CwuContainer = () => {
                         width: '100%',
                     }}
                 >
-                    <p>
-                        Według stanu na XX.XX.XXXX r. Pani/Pan XXX XXXXXX
-                        podlega / nie podlega ubezpieczeniu zdrowotnemu w
-                        Rzeczypospolitej Polskiej z tytułu pobierania emerytury
-                        lub renty Udostępnione informacje podlegają ochronie
-                    </p>
+                    <div
+                        dangerouslySetInnerHTML={{
+                            __html: templateUbezpieczenie,
+                        }}
+                    ></div>
                 </Card>
                 <Card
                     title="Dane adresowe"
                     extra={
                         <Button
-                            disabled
                             icon={<CopyOutlined />}
                             onClick={() =>
-                                addTextToEditor(mainEditor, template2)
+                                addTextToEditor(
+                                    mainEditor,
+                                    templateDaneAdresowe
+                                )
                             }
                         >
                             kopuj
@@ -59,16 +60,11 @@ export const CwuContainer = () => {
                         width: '100%',
                     }}
                 >
-                    <p>
-                        W Centralnym Wykazie Ubezpieczonych widnieją następujące
-                        adresy ww. osoby:
-                    </p>
-                    <ol>
-                        <li>adres zamieszkania...</li>
-                        <li>adres zameldowania...</li>
-
-                        <li>adres do korespondencji...</li>
-                    </ol>
+                    <div
+                        dangerouslySetInnerHTML={{
+                            __html: templateDaneAdresowe,
+                        }}
+                    ></div>
                 </Card>
                 <Divider plain>więcej już niedługo</Divider>
             </Space>

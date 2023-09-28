@@ -4,6 +4,7 @@ export const FirstDrawerContext = createContext({})
 
 export const FirstDrawerProvider = ({ children }) => {
     const [isFirstDrawerVisible, setIsFirstDrawerVisible] = useState(null)
+    const [isFormChanged, setIsFormChanged] = useState(false)
 
     const openDrawer = () => {
         setIsFirstDrawerVisible(true)
@@ -17,8 +18,10 @@ export const FirstDrawerProvider = ({ children }) => {
         <FirstDrawerContext.Provider
             value={{
                 isFirstDrawerVisible,
+                isFormChanged,
                 openDrawer,
                 closeDrawer,
+                setIsFormChanged,
             }}
         >
             {children}
