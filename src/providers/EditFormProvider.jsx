@@ -148,7 +148,6 @@ export const EditFormProvider = ({ children }) => {
     }
 
     const onValuesChange = (values) => {
-        console.log(values)
         setIsFormChanged(true)
     }
 

@@ -102,7 +102,7 @@ export const template7 = (data = {}) => {
         nazwisko ? nazwisko : '...'
     } to: ${
         status_sl ? status_sl.toUpperCase() : '...'
-    } . \n Tytuł ubezpieczenia: ${status_sl ? status_sl : '...'}.
+    } . \n Tytuł ubezpieczenia: jakiś tytuł ubezpieczenia.
                     Udostępnione informacje podlegają ochronie.</p>`
 
     return html
