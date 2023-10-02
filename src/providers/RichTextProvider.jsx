@@ -1,30 +1,36 @@
-import { useState, useRef, createContext } from 'react'
+import { useRef, createContext } from 'react'
 
 export const RichTextContext = createContext({
-    mainEditor: null,
-    attachmentsEditor: null,
-    requestorTemplateEditor: null,
+    mainEditorRef: undefined,
+    attachmentsEditorRef: undefined,
+    requestorTemplateEditorRef: undefined,
     addTextToEditor: () => {},
-    handleChangeContent: () => {},
     setInitialValues: () => {},
 })
 
 export const RichTextProvider = ({ children }) => {
-    const [mainEditorValue, setMainEditorValue] = useState('')
-    const [attachmentsEditorValue, setAttachmentsEditorValue] = useState('')
-    const [requestorTemplateEditorValue, setRequestorTemplateEditorValue] =
-        useState('')
     const mainEditorRef = useRef()
     const attachmentsEditorRef = useRef()
     const requestorTemplateEditorRef = useRef()
 
-    const addTextToEditor = (editorName, htmlTemplate) => {
-        const editorRef = editorName?.current?.getEditor()
+    const addTextToEditor = (selectedEditorRef, htmlTemplate) => {
+        const editorRef = selectedEditorRef?.current?.getEditor()
+        const range = editorRef.getSelection()
 
-        // console.log(editorRef.getSelection())
-        let oldHTML = `${editorRef.root.innerHTML}`
+        if (range) {
+            if (range.length == 0) {
+                console.log('User cursor is at index', range.index)
+            } else {
+                var text = editorRef.getText(range.index, range.length)
+                console.log('User has highlighted: ', text)
+            }
+        } else {
+            console.log('User cursor is not in editor')
+        }
+
+        let oldHTML = `${editorRef?.root?.innerHTML}`
         let newHTML = `${oldHTML}<p><br></p>${htmlTemplate}`
-        editorRef.clipboard.dangerouslyPasteHTML(newHTML)
+        editorRef?.clipboard?.dangerouslyPasteHTML(newHTML)
     }
 
     return (
@@ -33,12 +39,6 @@ export const RichTextProvider = ({ children }) => {
                 mainEditorRef,
                 attachmentsEditorRef,
                 requestorTemplateEditorRef,
-                mainEditorValue,
-                setMainEditorValue,
-                attachmentsEditorValue,
-                setAttachmentsEditorValue,
-                requestorTemplateEditorValue,
-                setRequestorTemplateEditorValue,
                 addTextToEditor,
             }}
         >

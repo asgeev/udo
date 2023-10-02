@@ -17,7 +17,7 @@ import { useCwuData } from '@hooks/useCwuData'
 import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
 
 export const CwuContainer = () => {
-    const { addTextToEditor, mainEditor, attachmentsEditor } =
+    const { addTextToEditor, mainEditorRef, attachmentsEditorRef } =
         useRichTextContext()
 
     const { currentRecordId } = useRecordsViewContext()
@@ -64,7 +64,7 @@ export const CwuContainer = () => {
                     icon={<CopyOutlined />}
                     onClick={(event) => {
                         event.stopPropagation()
-                        addTextToEditor(mainEditor, templateUbezpieczenie)
+                        addTextToEditor(mainEditorRef, templateUbezpieczenie)
                     }}
                 />
             ),
@@ -86,7 +86,7 @@ export const CwuContainer = () => {
                     icon={<CopyOutlined />}
                     onClick={(event) => {
                         event.stopPropagation()
-                        addTextToEditor(mainEditor, templateDaneAdresowe)
+                        addTextToEditor(mainEditorRef, templateDaneAdresowe)
                     }}
                 />
             ),

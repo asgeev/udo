@@ -3,8 +3,7 @@ import ReactQuill from 'react-quill'
 //Import contexts
 import { useRichTextContext } from '@hooks/useRichTextContext'
 import { useSecondDrawerContext } from '@hooks/useSecondDrawerContext'
-//Import all styles and functions for QullRichText
-import { RichTextEditor } from '@molecules/RichTextEditor/RichTextEditor'
+import { useEditFormContext } from '@hooks/useEditFormContext'
 
 import WP_Instance from '@services/WP_Instance'
 import { Form, Select, Space, Button, Tabs, Collapse, Tooltip } from 'antd'
@@ -17,6 +16,7 @@ import {
 //Import components
 import { FormSection } from '@molecules/FormSection/FormSection'
 import { PasteButtons } from '@molecules/PasteButtons/PasteButtons'
+
 import { createSignaturesDataOptions } from '@helpers/createSignaturesDataOptions'
 
 const modules = {
@@ -29,6 +29,7 @@ const modules = {
 export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
     const { openSecondDrawer } = useSecondDrawerContext()
     const { mainEditorRef, attachmentsEditorRef } = useRichTextContext()
+    const { formDisabled } = useEditFormContext()
     const editForm = Form.useFormInstance()
     const pesel = editForm.getFieldValue('pesel')
 
@@ -75,7 +76,7 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
                         <ReactQuill
                             ref={mainEditorRef}
                             modules={modules}
-                            id="template_main_text"
+                            readOnly={formDisabled}
                             placeholder="Tutaj wpisz swoją odpowiedź"
                         />
                     </Form.Item>
@@ -96,7 +97,7 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
                     <ReactQuill
                         ref={attachmentsEditorRef}
                         modules={modules}
-                        id="template_attachments_text"
+                        readOnly={formDisabled}
                         placeholder="Tutaj wpisz listę załączników"
                     />
                 </Form.Item>
