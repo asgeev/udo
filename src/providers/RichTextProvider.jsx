@@ -19,9 +19,9 @@ export const RichTextProvider = ({ children }) => {
     const requestorTemplateEditorRef = useRef()
 
     const addTextToEditor = (editorName, htmlTemplate) => {
-        const editorRef = editorName.current.getEditor()
+        const editorRef = editorName?.current?.getEditor()
 
-        console.log(editorRef.getSelection())
+        // console.log(editorRef.getSelection())
         let oldHTML = `${editorRef.root.innerHTML}`
         let newHTML = `${oldHTML}<p><br></p>${htmlTemplate}`
         editorRef.clipboard.dangerouslyPasteHTML(newHTML)

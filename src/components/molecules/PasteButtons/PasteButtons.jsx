@@ -49,7 +49,7 @@ export const PasteButtons = () => {
                     Ubezpieczenie
                 </Button>
                 <Button
-                    onClick={() => addTextToEditor(mainEditorRef, template4)}
+                    onClick={() => addTextToEditor(mainEditorRef, template4())}
                 >
                     Dane adresowe
                 </Button>
@@ -59,7 +59,7 @@ export const PasteButtons = () => {
                     Realizacja recept
                 </Button>
                 <Button
-                    onClick={() => addTextToEditor(mainEditorRef, template7)}
+                    onClick={() => addTextToEditor(mainEditorRef, template7())}
                 >
                     Ubezpieczenie zdrowotne
                 </Button>
