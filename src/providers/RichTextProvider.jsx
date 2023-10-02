@@ -1,11 +1,12 @@
 import { useRef, createContext } from 'react'
+//Import styles and others
+import { RichTextEditor } from '@molecules/RichTextEditor/RichTextEditor'
 
 export const RichTextContext = createContext({
     mainEditorRef: undefined,
     attachmentsEditorRef: undefined,
     requestorTemplateEditorRef: undefined,
     addTextToEditor: () => {},
-    setInitialValues: () => {},
 })
 
 export const RichTextProvider = ({ children }) => {

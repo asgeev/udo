@@ -6,6 +6,8 @@ import { CompanyDataFormSection } from '@molecules/FormSections/CompanyDataFormS
 import { ReplyTemplateFormSectionEditMode } from '@molecules/FormSections/ReplyTemplateFormSectionEditMode/ReplyTemplateFormSectionEditMode'
 import { EzdDataFormSection } from '@molecules/FormSections/EzdDataFormSection/EzdDataFormSection'
 import { AdditionalInfoFormSection } from '@molecules/FormSections/AdditionalInfoFormSection/AdditionalInfoFormSection'
+//Import icons
+import { SaveOutlined, DownloadOutlined } from '@ant-design/icons'
 
 export const EditForm = () => {
     const {
@@ -89,6 +91,7 @@ export const EditForm = () => {
                                         type="primary"
                                         size="large"
                                         onClick={saveFormAndDownloadFile}
+                                        icon={<DownloadOutlined />}
                                     >
                                         Zapisz i wygeneruj plik
                                     </Button>
@@ -97,6 +100,7 @@ export const EditForm = () => {
                                         loading={submitLoading}
                                         htmlType="submit"
                                         size="large"
+                                        icon={<SaveOutlined />}
                                     >
                                         Zapisz
                                     </Button>
