@@ -10,8 +10,6 @@ export const TableActionButtons = ({
     record,
     openDrawer,
     setCurrentRecordId,
-    createNew,
-    createKoszulka,
     ezdAction,
 }) => {
     return (
@@ -19,7 +17,7 @@ export const TableActionButtons = ({
             <Tooltip title="Edytuj" color="blue">
                 <Button
                     onClick={() => {
-                        setCurrentRecordId(record.key)
+                        setCurrentRecordId(record?.key)
                         openDrawer()
                     }}
                     type="text"
@@ -36,25 +34,31 @@ export const TableActionButtons = ({
                 />
             </Tooltip>
 
-            {!record.koszulka_id && (
+            {!record?.koszulka_id && (
                 <Badge dot>
-                    <Tooltip title="Utwórz koszulkę" color="purple">
+                    <Tooltip
+                        title="Spróbuj ponownie utworzyć koszulkę"
+                        color="purple"
+                    >
                         <Button
                             type="text"
                             icon={<SisternodeOutlined />}
-                            onClick={() => ezdAction(record.key, 'koszulka')}
+                            onClick={() => ezdAction(record?.key, 'koszulka')}
                         />
                     </Tooltip>
                 </Badge>
             )}
-            {!record.nr_sprawy && (
+            {!record?.nr_sprawy && (
                 <Badge dot>
-                    <Tooltip title="Utwórz sprawę" color="magenta">
+                    <Tooltip
+                        title="Spróbuj ponownie utworzyć sprawę"
+                        color="magenta"
+                    >
                         <Button
                             type="text"
-                            disabled={record.koszulka_id ? false : true}
+                            disabled={record?.koszulka_id ? false : true}
                             icon={<NodeExpandOutlined />}
-                            onClick={() => ezdAction(record.key, 'sprawa')}
+                            onClick={() => ezdAction(record?.key, 'sprawa')}
                         />
                     </Tooltip>
                 </Badge>
