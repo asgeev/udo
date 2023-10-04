@@ -5,7 +5,11 @@ export const createCompanyDataOptions = (data) => {
         newData.push({
             key: element?.id,
             value: element?.name,
-            label: `${element.name} |  Adres: ${element.street}  ${element.house}  ${element.apartment}  ${element.postcode}  ${element.city}`,
+            label: `${element?.name} |  Adres: ${element?.street}  ${
+                element.house
+            }${element.apartment ? `/${element.apartment}` : ''}, ${
+                element.postcode
+            } ${element.city}`,
             ...element,
         })
     })
