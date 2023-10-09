@@ -7,8 +7,16 @@ export const PasteButtons = () => {
     const { mainEditorRef, addTextToEditor } = useRichTextContext()
 
     const templatesArray = [
-        templates.daneAdresowe(),
         templates.ubezpieczenieZdrowotne(),
+        templates.ubezpieczenieZdrowotneBrak(),
+        templates.daneAdresowe(),
+        templates.platnik(),
+        templates.ekuz(),
+        templates.deklaracjaPOZ(),
+        templates.deklaracjaPOZBrak(),
+        templates.infoLeczeniePacjenta(),
+        templates.realizacjaRecept(),
+        templates.realizacjaReceptBrak(),
     ]
 
     return (
@@ -38,7 +46,6 @@ export const PasteButtons = () => {
             </Space>
             <Space wrap>
                 {templatesArray?.map((template, index) => {
-                    console.log(template)
                     return (
                         <Button
                             key={index}

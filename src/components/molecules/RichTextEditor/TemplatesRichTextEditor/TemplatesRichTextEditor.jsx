@@ -6,16 +6,46 @@ export const templates = {
 
         const header = `<p><strong>Szanowny Panie</strong></p>`
 
-        const html = `m e<p>podaję informacje dotyczące wskazanej we wniosku osoby: Pana/Pani XXXXX XXXXXXXXX</p>`
+        const html = `<p>podaję informacje dotyczące wskazanej we wniosku osoby: Pana/Pani XXXXX XXXXXXXXX</p>`
 
         return { html: html, header: header, name: name }
     },
     szanowniPanstwo: (data = {}) => {
         const name = 'Szanowni Państwo...'
 
-        const header = `<p><strong>Szanowni Państwo...</strong></p>`
+        const header = `<p><strong>Szanowni Państwo</strong></p>`
 
         const html = `<p>podaję informacje dotyczące wskazanej we wniosku osoby: Pana/Pani XXXXX XXXXXXXXX</p>`
+
+        return { html: html, header: header, name: name }
+    },
+    ubezpieczenieZdrowotne: (data = {}) => {
+        const { imie, nazwisko, status_sl, msg_date } = data
+
+        const name = 'Info. ubez. zdr.'
+
+        const header =
+            '<p><strong>Informacja o ubezpieczeniu zdrowotnym</strong></p>'
+
+        const html = `<p>Według stanu na dzień ${
+            msg_date ? dayjs(msg_date).format('DD MMMM YYYY') : '...'
+        } r. status Pani/Pana ${imie ? imie : '...'} ${
+            nazwisko ? nazwisko : '...'
+        } to: ${status_sl ? status_sl.toUpperCase() : '...'}.</p>
+        <p>Udostępnione informacje podlegają ochronie.</p>`
+
+        return { html: html, header: header, name: name }
+    },
+
+    ubezpieczenieZdrowotneBrak: (data = {}) => {
+        const { imie, nazwisko, status_sl, msg_date } = data
+
+        const name = 'Info. ubez. zdr. - brak'
+
+        const header =
+            '<p><strong>Informacja o ubezpieczeniu zdrowotnym</strong></p>'
+
+        const html = `<p>Brak jest informacji o świadczeniach zdrowotncyh udzielonych w okresie od ... r. do ... r..</p>`
 
         return { html: html, header: header, name: name }
     },
@@ -41,7 +71,7 @@ export const templates = {
             adr_kor_telefon = '',
         } = data
         const name = 'Dane adresowe/teleadresowe'
-        const header = '<p><strong>Dane adresowe/teleadresowe</strong></p></br>'
+        const header = '<p><strong>Dane adresowe/teleadresowe</strong></p>'
         const html = `<p>W Centralnym Wykazie Ubezpieczonych widnieją następujące adresy ww. osoby: <p>
                     <p></p>
                     <dl>
@@ -75,145 +105,89 @@ export const templates = {
                             <li>telefon:${adr_kor_telefon}</li>          
                         </ul>
                     </dl>
-       
         `
-
         return { html: html, header: header, name: name }
     },
-    ubezpieczenieZdrowotne: (data = {}) => {
-        const { imie, nazwisko, status_sl, msg_date } = data
 
-        const name = 'Informacja o ubezpieczeniu zdrowotnym'
-        const header =
-            '<p><strong>Informacja o ubezpieczeniu zdrowotnym</strong></p></br>'
-        const html = `<p>Według stanu na dzień ${
-            msg_date ? dayjs(msg_date).format('DD MMMM YYYY') : '...'
-        } r. status Pani/Pana ${imie ? imie : '...'} ${
-            nazwisko ? nazwisko : '...'
-        } to: ${status_sl ? status_sl.toUpperCase() : '...'}.</p>
-        <p>Udostępnione informacje podlegają ochronie.</p>`
+    platnik: (data = {}) => {
+        const name = 'Płatnik składek'
 
-        return { html: html, header: header, name: name }
+        const header = `<p><strong>Płatnik składek</strong></p>`
+
+        const html = `<p>Płatnik składek na ubezpieczenie zdrowotne:<p/>
+                      <p>od:   do: </p>
+                      <ul>
+                        <li>NIP:</li>
+                        <li>Nazwa skrócona:</li>
+                      </ul>
+                    `
+
+        return { html, header, name }
+    },
+
+    ekuz: (data = {}) => {
+        const name = 'EKUZ'
+
+        const header = `<p><strong>EKUZ</strong></p></br>`
+
+        const html = `<p>Europejska Karta Ubezpieczenia Zdrowotnego: wydana/brak</p>
+                      <p>ważność karty od:     do:</p>`
+
+        return { html, header, name }
+    },
+    deklaracjaPOZ: (data = {}) => {
+        const name = 'Deklaracja POZ'
+
+        const header = `<p><strong>Deklaracja lekarza POZ</strong></p>`
+
+        const html = `<p>Miejsce złożenia deklaracji wyboru lekarza pierwszego kontaktu: ....</p> `
+
+        return { html, header, name }
+    },
+    deklaracjaPOZBrak: (data = {}) => {
+        const name = 'Deklaracja POZ - brak'
+
+        const header = `<p><strong>Deklaracja POZ - brak</strong></p>`
+
+        const html = `<p>Pan XXXX XXXXX nie złożył deklaracji wyboru lekarza podstawowej opieki zdrowotnej.</p> `
+
+        return { html, header, name }
+    },
+    ZUSKRUS: (data = {}) => {
+        const name = 'ZUS/KRUS'
+
+        const header = `<p><strong>ZUS/KRUS</strong></p>`
+
+        const html = `<p>Dane adresowe przekazywane są do Centralnego Wykazu Ubezpieczonych bezpośrednio przez ZUS lub KRUS i nie są związane z faktem czy osoba ubezpieczona korzysta aktualnie ze świadczeń opieki zdrowotnej finansowanej przez NFZ. Nie jesteśmy w stanie zweryfikować, czy zawarty adres w systemie jest aktualny.</p>`
+
+        return { html, header, name }
+    },
+    infoLeczeniePacjenta: (data = {}) => {
+        const name = 'Leczenie Pacjenta '
+
+        const header = `<p><strong>Informacja o leczeniu pacjenta</strong></p>`
+
+        const html = `<p>Jako załącznik przekazujemy zestawienie dotyczące okresu i miejsc udzielonych świadczeń zdrowotnych w okresie od: ... r. do: ... r.</p>`
+
+        return { html, header, name }
+    },
+    realizacjaRecept: (data = {}) => {
+        const name = 'Realizacja recept'
+
+        const header = `<p><strong>Informacja o realizacji recept</strong></p>`
+
+        const html = `<p></p>`
+
+        return { html, header, name }
+    },
+    realizacjaReceptBrak: (data = {}) => {
+        const name = 'Realizacja recept - brak'
+
+        const header = `<p><strong>Informacja o realizacji recept</strong></p>`
+
+        const html = `<p>Brak jest informacji o zrealizowanych receptach refundowanych wystawionych w okresie od ………. r. do ……….. r.</p>
+                      <p>Informacji na temat leków nierefundowanych udziela Centrum e-Zdrowia.</p>`
+
+        return { html, header, name }
     },
 }
-
-const template2 = () => {
-    const name = 'Płatnik'
-
-    const header = `<p><strong>Informacja o leczeniu pacjenta</strong><p/>`
-
-    const html = `<p>Brak jest informacji o udzielonych świadczeniach zdrowotnych w rodzaju opieka psychiatryczna i leczenie uzależnień w okresie od  .....r.<p/>`
-
-    return { html, header, name }
-}
-
-const template3 = () => {
-    const name = 'Ubezpieczenie zdrowotne'
-
-    const header = `<p><strong>Płatnik</strong></p>`
-
-    const html = `<p><strong>Ubezpieczenie zdrowotne</strong><p/>
-    <p>Według stanu na .... czerwca 2023 r. Pani/Pan XXX XXXXXX podlega/nie podlega ubezpieczeniu zdrowotnemu w Rzeczypospolitej Polskiej z tytułu pobierania emerytury lub renty<p/>
-    <p>Udostępnione informacje podlegają ochronie<p/>`
-
-    return { html, header, name }
-}
-
-const template5 = () => {
-    const name = 'Płatnik'
-
-    const header = `<p><strong>Płatnik</strong></p>`
-
-    const html = ` <p><strong>Informacja o leczeniu pacjenta</strong></p>
-    <p>Brak jest informacji o świadczeniach zdrowotnych udzielonych w okresie od ……….. r. do ……… r.</p>`
-
-    return { html, header, name }
-}
-
-const template6 = () => {
-    const name = 'Płatnik'
-
-    const header = `<p><strong>Płatnik</strong></p>`
-
-    const html = `<p><strong>Informacja  o realizacji recept</strong></p> 
-    <p>Brak jest informacji o zrealizowanych receptach refundowanych wystawionych w okresie od ………. r. do ……….. r.</p>
-    <p>Informacji na temat leków nierefundowanych udziela Centrum e-Zdrowia.</p>`
-
-    return { html, header, name }
-}
-
-const template8 = () => {
-    const name = 'Płatnik'
-
-    const header = `<p><strong>Płatnik</strong></p>`
-
-    const html = ` <p><strong>Informacja o deklaracji lekarza podstawowej opieki zdrowotnej</strong></p> 
-    <p>Pan XXXX XXXXX nie złożył deklaracji wyboru lekarza podstawowej opieki zdrowotnej.</p> `
-
-    return { html, header, name }
-}
-
-const template9 = () => {
-    const name = 'Płatnik'
-
-    const header = `<p><strong>Płatnik</strong></p>`
-
-    const html = ` <p><strong>Informacja o leczeniu pacjenta</strong></p>
-    <p>Jako załącznik przekazujemy zestawienie dotyczące okresu i miejsc udzielonych świadczeń zdrowotnych w okresie od ………. r.</p>`
-
-    return { html, header, name }
-}
-
-const template10 = () => {
-    const name = 'Płatnik'
-
-    const header = `<p><strong>Płatnik</strong></p>`
-
-    const html = `<p>Dane adresowe przekazywane są do Centralnego Wykazu Ubezpieczonych bezpośrednio przez ZUS lub KRUS i nie są związane z faktem czy osoba ubezpieczona korzysta aktualnie ze świadczeń opieki zdrowotnej finansowanej przez NFZ.</p>`
-
-    return { html, header, name }
-}
-
-const template11 = () => {
-    const name = 'Płatnik'
-
-    const header = `<p><strong>Płatnik</strong></p>`
-
-    const html = `<p>Dane zostały zweryfikowane w naszych systemach informatycznych ..... 2023r.</p>`
-
-    return { html, header, name }
-}
-
-const template12 = () => {
-    const name = 'Płatnik'
-
-    const header = `<p><strong>Płatnik</strong></p>`
-
-    const html = `<p>Narodowy Fundusz Zdrowia nie monitoruje świadczeń opieki zdrowotnej wykonywanych na bieżąco, lecz przetwarza dane dotyczące udzielonych świadczeń na podstawie raportów przekazywanych do OW przez świadczeniodawców. Zgodnie z §23 ust.3 załącznika do rozporządzenia Ministra Zdrowia z dnia 8 września 2015 r. w sprawie ogólnych warunków umów o udzielanie świadczeń opieki zdrowotnej (Dz.U. z 2022 r. poz. 787, z późn. zm.) dokumenty rozliczeniowe świadczeniodawca składa OW w terminie do 10 dnia każdego miesiąca, za miesiąc poprzedni.</p>
-    `
-
-    return { html, header, name }
-}
-
-const template13 = () => {
-    const name = 'Płatnik'
-
-    const header = `<p><strong>Płatnik</strong></p>`
-
-    const html = `<p>Dane zostały zweryfikowane w naszych systemach informatycznych ..... 2023r.</p>`
-
-    return { html, header, name }
-}
-
-// export const getSelectedTemplates = () => {
-//     let templatesArray = []
-//     const templatesName = ['daneAdresowe', 'ubezpieczenieZdrowotne']
-
-//     templatesName.forEach((templateName) => {
-//         let element = `${templateName}`
-
-//         templatesArray.push(element)
-//     })
-
-//     return templatesArray
-// }
