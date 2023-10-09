@@ -1,3 +1,6 @@
+import { useRichTextContext } from '@hooks/useRichTextContext'
+import { useCwuData } from '@hooks/useCwuData'
+import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
 import {
     Space,
     Spin,
@@ -7,56 +10,48 @@ import {
     Collapse,
     Alert,
 } from 'antd'
+import { mergeTemplateObject } from '@helpers/mergeTemplateObject'
 import { CopyOutlined } from '@ant-design/icons'
-import {
-    template4,
-    template7,
-} from '@molecules/RichTextEditor/TemplatesRichTextEditor/TemplatesRichTextEditor'
-import { useRichTextContext } from '@hooks/useRichTextContext'
-import { useCwuData } from '@hooks/useCwuData'
-import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
+import { templates } from '@molecules/RichTextEditor/TemplatesRichTextEditor/TemplatesRichTextEditor'
 
 export const CwuContainer = () => {
-    const { addTextToEditor, mainEditorRef, attachmentsEditorRef } =
-        useRichTextContext()
+    const { addTextToEditor, mainEditorRef } = useRichTextContext()
 
     const { currentRecordId } = useRecordsViewContext()
 
     const { data, isLoading, error } = useCwuData(currentRecordId)
 
-    const newData = data?.data
-
-    const templateUbezpieczenie = template7(newData)
-    const templateDaneAdresowe = template4(newData)
+    const templateUbezpieczenie = templates.ubezpieczenieZdrowotne(data)
+    const templateDaneAdresowe = templates.daneAdresowe(data)
 
     const descriptionItems = [
         {
             key: '1',
             label: 'Pesel',
-            children: <p>{newData?.pesel}</p>,
+            children: <p>{data?.pesel}</p>,
         },
         {
             key: '2',
             label: 'Płeć',
-            children: <p>{newData?.plec}</p>,
+            children: <p>{data?.plec}</p>,
             span: 2,
         },
         {
             key: '3',
             label: 'Imię',
-            children: <p>{newData?.imie}</p>,
+            children: <p>{data?.imie}</p>,
         },
         {
             key: '4',
             label: 'Nazwisko',
-            children: <p>{newData?.nazwisko}</p>,
+            children: <p>{data?.nazwisko}</p>,
         },
     ]
 
     const collapseItems = [
         {
             key: '1',
-            label: 'Ubezpieczenie',
+            label: 'Informacja o ubezpieczniu',
             showArrow: true,
             extra: (
                 <Button
@@ -64,21 +59,24 @@ export const CwuContainer = () => {
                     icon={<CopyOutlined />}
                     onClick={(event) => {
                         event.stopPropagation()
-                        addTextToEditor(mainEditorRef, templateUbezpieczenie)
+                        addTextToEditor(
+                            mainEditorRef,
+                            mergeTemplateObject(templateUbezpieczenie)
+                        )
                     }}
                 />
             ),
             children: (
                 <div
                     dangerouslySetInnerHTML={{
-                        __html: templateUbezpieczenie,
+                        __html: templateUbezpieczenie?.html,
                     }}
                 ></div>
             ),
         },
         {
             key: '2',
-            label: 'Dane adresowe',
+            label: 'Dane adresowe/teleadresowe',
             showArrow: true,
             extra: (
                 <Button
@@ -86,14 +84,17 @@ export const CwuContainer = () => {
                     icon={<CopyOutlined />}
                     onClick={(event) => {
                         event.stopPropagation()
-                        addTextToEditor(mainEditorRef, templateDaneAdresowe)
+                        addTextToEditor(
+                            mainEditorRef,
+                            mergeTemplateObject(templateDaneAdresowe)
+                        )
                     }}
                 />
             ),
             children: (
                 <div
                     dangerouslySetInnerHTML={{
-                        __html: templateDaneAdresowe,
+                        __html: templateDaneAdresowe?.html,
                     }}
                 ></div>
             ),
@@ -104,8 +105,12 @@ export const CwuContainer = () => {
         return (
             <Alert
                 showIcon
-                message="Błąd"
-                description={error.message}
+                message="Ups! Coś poszło nie tak!"
+                description={
+                    error?.response
+                        ? error?.response?.data[0].description
+                        : 'Wystąpił błąd podczas pobierania danych z systemu CWU, prosimy spróbować później.'
+                }
                 type="error"
             />
         )

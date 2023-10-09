@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Form, AutoComplete, Space, Input, Alert, Select, Spin } from 'antd'
-import WP_Instance from '@services/WP_Instance'
 import { useTheme } from 'styled-components'
 import { FormSection } from '@molecules/FormSection/FormSection'
 import { createCompanyDataOptions } from '@helpers/createCompanyDataOptions'
