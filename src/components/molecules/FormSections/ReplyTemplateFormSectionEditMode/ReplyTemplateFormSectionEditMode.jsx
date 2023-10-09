@@ -6,7 +6,16 @@ import { useSecondDrawerContext } from '@hooks/useSecondDrawerContext'
 import { useEditFormContext } from '@hooks/useEditFormContext'
 
 import WP_Instance from '@services/WP_Instance'
-import { Form, Select, Space, Button, Tabs, Collapse, Tooltip } from 'antd'
+import {
+    Form,
+    Select,
+    Space,
+    Button,
+    Tabs,
+    Collapse,
+    Tooltip,
+    Alert,
+} from 'antd'
 import {
     PaperClipOutlined,
     SisternodeOutlined,
@@ -32,8 +41,12 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
     const { formDisabled } = useEditFormContext()
     const editForm = Form.useFormInstance()
     const pesel = editForm.getFieldValue('pesel')
+    const koszulka_id = editForm.getFieldValue('koszulka_id')
+    const nr_sprawy = editForm.getFieldValue('nr_sprawy')
 
     const [signatures, setSignatures] = useState(null)
+
+    const areFiledsEmpty = pesel && koszulka_id && nr_sprawy ? false : true
 
     useEffect(() => {
         WP_Instance.get(`/udo/v1/getSignatureList`)
@@ -121,34 +134,74 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
             sectionName="Dane szablonu odpowiedzi"
             subTitle={'Wpisz poniżej odpowiedź która znajdzie się na piśmie'}
         >
-            <Space
-                direction="horizontal"
-                style={{
-                    marginBottom: 20,
-                }}
-            >
-                <Tooltip title="Pokaż dane z CWU">
-                    <Button
-                        icon={<TeamOutlined />}
-                        type="primary"
-                        onClick={(e) => {
-                            e.preventDefault()
-                            openSecondDrawer(1)
-                        }}
-                        disabled={pesel ? false : true}
-                    >
-                        CWU
+            <Space direction="vertical" size="large" style={{ width: '100%' }}>
+                {areFiledsEmpty && (
+                    <Space direction="vertical">
+                        <Alert
+                            type="error"
+                            message="Uwaga!"
+                            description="Wszystkie wskazane poniżej czynności prosimy robić z poziomu aplikacji UDO!!"
+                            showIcon
+                        />
+                        <Alert
+                            type="warning"
+                            description={`Przyciski do pobierania danych zostały wyłączone, ponieważ w sprawie brakuje jednego z wymienionych elementów:`}
+                            showIcon
+                        />
+
+                        {!pesel && (
+                            <Alert
+                                type="warning"
+                                description={`Nieuzupełnione pole pesel`}
+                                showIcon
+                            />
+                        )}
+                        {!koszulka_id && (
+                            <Alert
+                                type="warning"
+                                description={`Brak utworzonej koszulki w EZD -> możesz ponownie spróbować utworzy ją z poziomu podglądu spraw`}
+                                showIcon
+                            />
+                        )}
+                        {!nr_sprawy && (
+                            <Alert
+                                type="warning"
+                                description={`Brak założonej sprawy na koszulce w EZD -> możesz ponownie spróbować utworzyć sprawę w EZD dla tej koszulki z poziomu podglądu spraw`}
+                                showIcon
+                            />
+                        )}
+                    </Space>
+                )}
+
+                <Space
+                    direction="horizontal"
+                    style={{
+                        marginBottom: 20,
+                    }}
+                >
+                    <Tooltip title="Pokaż dane z CWU">
+                        <Button
+                            icon={<TeamOutlined />}
+                            type="primary"
+                            onClick={(e) => {
+                                e.preventDefault()
+                                openSecondDrawer(1)
+                            }}
+                            disabled={areFiledsEmpty}
+                        >
+                            CWU
+                        </Button>
+                    </Tooltip>
+                    <Button type="primary" disabled>
+                        Koszty leczenia
                     </Button>
-                </Tooltip>
-                <Button type="primary" disabled>
-                    Koszty leczenia
-                </Button>
-                <Button type="primary" disabled>
-                    SoFU
-                </Button>
-                <Button type="primary" disabled>
-                    BO
-                </Button>
+                    <Button type="primary" disabled>
+                        SoFU
+                    </Button>
+                    <Button type="primary" disabled>
+                        BO
+                    </Button>
+                </Space>
             </Space>
 
             <Tabs items={tabsItems} animated />

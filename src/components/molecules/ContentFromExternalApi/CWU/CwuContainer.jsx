@@ -9,6 +9,8 @@ import {
     Divider,
     Collapse,
     Alert,
+    Result,
+    Typography,
 } from 'antd'
 import { mergeTemplateObject } from '@helpers/mergeTemplateObject'
 import { CopyOutlined } from '@ant-design/icons'
@@ -16,10 +18,10 @@ import { templates } from '@molecules/RichTextEditor/TemplatesRichTextEditor/Tem
 
 export const CwuContainer = () => {
     const { addTextToEditor, mainEditorRef } = useRichTextContext()
-
     const { currentRecordId } = useRecordsViewContext()
-
     const { data, isLoading, error } = useCwuData(currentRecordId)
+
+    const { Paragraph, Text } = Typography
 
     const templateUbezpieczenie = templates.ubezpieczenieZdrowotne(data)
     const templateDaneAdresowe = templates.daneAdresowe(data)
@@ -103,16 +105,25 @@ export const CwuContainer = () => {
 
     if (error)
         return (
-            <Alert
-                showIcon
-                message="Ups! Coś poszło nie tak!"
-                description={
-                    error?.response
-                        ? error?.response?.data[0].description
-                        : 'Wystąpił błąd podczas pobierania danych z systemu CWU, prosimy spróbować później.'
-                }
-                type="error"
-            />
+            <>
+                <Result status="error" title="Ups! Coś poszło nie tak!">
+                    <div className="desc">
+                        <Paragraph>
+                            <Text
+                                strong
+                                style={{
+                                    fontSize: 16,
+                                }}
+                            >
+                                Opis błędu:
+                            </Text>
+                        </Paragraph>
+                        {error?.response
+                            ? error?.response?.data?.description
+                            : 'Wystąpił błąd podczas pobierania danych z systemu CWU, prosimy spróbować później'}
+                    </div>
+                </Result>
+            </>
         )
 
     return (
