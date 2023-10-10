@@ -68,24 +68,16 @@ export const EzdDataFormSection = ({ editMode = false, setError, form }) => {
                 >
                     <Input
                         style={{ minWidth: 300 }}
-                        disabled
                         placeholder="wprowadż nazwę koszulki"
                     ></Input>
                 </Form.Item>
                 {editMode && (
                     <>
                         <Form.Item name="koszulka_id" label="Id koszulki">
-                            <Input
-                                disabled
-                                placeholder="id koszulki utworzonej"
-                            />
+                            <Input disabled />
                         </Form.Item>
                         <Form.Item name="nr_sprawy" label="Numer sprawy">
-                            <Input
-                                disabled
-                                style={{ minWidth: 250 }}
-                                placeholder="numer sprawy"
-                            />
+                            <Input disabled style={{ minWidth: 250 }} />
                         </Form.Item>
                     </>
                 )}

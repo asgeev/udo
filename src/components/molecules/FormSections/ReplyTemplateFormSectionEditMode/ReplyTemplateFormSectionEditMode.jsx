@@ -40,9 +40,9 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
     const { mainEditorRef, attachmentsEditorRef } = useRichTextContext()
     const { formDisabled } = useEditFormContext()
     const editForm = Form.useFormInstance()
-    const pesel = editForm.getFieldValue('pesel')
-    const koszulka_id = editForm.getFieldValue('koszulka_id')
-    const nr_sprawy = editForm.getFieldValue('nr_sprawy')
+    const pesel = Form.useWatch('pesel', editForm)
+    const koszulka_id = Form.useWatch('koszulka_id', editForm)
+    const nr_sprawy = Form.useWatch('nr_sprawy', editForm)
 
     const [signatures, setSignatures] = useState(null)
 
