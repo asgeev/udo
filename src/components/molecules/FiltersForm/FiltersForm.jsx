@@ -25,6 +25,9 @@ export const FiltersForm = ({ onFiltersChange }) => {
                 />
             </Form.Item>
             <Space size={'large'}>
+                <Form.Item name="my" label="Moje" valuePropName="checked">
+                    <Switch disabled />
+                </Form.Item>
                 <Form.Item
                     name="show_finished"
                     label="Zakończone"
