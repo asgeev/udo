@@ -22,24 +22,24 @@ export const templates = {
     ubezpieczenieZdrowotne: (data = {}) => {
         const { imie, nazwisko, status_sl, msg_date } = data
 
+        const emptyText = '...'
+
         const name = 'Info. ubez. zdr.'
 
         const header =
             '<p><strong>Informacja o ubezpieczeniu zdrowotnym</strong></p>'
 
         const html = `<p>Według stanu na dzień ${
-            msg_date ? dayjs(msg_date).format('DD MMMM YYYY') : '...'
-        } r. status Pani/Pana ${imie ? imie : '...'} ${
-            nazwisko ? nazwisko : '...'
-        } to: ${status_sl ? status_sl.toUpperCase() : '...'}.</p>
+            msg_date ? dayjs(msg_date).format('DD MMMM YYYY') : emptyText
+        } r. status Pani/Pana ${imie ? imie : emptyText} ${
+            nazwisko ? nazwisko : emptyText
+        } to: ${status_sl ? status_sl.toUpperCase() : emptyText}.</p>
         <p>Udostępnione informacje podlegają ochronie.</p>`
 
         return { html: html, header: header, name: name }
     },
 
     ubezpieczenieZdrowotneBrak: (data = {}) => {
-        const { imie, nazwisko, status_sl, msg_date } = data
-
         const name = 'Info. ubez. zdr. - brak'
 
         const header =
@@ -51,25 +51,27 @@ export const templates = {
     },
     daneAdresowe: (data = {}) => {
         const {
-            adr_zam_kod_pocztowy = '',
-            adr_zam_miejscowosc = '',
-            adr_zam_nr_domu = '',
-            adr_zam_nr_lokalu = '',
-            adr_zam_ulica = '',
-            adr_zam_telefon = '',
-            adr_mel_kod_pocztowy = '',
-            adr_mel_miejscowosc = '',
-            adr_mel_nr_domu = '',
-            adr_mel_nr_lokalu = '',
-            adr_mel_ulica = '',
-            adr_mel_telefon = '',
-            adr_kor_kod_pocztowy = '',
-            adr_kor_miejscowosc = '',
-            adr_kor_nr_domu = '',
-            adr_kor_nr_lokalu = '',
-            adr_kor_ulica = '',
-            adr_kor_telefon = '',
+            adr_zam_kod_pocztowy,
+            adr_zam_miejscowosc,
+            adr_zam_nr_domu,
+            adr_zam_nr_lokalu,
+            adr_zam_ulica,
+            adr_zam_telefon,
+            adr_mel_kod_pocztowy,
+            adr_mel_miejscowosc,
+            adr_mel_nr_domu,
+            adr_mel_nr_lokalu,
+            adr_mel_ulica,
+            adr_mel_telefon,
+            adr_kor_kod_pocztowy,
+            adr_kor_miejscowosc,
+            adr_kor_nr_domu,
+            adr_kor_nr_lokalu,
+            adr_kor_ulica,
+            adr_kor_telefon,
         } = data
+
+        const emptyText = 'brak danych'
         const name = 'Dane adresowe/teleadresowe'
         const header = '<p><strong>Dane adresowe/teleadresowe</strong></p>'
         const html = `<p>W Centralnym Wykazie Ubezpieczonych widnieją następujące adresy ww. osoby: <p>
@@ -77,32 +79,54 @@ export const templates = {
                     <dl>
                     <dt>adres zamieszkania:</dt>
                         <ul>
-                            <li>ulica: ${adr_zam_ulica}</li>
-                            <li>nr domu: ${adr_zam_nr_domu}</li>
-                            <li>nr lokalu: ${adr_zam_nr_lokalu}</li>
-                            <li>kod pocztowy: ${adr_zam_kod_pocztowy}</li>
-                            <li>miejscowość: ${adr_zam_miejscowosc}</li>
-                            <li>telefon: ${adr_zam_telefon}</li>
+                            <li>ulica: ${adr_zam_ulica || emptyText}</li>
+                            <li>nr domu: ${adr_zam_nr_domu || emptyText}</li>
+                            <li>nr lokalu: ${
+                                adr_zam_nr_lokalu || emptyText
+                            }</li>
+                            <li>kod pocztowy: ${
+                                adr_zam_kod_pocztowy || emptyText
+                            }</li>
+                            <li>miejscowość: ${
+                                adr_zam_miejscowosc || emptyText
+                            }</li>
+                            <li>telefon: ${adr_zam_telefon || emptyText}</li>
                         </ul>
     
                     <dt>adres zameldowania:</dt>
                         <ul>
-                            <li>ulica: ${adr_mel_ulica}</li>
-                            <li>nr domu: ${adr_mel_nr_domu}</li>
-                            <li>nr lokalu: ${adr_mel_nr_lokalu}</li>
-                            <li>kod pocztowy: ${adr_mel_kod_pocztowy}</li>
-                            <li>miejscowość: ${adr_mel_miejscowosc}</li> 
-                            <li>telefon: ${adr_mel_telefon}</li>           
+                            <li>ulica: ${adr_mel_ulica || emptyText}</li>
+                            <li>nr domu: ${adr_mel_nr_domu || emptyText}</li>
+                            <li>nr lokalu: ${
+                                adr_mel_nr_lokalu || emptyText
+                            }</li>
+                            <li>kod pocztowy: ${
+                                adr_mel_kod_pocztowy || emptyText
+                            }</li>
+                            <li>miejscowość: ${
+                                adr_mel_miejscowosc || emptyText
+                            }</li> 
+                            <li>telefon: ${
+                                adr_mel_telefon || emptyText
+                            }</li>           
                         </ul>
     
                     <dt>adres do korespondencji:</dt>
                         <ul>
-                            <li>ulica: ${adr_kor_ulica}</li>
-                            <li>nr domu: ${adr_kor_nr_domu}</li>
-                            <li>nr lokalu: ${adr_kor_nr_lokalu}</li>
-                            <li>kod pocztowy: ${adr_kor_kod_pocztowy}</li>
-                            <li>miejscowość: ${adr_kor_miejscowosc}</li>    
-                            <li>telefon:${adr_kor_telefon}</li>          
+                            <li>ulica: ${adr_kor_ulica || emptyText}</li>
+                            <li>nr domu: ${adr_kor_nr_domu || emptyText}</li>
+                            <li>nr lokalu: ${
+                                adr_kor_nr_lokalu || emptyText
+                            }</li>
+                            <li>kod pocztowy: ${
+                                adr_kor_kod_pocztowy || emptyText
+                            }</li>
+                            <li>miejscowość: ${
+                                adr_kor_miejscowosc || emptyText
+                            }</li>    
+                            <li>telefon: ${
+                                adr_kor_telefon || emptyText
+                            }</li>          
                         </ul>
                     </dl>
         `
@@ -187,6 +211,15 @@ export const templates = {
 
         const html = `<p>Brak jest informacji o zrealizowanych receptach refundowanych wystawionych w okresie od ………. r. do ……….. r.</p>
                       <p>Informacji na temat leków nierefundowanych udziela Centrum e-Zdrowia.</p>`
+
+        return { html, header, name }
+    },
+    leczeniePrzed2008: (data = {}) => {
+        const name = 'Leczenie przed 2008'
+
+        const header = `<p><strong>Leczenie przed 2008</strong></p>`
+
+        const html = `<p>Gromadzenie danych oświadczeniach opieki zdrowotnej w formie elektronicznej rozpoczęliśmy w 2008 r.. Przekazanie żądanych informacji przed tym okresem jest niemożliwe.</p>`
 
         return { html, header, name }
     },

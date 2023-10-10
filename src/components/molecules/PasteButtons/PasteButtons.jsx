@@ -17,6 +17,7 @@ export const PasteButtons = () => {
         templates.infoLeczeniePacjenta(),
         templates.realizacjaRecept(),
         templates.realizacjaReceptBrak(),
+        templates.leczeniePrzed2008(),
     ]
 
     return (

@@ -4,6 +4,7 @@ import { useFirstDrawerContext } from '@hooks/useFirstDrawerContext'
 import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
 import { SecondDrawer } from '@organisms/SecondDrawer/SecondDrawer'
 import { EditFormProvider } from '@providers/EditFormProvider'
+import { RequestHistory } from '@molecules/RequestHistory/RequestHistory'
 
 export const FirstDrawer = () => {
     const { currentRecordId } = useRecordsViewContext()
@@ -17,6 +18,7 @@ export const FirstDrawer = () => {
             open={isFirstDrawerVisible}
             destroyOnClose={true}
             onClose={closeDrawer}
+            extra={<RequestHistory />}
         >
             <EditFormProvider>
                 <EditForm />

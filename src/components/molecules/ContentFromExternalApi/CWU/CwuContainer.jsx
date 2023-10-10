@@ -19,7 +19,7 @@ import { templates } from '@molecules/RichTextEditor/TemplatesRichTextEditor/Tem
 export const CwuContainer = () => {
     const { addTextToEditor, mainEditorRef } = useRichTextContext()
     const { currentRecordId } = useRecordsViewContext()
-    const { data, isLoading, error } = useCwuData(currentRecordId)
+    const { data, isLoading, isFetching, error } = useCwuData(currentRecordId)
 
     const { Paragraph, Text } = Typography
 
@@ -139,7 +139,10 @@ export const CwuContainer = () => {
                 />
             </Space>
 
-            <Spin tip="Pobieranie danych z CWU..." spinning={isLoading}>
+            <Spin
+                tip="Pobieranie danych z CWU..."
+                spinning={isLoading || isFetching}
+            >
                 <Descriptions
                     size="small"
                     title="Dane osoby"
