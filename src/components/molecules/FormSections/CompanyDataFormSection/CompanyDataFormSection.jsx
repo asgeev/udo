@@ -1,63 +1,41 @@
-import { useEffect, useState } from 'react'
-import { Form, AutoComplete, Space, Input, Alert, Select } from 'antd'
-import WP_Instance from '@services/WP_Instance'
+import { useEffect } from 'react'
+import { Form, AutoComplete, Space, Input, Alert, Select, Spin } from 'antd'
 import { useTheme } from 'styled-components'
 import { FormSection } from '@molecules/FormSection/FormSection'
 import { createCompanyDataOptions } from '@helpers/createCompanyDataOptions'
 import { createCompanyTypeIdOptions } from '@helpers/createCompanyTypeIdOptions'
+import { useGetRequestorsList } from '@hooks/useGetRequestorList'
+import { useGetRequestorTypesList } from '@hooks/useGetRequestorTypesList'
 
 export const CompanyDataFormSection = ({ editMode = false, setError }) => {
     const { colors } = useTheme()
     const form = Form.useFormInstance()
-    const [companyData, setCompanyData] = useState(null)
-    const [searchQuery, setSearchQuery] = useState('')
-    const [selectedRequestor, setSeclectedRequestor] = useState(null)
-    const [companyTypesItems, setCompanyTypesItems] = useState([])
 
-    const handleSetSelectedCompany = (value, options) => {
-        setSeclectedRequestor(options)
-    }
-
-    const handleSetCompanyData = (data) => {
-        setCompanyData(data)
-    }
-    const handleOnSearch = (query) => {
-        setSearchQuery(query)
-    }
+    const {
+        data: requestorsList,
+        isError: requestorsListError,
+        isLoading,
+    } = useGetRequestorsList()
+    const { data: requestorTypesList, isError: requestorTypesListError } =
+        useGetRequestorTypesList()
 
     useEffect(() => {
-        form.setFieldValue('requestor_id', selectedRequestor?.id)
-        form.setFieldValue('requestor_street', selectedRequestor?.street)
-        form.setFieldValue('requestor_house', selectedRequestor?.house)
-        form.setFieldValue('requestor_apartment', selectedRequestor?.apartment)
-        form.setFieldValue('requestor_postcode', selectedRequestor?.postcode)
-        form.setFieldValue('requestor_city', selectedRequestor?.city)
-        form.setFieldValue(
-            'requestor_type_id',
-            selectedRequestor?.requestor_type_id
-        )
-    }, [selectedRequestor])
+        if (requestorTypesListError || requestorsListError) {
+            setError(true)
+        }
+    }, [requestorTypesListError, requestorsListError])
 
-    useEffect(() => {
-        WP_Instance.get(`/udo/v1/getRequestorList?company_name=${searchQuery}`)
-            .then((response) => {
-                handleSetCompanyData(response?.data)
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-    }, [searchQuery])
-
-    useEffect(() => {
-        WP_Instance.get(`/udo/v1/getRequestorTypesList`)
-            .then((response) => {
-                setCompanyTypesItems(response?.data)
-            })
-            .catch((error) => {
-                console.error(error)
-                setError(true)
-            })
-    }, [])
+    const handleOnSelect = (value, option) => {
+        console.log(option)
+        form.setFieldValue('requestor_name', option?.name)
+        form.setFieldValue('requestor_id', option?.id)
+        form.setFieldValue('requestor_street', option?.street)
+        form.setFieldValue('requestor_house', option?.house)
+        form.setFieldValue('requestor_apartment', option?.apartment)
+        form.setFieldValue('requestor_postcode', option?.postcode)
+        form.setFieldValue('requestor_city', option?.city)
+        form.setFieldValue('requestor_type_id', option?.requestor_type_id)
+    }
 
     return (
         <FormSection
@@ -67,7 +45,7 @@ export const CompanyDataFormSection = ({ editMode = false, setError }) => {
             backgroundColor={colors.color_card_7}
             style={{ gridRow: 2 / 12, gridColumn: 1 }}
         >
-            <Form.Item hidden={true} name="company_id">
+            <Form.Item hidden={true} name="requestor_id">
                 <Input />
             </Form.Item>
             <Alert
@@ -89,10 +67,15 @@ export const CompanyDataFormSection = ({ editMode = false, setError }) => {
                 ]}
             >
                 <AutoComplete
-                    options={createCompanyDataOptions(companyData)}
-                    notFoundContent={' ☹️ Brak wyników dla wyszukiwanej frazy'}
-                    onSelect={handleSetSelectedCompany}
-                    onSearch={handleOnSearch}
+                    options={createCompanyDataOptions(requestorsList)}
+                    notFoundContent={
+                        isLoading ? (
+                            <Spin />
+                        ) : (
+                            ' ☹️ Brak wyników dla wyszukiwanej frazy'
+                        )
+                    }
+                    onSelect={(value, option) => handleOnSelect(value, option)}
                     placeholder="wyszukaj lub wprowadź nazwę podmiotu"
                     allowClear
                     filterOption={(inputValue, option) =>
@@ -191,7 +174,7 @@ export const CompanyDataFormSection = ({ editMode = false, setError }) => {
                             .toLowerCase()
                             .includes(input.toLowerCase())
                     }
-                    options={createCompanyTypeIdOptions(companyTypesItems)}
+                    options={createCompanyTypeIdOptions(requestorTypesList)}
                 />
             </Form.Item>
         </FormSection>

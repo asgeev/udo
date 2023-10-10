@@ -12,5 +12,6 @@ export const useCwuData = (currentRecordId) => {
             return data
         },
         enabled: currentRecordId > 0,
+        refetchOnWindowFocus: false,
     })
 }

@@ -1,131 +1,226 @@
 import dayjs from 'dayjs'
 
-//Templates for buttons
+export const templates = {
+    szanownyPanie: (data = {}) => {
+        const name = 'Szanowny Panie...'
 
-export const template1 = `
-    <p>Szanowny Panie,</p>
-    <p>podaję informacje dotyczące wskazanej we wniosku osoby: Pana/Pani XXXXX XXXXXXXXX</p>
-`
+        const header = `<p><strong>Szanowny Panie</strong></p>`
 
-export const template2 = `
-    <p><strong>Informacja o leczeniu pacjenta</strong><p/>
-    <p>Brak jest informacji o udzielonych świadczeniach zdrowotnych w rodzaju opieka psychiatryczna i leczenie uzależnień w okresie od  .....r.<p/>
-    `
-export const template3 = `
-    <p><strong>Ubezpieczenie zdrowotne</strong><p/>
-    <p>Według stanu na .... czerwca 2023 r. Pani/Pan XXX XXXXXX podlega/nie podlega ubezpieczeniu zdrowotnemu w Rzeczypospolitej Polskiej z tytułu pobierania emerytury lub renty<p/>
-    <p>Udostępnione informacje podlegają ochronie<p/>
-`
+        const html = `<p>podaję informacje dotyczące wskazanej we wniosku osoby: Pana/Pani XXXXX XXXXXXXXX</p>`
 
-export const template4 = (data = {}) => {
-    const {
-        adr_zam_kod_pocztowy,
-        adr_zam_miejscowosc,
-        adr_zam_nr_domu,
-        adr_zam_nr_lokalu,
-        adr_zam_ulica,
-        adr_mel_kod_pocztowy,
-        adr_mel_miejscowosc,
-        adr_mel_nr_domu,
-        adr_mel_nr_lokalu,
-        adr_mel_ulica,
-        adr_kor_kod_pocztowy,
-        adr_kor_miejscowosc,
-        adr_kor_nr_domu,
-        adr_kor_nr_lokalu,
-        adr_kor_ulica,
-    } = data
-    const html = `
-    <p>W Centralnym Wykazie Ubezpieczonych widnieją następujące adresy ww. osoby: <p>
-    <dl>
+        return { html: html, header: header, name: name }
+    },
+    szanowniPanstwo: (data = {}) => {
+        const name = 'Szanowni Państwo...'
 
-      <dt>adres zamieszkania:</dt>
-        <ul>
-            <li>ulica: ${adr_zam_ulica ? adr_zam_ulica : ''}</li>
-            <li>nr domu: ${adr_zam_nr_domu ? adr_zam_nr_domu : ''}</li>
-            <li>nr lokalu: ${adr_zam_nr_lokalu ? adr_zam_nr_lokalu : ''}</li>
-            <li>kod pocztowy: ${
-                adr_zam_kod_pocztowy ? adr_zam_kod_pocztowy : ''
-            }</li>
-            <li>miejscowość: ${
-                adr_zam_miejscowosc ? adr_zam_miejscowosc : ''
-            }</li>
-        </ul>
+        const header = `<p><strong>Szanowni Państwo</strong></p>`
 
-      <dt>adres zameldowania:</dt>
-        <ul>
-            <li>ulica: ${adr_mel_ulica ? adr_mel_ulica : ''}</li>
-            <li>nr domu: ${adr_mel_nr_domu ? adr_mel_nr_domu : ''}</li>
-            <li>nr lokalu: ${adr_mel_nr_lokalu ? adr_mel_nr_lokalu : ''}</li>
-            <li>kod pocztowy: ${
-                adr_mel_kod_pocztowy ? adr_mel_kod_pocztowy : ''
-            }</li>
-            <li>miejscowość: ${
-                adr_mel_miejscowosc ? adr_mel_miejscowosc : ''
-            }</li>            
-        </ul>
+        const html = `<p>podaję informacje dotyczące wskazanej we wniosku osoby: Pana/Pani XXXXX XXXXXXXXX</p>`
 
-      <dt>adres do korespondencji:</dt>
-        <ul>
-            <li>ulica: ${adr_kor_ulica ? adr_kor_ulica : ''}</li>
-            <li>nr domu: ${adr_kor_nr_domu ? adr_kor_nr_domu : ''}</li>
-            <li>nr lokalu: ${adr_kor_nr_lokalu ? adr_kor_nr_lokalu : ''}</li>
-            <li>kod pocztowy: ${
-                adr_kor_kod_pocztowy ? adr_kor_kod_pocztowy : ''
-            }</li>
-            <li>miejscowość: ${
-                adr_kor_miejscowosc ? adr_kor_miejscowosc : ''
-            }</li>              
-        </ul>
-    </dl>
-   
-    `
+        return { html: html, header: header, name: name }
+    },
+    ubezpieczenieZdrowotne: (data = {}) => {
+        const { imie, nazwisko, status_sl, msg_date } = data
 
-    return html
-}
+        const emptyText = '...'
 
-export const template5 = `
-    <p><strong>Informacja o leczeniu pacjenta</strong></p>
-    <p>Brak jest informacji o świadczeniach zdrowotnych udzielonych w okresie od ……….. r. do ……… r.</p>
-`
-export const template6 = `
-    <p><strong>Informacja  o realizacji recept</strong></p> 
-    <p>Brak jest informacji o zrealizowanych receptach refundowanych wystawionych w okresie od ………. r. do ……….. r.</p>
-    <p>Informacji na temat leków nierefundowanych udziela Centrum e-Zdrowia.</p>
-`
+        const name = 'Info. ubez. zdr.'
 
-export const template7 = (data = {}) => {
-    const { imie, nazwisko, status_sl } = data
-    const html = `
-        <p>Według stanu na dzień ${dayjs().format('DD MMMM YYYY')} r. status
-                    ubezpieczenia Pani/Pana ${imie ? imie : '...'} ${
-        nazwisko ? nazwisko : '...'
-    } to: ${
-        status_sl ? status_sl.toUpperCase() : '...'
-    } . \n Tytuł ubezpieczenia: jakiś tytuł ubezpieczenia.
-                    Udostępnione informacje podlegają ochronie.</p>`
+        const header =
+            '<p><strong>Informacja o ubezpieczeniu zdrowotnym</strong></p>'
 
-    return html
-}
+        const html = `<p>Według stanu na dzień ${
+            msg_date ? dayjs(msg_date).format('DD MMMM YYYY') : emptyText
+        } r. status Pani/Pana ${imie ? imie : emptyText} ${
+            nazwisko ? nazwisko : emptyText
+        } to: ${status_sl ? status_sl.toUpperCase() : emptyText}.</p>
+        <p>Udostępnione informacje podlegają ochronie.</p>`
 
-export const template8 = `
-    <p><strong>Informacja o deklaracji lekarza podstawowej opieki zdrowotnej</strong></p> 
-    <p>Pan XXXX XXXXX nie złożył deklaracji wyboru lekarza podstawowej opieki zdrowotnej.</p>   
+        return { html: html, header: header, name: name }
+    },
 
-`
-export const template9 = `
-    <p><strong>Informacja o leczeniu pacjenta</strong></p>
-    <p>Jako załącznik przekazujemy zestawienie dotyczące okresu i miejsc udzielonych świadczeń zdrowotnych w okresie od ………. r.</p>
-`
+    ubezpieczenieZdrowotneBrak: (data = {}) => {
+        const name = 'Info. ubez. zdr. - brak'
 
-export const template10 = `
-    <p>Dane adresowe przekazywane są do Centralnego Wykazu Ubezpieczonych bezpośrednio przez ZUS lub KRUS i nie są związane z faktem czy osoba ubezpieczona korzysta aktualnie ze świadczeń opieki zdrowotnej finansowanej przez NFZ.</p>
+        const header =
+            '<p><strong>Informacja o ubezpieczeniu zdrowotnym</strong></p>'
+
+        const html = `<p>Brak jest informacji o świadczeniach zdrowotncyh udzielonych w okresie od ... r. do ... r..</p>`
+
+        return { html: html, header: header, name: name }
+    },
+    daneAdresowe: (data = {}) => {
+        const {
+            adr_zam_kod_pocztowy,
+            adr_zam_miejscowosc,
+            adr_zam_nr_domu,
+            adr_zam_nr_lokalu,
+            adr_zam_ulica,
+            adr_zam_telefon,
+            adr_mel_kod_pocztowy,
+            adr_mel_miejscowosc,
+            adr_mel_nr_domu,
+            adr_mel_nr_lokalu,
+            adr_mel_ulica,
+            adr_mel_telefon,
+            adr_kor_kod_pocztowy,
+            adr_kor_miejscowosc,
+            adr_kor_nr_domu,
+            adr_kor_nr_lokalu,
+            adr_kor_ulica,
+            adr_kor_telefon,
+        } = data
+
+        const emptyText = 'brak danych'
+        const name = 'Dane adresowe/teleadresowe'
+        const header = '<p><strong>Dane adresowe/teleadresowe</strong></p>'
+        const html = `<p>W Centralnym Wykazie Ubezpieczonych widnieją następujące adresy ww. osoby: <p>
+                    <p></p>
+                    <dl>
+                    <dt>adres zamieszkania:</dt>
+                        <ul>
+                            <li>ulica: ${adr_zam_ulica || emptyText}</li>
+                            <li>nr domu: ${adr_zam_nr_domu || emptyText}</li>
+                            <li>nr lokalu: ${
+                                adr_zam_nr_lokalu || emptyText
+                            }</li>
+                            <li>kod pocztowy: ${
+                                adr_zam_kod_pocztowy || emptyText
+                            }</li>
+                            <li>miejscowość: ${
+                                adr_zam_miejscowosc || emptyText
+                            }</li>
+                            <li>telefon: ${adr_zam_telefon || emptyText}</li>
+                        </ul>
     
-`
+                    <dt>adres zameldowania:</dt>
+                        <ul>
+                            <li>ulica: ${adr_mel_ulica || emptyText}</li>
+                            <li>nr domu: ${adr_mel_nr_domu || emptyText}</li>
+                            <li>nr lokalu: ${
+                                adr_mel_nr_lokalu || emptyText
+                            }</li>
+                            <li>kod pocztowy: ${
+                                adr_mel_kod_pocztowy || emptyText
+                            }</li>
+                            <li>miejscowość: ${
+                                adr_mel_miejscowosc || emptyText
+                            }</li> 
+                            <li>telefon: ${
+                                adr_mel_telefon || emptyText
+                            }</li>           
+                        </ul>
+    
+                    <dt>adres do korespondencji:</dt>
+                        <ul>
+                            <li>ulica: ${adr_kor_ulica || emptyText}</li>
+                            <li>nr domu: ${adr_kor_nr_domu || emptyText}</li>
+                            <li>nr lokalu: ${
+                                adr_kor_nr_lokalu || emptyText
+                            }</li>
+                            <li>kod pocztowy: ${
+                                adr_kor_kod_pocztowy || emptyText
+                            }</li>
+                            <li>miejscowość: ${
+                                adr_kor_miejscowosc || emptyText
+                            }</li>    
+                            <li>telefon: ${
+                                adr_kor_telefon || emptyText
+                            }</li>          
+                        </ul>
+                    </dl>
+        `
+        return { html: html, header: header, name: name }
+    },
 
-export const template11 = `
-    <p>Dane zostały zweryfikowane w naszych systemach informatycznych ..... 2023r.</p>
-`
-export const template12 = `
-    <p>Narodowy Fundusz Zdrowia nie monitoruje świadczeń opieki zdrowotnej wykonywanych na bieżąco, lecz przetwarza dane dotyczące udzielonych świadczeń na podstawie raportów przekazywanych do OW przez świadczeniodawców. Zgodnie z §23 ust.3 załącznika do rozporządzenia Ministra Zdrowia z dnia 8 września 2015 r. w sprawie ogólnych warunków umów o udzielanie świadczeń opieki zdrowotnej (Dz.U. z 2022 r. poz. 787, z późn. zm.) dokumenty rozliczeniowe świadczeniodawca składa OW w terminie do 10 dnia każdego miesiąca, za miesiąc poprzedni.</p>
-`
+    platnik: (data = {}) => {
+        const name = 'Płatnik składek'
+
+        const header = `<p><strong>Płatnik składek</strong></p>`
+
+        const html = `<p>Płatnik składek na ubezpieczenie zdrowotne:<p/>
+                      <p>od:   do: </p>
+                      <ul>
+                        <li>NIP:</li>
+                        <li>Nazwa skrócona:</li>
+                      </ul>
+                    `
+
+        return { html, header, name }
+    },
+
+    ekuz: (data = {}) => {
+        const name = 'EKUZ'
+
+        const header = `<p><strong>EKUZ</strong></p></br>`
+
+        const html = `<p>Europejska Karta Ubezpieczenia Zdrowotnego: wydana/brak</p>
+                      <p>ważność karty od:     do:</p>`
+
+        return { html, header, name }
+    },
+    deklaracjaPOZ: (data = {}) => {
+        const name = 'Deklaracja POZ'
+
+        const header = `<p><strong>Deklaracja lekarza POZ</strong></p>`
+
+        const html = `<p>Miejsce złożenia deklaracji wyboru lekarza pierwszego kontaktu: ....</p> `
+
+        return { html, header, name }
+    },
+    deklaracjaPOZBrak: (data = {}) => {
+        const name = 'Deklaracja POZ - brak'
+
+        const header = `<p><strong>Deklaracja POZ - brak</strong></p>`
+
+        const html = `<p>Pan XXXX XXXXX nie złożył deklaracji wyboru lekarza podstawowej opieki zdrowotnej.</p> `
+
+        return { html, header, name }
+    },
+    ZUSKRUS: (data = {}) => {
+        const name = 'ZUS/KRUS'
+
+        const header = `<p><strong>ZUS/KRUS</strong></p>`
+
+        const html = `<p>Dane adresowe przekazywane są do Centralnego Wykazu Ubezpieczonych bezpośrednio przez ZUS lub KRUS i nie są związane z faktem czy osoba ubezpieczona korzysta aktualnie ze świadczeń opieki zdrowotnej finansowanej przez NFZ. Nie jesteśmy w stanie zweryfikować, czy zawarty adres w systemie jest aktualny.</p>`
+
+        return { html, header, name }
+    },
+    infoLeczeniePacjenta: (data = {}) => {
+        const name = 'Leczenie Pacjenta '
+
+        const header = `<p><strong>Informacja o leczeniu pacjenta</strong></p>`
+
+        const html = `<p>Jako załącznik przekazujemy zestawienie dotyczące okresu i miejsc udzielonych świadczeń zdrowotnych w okresie od: ... r. do: ... r.</p>`
+
+        return { html, header, name }
+    },
+    realizacjaRecept: (data = {}) => {
+        const name = 'Realizacja recept'
+
+        const header = `<p><strong>Informacja o realizacji recept</strong></p>`
+
+        const html = `<p></p>`
+
+        return { html, header, name }
+    },
+    realizacjaReceptBrak: (data = {}) => {
+        const name = 'Realizacja recept - brak'
+
+        const header = `<p><strong>Informacja o realizacji recept</strong></p>`
+
+        const html = `<p>Brak jest informacji o zrealizowanych receptach refundowanych wystawionych w okresie od ………. r. do ……….. r.</p>
+                      <p>Informacji na temat leków nierefundowanych udziela Centrum e-Zdrowia.</p>`
+
+        return { html, header, name }
+    },
+    leczeniePrzed2008: (data = {}) => {
+        const name = 'Leczenie przed 2008'
+
+        const header = `<p><strong>Leczenie przed 2008</strong></p>`
+
+        const html = `<p>Gromadzenie danych oświadczeniach opieki zdrowotnej w formie elektronicznej rozpoczęliśmy w 2008 r.. Przekazanie żądanych informacji przed tym okresem jest niemożliwe.</p>`
+
+        return { html, header, name }
+    },
+}

@@ -1,88 +1,66 @@
-import { useContext } from 'react'
 import { Button, Space } from 'antd'
-import { RichTextContext } from '@providers/RichTextProvider'
-import {
-    template1,
-    template2,
-    template3,
-    template4,
-    template5,
-    template6,
-    template7,
-    template8,
-    template9,
-    template10,
-    template11,
-    template12,
-} from '@molecules/RichTextEditor/TemplatesRichTextEditor/TemplatesRichTextEditor'
+import { useRichTextContext } from '@hooks/useRichTextContext'
+import { mergeTemplateObject } from '@helpers/mergeTemplateObject'
+import { templates } from '@molecules/RichTextEditor/TemplatesRichTextEditor/TemplatesRichTextEditor'
 
 export const PasteButtons = () => {
-    const { mainEditorRef, addTextToEditor } = useContext(RichTextContext)
+    const { mainEditorRef, addTextToEditor } = useRichTextContext()
+
+    const templatesArray = [
+        templates.ubezpieczenieZdrowotne(),
+        templates.ubezpieczenieZdrowotneBrak(),
+        templates.daneAdresowe(),
+        templates.platnik(),
+        templates.ekuz(),
+        templates.deklaracjaPOZ(),
+        templates.deklaracjaPOZBrak(),
+        templates.infoLeczeniePacjenta(),
+        templates.realizacjaRecept(),
+        templates.realizacjaReceptBrak(),
+        templates.leczeniePrzed2008(),
+    ]
+
     return (
         <Space direction="vertical" style={{ marginBottom: 15 }}>
             <Space wrap>
                 <Button
-                    onClick={() => addTextToEditor(mainEditorRef, template1)}
+                    onClick={() =>
+                        addTextToEditor(
+                            mainEditorRef,
+                            mergeTemplateObject(templates.szanownyPanie())
+                        )
+                    }
                 >
-                    Szanowny Panie...
+                    {templates.szanownyPanie().name}
+                </Button>
+
+                <Button
+                    onClick={() =>
+                        addTextToEditor(
+                            mainEditorRef,
+                            mergeTemplateObject(templates.szanowniPanstwo())
+                        )
+                    }
+                >
+                    {templates.szanowniPanstwo().name}
                 </Button>
             </Space>
             <Space wrap>
-                <Button
-                    onClick={() => addTextToEditor(mainEditorRef, template2)}
-                >
-                    Informacja o leczeniu
-                </Button>
-                <Button
-                    onClick={() => addTextToEditor(mainEditorRef, template5)}
-                >
-                    Informacja o leczeniu 2
-                </Button>
-                <Button
-                    onClick={() => addTextToEditor(mainEditorRef, template9)}
-                >
-                    Informacja o leczeniu 2 zał.
-                </Button>
-                <Button
-                    onClick={() => addTextToEditor(mainEditorRef, template3)}
-                >
-                    Ubezpieczenie
-                </Button>
-                <Button
-                    onClick={() => addTextToEditor(mainEditorRef, template4())}
-                >
-                    Dane adresowe
-                </Button>
-                <Button
-                    onClick={() => addTextToEditor(mainEditorRef, template6)}
-                >
-                    Realizacja recept
-                </Button>
-                <Button
-                    onClick={() => addTextToEditor(mainEditorRef, template7())}
-                >
-                    Ubezpieczenie zdrowotne
-                </Button>
-                <Button
-                    onClick={() => addTextToEditor(mainEditorRef, template8)}
-                >
-                    Deklaracja POZ
-                </Button>
-                <Button
-                    onClick={() => addTextToEditor(mainEditorRef, template10)}
-                >
-                    Wyjaśnienie CWU
-                </Button>
-                <Button
-                    onClick={() => addTextToEditor(mainEditorRef, template11)}
-                >
-                    Dane zweryfikowane
-                </Button>
-                <Button
-                    onClick={() => addTextToEditor(mainEditorRef, template12)}
-                >
-                    Przetwarzanie danych
-                </Button>
+                {templatesArray?.map((template, index) => {
+                    return (
+                        <Button
+                            key={index}
+                            onClick={() =>
+                                addTextToEditor(
+                                    mainEditorRef,
+                                    mergeTemplateObject(template)
+                                )
+                            }
+                        >
+                            {template?.name}
+                        </Button>
+                    )
+                })}
             </Space>
         </Space>
     )
