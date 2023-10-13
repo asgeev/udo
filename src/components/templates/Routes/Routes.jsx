@@ -10,7 +10,7 @@ import { useIsAuthenticated } from 'react-auth-kit'
 import { AppLayout } from '@templates/AppLayout/AppLayout'
 import { Login } from '@pages/Login/Login'
 import { PageNotFound } from '@pages/PageNotFound/PageNotFound'
-import { Home } from '@pages/Home/Home'
+import { HomePage } from '@pages/HomePage/HomePage'
 import { MainAdd } from '@pages/MainAdd/MainAdd'
 import { RecordsView } from '@pages/RecordsView/RecordsView'
 
@@ -34,7 +34,7 @@ export const Routes = () => {
                         <PrivateRoute Component={AppLayout}></PrivateRoute>
                     }
                 >
-                    <Route element={<Home />} />
+                    <Route path="/" element={<HomePage />} />
                     <Route path="dodawanie" element={<MainAdd />} />
                     <Route path="podglad" element={<RecordsView />} />
                     {/* <Route path="podglad" element={<RecordsView />} /> */}
