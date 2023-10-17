@@ -48,7 +48,7 @@ export const InflowFormSection = ({ editMode = false, setError }) => {
                         closable
                     />
                 )}
-                <Space wrap>
+                <Space id="formItemInfowKoszulkaId" wrap>
                     <Form.Item
                         name="inflow_koszulka_id"
                         label="Id koszulki wpływającej"
@@ -60,6 +60,7 @@ export const InflowFormSection = ({ editMode = false, setError }) => {
                         ]}
                     >
                         <Input
+                            id="inputInflowKoszulkaId"
                             disabled={editMode}
                             placeholder="id koszulki wpływającej"
                         />
@@ -67,6 +68,7 @@ export const InflowFormSection = ({ editMode = false, setError }) => {
                     {!editMode && (
                         <Tooltip title="Wstaw dane z EZD">
                             <Button
+                                id="getMetaDataFromEzdButton"
                                 type="primary"
                                 icon={<SyncOutlined />}
                                 onClick={getMetaDataFromEzd}
