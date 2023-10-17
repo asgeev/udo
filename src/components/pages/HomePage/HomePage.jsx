@@ -5,6 +5,7 @@ import {
     GithubOutlined,
     MailOutlined,
     LinkedinOutlined,
+    UserOutlined,
 } from '@ant-design/icons'
 import nfzlogo from '@assets/nfzlogo.png'
 
@@ -74,7 +75,7 @@ export const HomePage = () => {
                         Napisz do nas mejla! Chętnie pomożemy!
                     </Paragraph>
                     <Space size={'middle'}>
-                        <MailOutlined style={{ fontSize: '18px' }} />
+                        <Avatar shape="square" icon={<MailOutlined />} />
                         <Link
                             href="mailto:aplikacje@nfz-lublin.pl"
                             target="_blank"
@@ -104,9 +105,7 @@ export const HomePage = () => {
                         ]}
                     >
                         <Meta
-                            avatar={
-                                <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=2" />
-                            }
+                            avatar={<Avatar icon={<UserOutlined />} />}
                             title="Łukasz Bondyra"
                             description="Backend developer"
                         />
