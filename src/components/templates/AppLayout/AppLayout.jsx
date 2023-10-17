@@ -6,6 +6,7 @@ import { StyledLayout } from './AppLayout.styles'
 //Import molecules
 import { Header } from '@molecules/Header/Header'
 import { Navigation } from '@molecules/Navigation/Navigation'
+import { JoyrideTour } from '@organisms/Joyride/JoyrideTour'
 
 const breadcrumbNameMap = {
     '/': 'Główna',
@@ -46,7 +47,8 @@ export const AppLayout = () => {
 
     return (
         <>
-            <StyledLayout>
+            {/* <JoyrideTour /> */}
+            <StyledLayout id="app">
                 <Navigation collapsed={collapsed} setCollapsed={setCollapsed} />
                 <Layout>
                     <Header collapsed={collapsed} />

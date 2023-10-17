@@ -65,6 +65,7 @@ export const AddForm = () => {
                             <Space>
                                 {submitLoading && <Spin indicator={antIcon} />}
                                 <Button
+                                    id="saveAddFrom"
                                     type="primary"
                                     htmlType="submit"
                                     size="large"

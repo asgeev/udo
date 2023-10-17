@@ -19,6 +19,7 @@ import {
     BellOutlined,
     HistoryOutlined,
     TrophyOutlined,
+    InfoCircleOutlined,
 } from '@ant-design/icons'
 
 export const Header = ({ collapsed }) => {
@@ -84,6 +85,7 @@ export const Header = ({ collapsed }) => {
                 }}
             >
                 <Space
+                    id="userStatistic"
                     size="large"
                     style={{ display: 'flex', alignItems: 'center' }}
                 >
@@ -101,6 +103,13 @@ export const Header = ({ collapsed }) => {
                     />
                 </Space>
                 <Space size={'middle'}>
+                    <InfoCircleOutlined
+                        type="button"
+                        id="start-action"
+                        style={{
+                            fontSize: '1.4rem',
+                        }}
+                    />
                     <Badge count={0}>
                         <BellOutlined
                             style={{
