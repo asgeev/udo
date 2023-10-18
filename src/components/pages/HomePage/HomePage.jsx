@@ -64,8 +64,7 @@ export const HomePage = () => {
                         przycisk pobierania danych. Po tej operacji wszystkie
                         dane pobiorą się automatycznie z EZD. Oczywiście to nie
                         jedyna super funkcja w tej aplikacji. Więcej odkryjesz w
-                        przygotowanym tutorialu który dołączony jest do ważnych
-                        elementów strony.
+                        we wkrótce dostępnym tutorialu.
                     </Paragraph>
 
                     <Title level={3}>
