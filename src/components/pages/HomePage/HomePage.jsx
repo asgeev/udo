@@ -63,7 +63,7 @@ export const HomePage = () => {
                         teraz wystarczy, że wpiszesz numer koszulki i klikniesz
                         przycisk pobierania danych. Po tej operacji wszystkie
                         dane pobiorą się automatycznie z EZD. Oczywiście to nie
-                        jedyna super funkcja w tej aplikacji. Więcej odkryjesz w
+                        jedyna super funkcja w tej aplikacji. Więcej odkryjesz
                         we wkrótce dostępnym tutorialu.
                     </Paragraph>
 
