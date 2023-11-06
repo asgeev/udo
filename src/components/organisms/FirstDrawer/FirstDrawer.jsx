@@ -22,9 +22,8 @@ export const FirstDrawer = () => {
         >
             <EditFormProvider>
                 <EditForm />
+                <SecondDrawer />
             </EditFormProvider>
-
-            <SecondDrawer />
         </Drawer>
     )
 }
