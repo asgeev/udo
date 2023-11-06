@@ -1,4 +1,5 @@
 import { useRichTextContext } from '@hooks/useRichTextContext'
+import { useEditFormContext } from '@hooks/useEditFormContext'
 import { useCwuData } from '@hooks/useCwuData'
 import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
 import {
@@ -13,18 +14,30 @@ import {
     Typography,
 } from 'antd'
 import { mergeTemplateObject } from '@helpers/mergeTemplateObject'
-import { CopyOutlined } from '@ant-design/icons'
+import { CopyOutlined, WarningOutlined } from '@ant-design/icons'
 import { templates } from '@molecules/RichTextEditor/TemplatesRichTextEditor/TemplatesRichTextEditor'
 
 export const CwuContainer = () => {
     const { addTextToEditor, mainEditorRef } = useRichTextContext()
     const { currentRecordId } = useRecordsViewContext()
+    //Fetch data
     const { data, isLoading, isFetching, error } = useCwuData(currentRecordId)
+    //Get fields value from edit form
+    const { editForm } = useEditFormContext()
+    const firstName = editForm?.getFieldValue('first_name')
+    const lastName = editForm?.getFieldValue('last_name')
 
     const { Paragraph, Text } = Typography
 
+    //Generate templates
     const templateUbezpieczenie = templates.ubezpieczenieZdrowotne(data)
     const templateDaneAdresowe = templates.daneAdresowe(data)
+
+    //Check if strings of first name and last name are equal
+    const isFirstNameEqual =
+        data?.imie?.toUpperCase() === firstName?.toUpperCase()
+    const isLastNameEqual =
+        data?.nazwisko?.toUpperCase() === lastName?.toUpperCase()
 
     const descriptionItems = [
         {
@@ -41,19 +54,39 @@ export const CwuContainer = () => {
         {
             key: '3',
             label: 'Imię',
-            children: <p>{data?.imie}</p>,
+            children: (
+                <Space align="baseline">
+                    <Paragraph type={!isFirstNameEqual && 'warning'}>
+                        {data?.imie}
+                    </Paragraph>
+                    {isFirstNameEqual ||
+                        (!isLoading && (
+                            <WarningOutlined style={{ color: '#faad14' }} />
+                        ))}
+                </Space>
+            ),
         },
         {
             key: '4',
             label: 'Nazwisko',
-            children: <p>{data?.nazwisko}</p>,
+            children: (
+                <Space align="baseline">
+                    <Paragraph type={!isLastNameEqual && 'warning'}>
+                        {data?.nazwisko}
+                    </Paragraph>
+                    {isLastNameEqual ||
+                        (!isLoading && (
+                            <WarningOutlined style={{ color: '#faad14' }} />
+                        ))}
+                </Space>
+            ),
         },
     ]
 
     const collapseItems = [
         {
             key: '1',
-            label: 'Informacja o ubezpieczniu',
+            label: 'Informacja o ubezpieczeniu',
             showArrow: true,
             extra: (
                 <Button
@@ -133,10 +166,19 @@ export const CwuContainer = () => {
                 style={{ marginBottom: 30, width: '100%' }}
             >
                 <Alert
-                    type="warning"
+                    type="info"
                     showIcon
-                    description="Uwaga! Wyświetlane dane są danymi testowymi!"
+                    description="Wyświetlane dane są danymi testowymi!"
                 />
+                {(isFirstNameEqual && isLastNameEqual) ||
+                    (!isLoading && (
+                        <Alert
+                            message="Uwaga!"
+                            type="warning"
+                            showIcon
+                            description="Niektóre dane pobrane z CWU nie pasują do danych znajdujących się w zapytaniu!"
+                        />
+                    ))}
             </Space>
 
             <Spin
