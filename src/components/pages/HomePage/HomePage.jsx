@@ -115,10 +115,7 @@ export const HomePage = () => {
                             marginTop: 16,
                         }}
                         actions={[
-                            <a
-                                key="github"
-                                href="https://github.com/polishghost27"
-                            >
+                            <a key="github" href="https://github.com/asgeev">
                                 <GithubOutlined />
                             </a>,
                             <a
@@ -127,10 +124,7 @@ export const HomePage = () => {
                             >
                                 <LinkedinOutlined />
                             </a>,
-                            <a
-                                key="email"
-                                href="mailto:adamszymanski27@hotmail.com"
-                            >
+                            <a key="email" href="mailto:asgeev@proton.me">
                                 <MailOutlined />
                             </a>,
                         ]}
@@ -140,7 +134,7 @@ export const HomePage = () => {
                                 <Avatar src="https://avatars.githubusercontent.com/u/80470876?v=4" />
                             }
                             title="Adam Szymański"
-                            description="Frontend developer | Desinger"
+                            description="Frontend developer | Designer"
                         />
                     </Card>
                 </Space>
