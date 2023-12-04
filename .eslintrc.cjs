@@ -34,5 +34,6 @@ module.exports = {
     rules: {
         'react-refresh/only-export-components': 'warn',
         'no-useless-escape': 'off',
+        'react/prop-types': 0,
     },
 }
