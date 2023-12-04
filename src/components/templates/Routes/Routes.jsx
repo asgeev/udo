@@ -37,7 +37,6 @@ export const Routes = () => {
                     <Route path="/" element={<HomePage />} />
                     <Route path="dodawanie" element={<MainAdd />} />
                     <Route path="podglad" element={<RecordsView />} />
-                    {/* <Route path="podglad" element={<RecordsView />} /> */}
                 </Route>
 
                 <Route path="*" element={<PageNotFound />} />

@@ -1,25 +1,13 @@
 import { useSignOut } from 'react-auth-kit'
 import { useNavigate } from 'react-router-dom'
 import { useAuthUser } from 'react-auth-kit'
-import {
-    Layout,
-    Avatar,
-    Space,
-    Dropdown,
-    Badge,
-    theme,
-    Typography,
-    Statistic,
-} from 'antd'
+import { Layout, Avatar, Space, Dropdown, Badge, theme, Typography } from 'antd'
 
 import {
     LogoutOutlined,
     UserOutlined,
     SettingOutlined,
     BellOutlined,
-    HistoryOutlined,
-    TrophyOutlined,
-    InfoCircleOutlined,
 } from '@ant-design/icons'
 
 export const Header = ({ collapsed }) => {
@@ -27,7 +15,7 @@ export const Header = ({ collapsed }) => {
     const signOut = useSignOut()
     const navigate = useNavigate()
     const auth = useAuthUser()
-    const username = auth() ? auth()?.user_display_name : 'Witaj, użytkowniku'
+    const username = auth() ? auth()?.user_display_name : 'użytkowniku'
     const { Text } = Typography
 
     const {
@@ -81,35 +69,10 @@ export const Header = ({ collapsed }) => {
                     width: '100%',
                     height: '100%',
                     display: 'flex',
-                    justifyContent: 'space-between',
+                    justifyContent: 'end',
                 }}
             >
-                <Space
-                    id="userStatistic"
-                    size="large"
-                    style={{ display: 'flex', alignItems: 'center' }}
-                >
-                    <Statistic
-                        title="Zakończone"
-                        value={21}
-                        valueStyle={{ fontSize: 14, color: '#3f8600' }}
-                        prefix={<TrophyOutlined />}
-                    />
-                    <Statistic
-                        title="W trakcie"
-                        value={38}
-                        valueStyle={{ fontSize: 14, color: '#1677FF' }}
-                        prefix={<HistoryOutlined />}
-                    />
-                </Space>
-                <Space size={'middle'}>
-                    <InfoCircleOutlined
-                        type="button"
-                        id="start-action"
-                        style={{
-                            fontSize: '1.4rem',
-                        }}
-                    />
+                <Space size={'middle'} align={'center'}>
                     <Badge count={0}>
                         <BellOutlined
                             style={{
@@ -117,7 +80,7 @@ export const Header = ({ collapsed }) => {
                             }}
                         />
                     </Badge>
-                    <Text>{username}</Text>
+                    <Text>{`Witaj, ${username}`}</Text>
                     <Dropdown
                         menu={{
                             items,

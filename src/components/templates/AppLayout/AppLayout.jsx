@@ -32,7 +32,6 @@ export const AppLayout = () => {
             title: <NavLink to={url}>{breadcrumbNameMap[url]}</NavLink>,
         }
     })
-
     const breadcrumbItems = [
         {
             title: (
