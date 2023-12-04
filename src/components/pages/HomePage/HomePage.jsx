@@ -1,6 +1,5 @@
 import { useAuthUser } from 'react-auth-kit'
-import styled from 'styled-components'
-import { Typography, Anchor, Space, Card, Avatar, Divider } from 'antd'
+import { Typography, Space, Card, Avatar, Divider } from 'antd'
 import {
     GithubOutlined,
     MailOutlined,
@@ -8,32 +7,7 @@ import {
     UserOutlined,
 } from '@ant-design/icons'
 import nfzlogo from '@assets/nfzlogo.png'
-
-const Container = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 50px;
-`
-
-const AnchorStyled = styled(Anchor)`
-    /* position: sticky; */
-`
-const GuideItemsContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-`
-const GuideItemContainer = styled.div`
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-`
-
-const Logo = styled.img`
-    margin: 20px 0;
-    width: 400px;
-`
+import { Container, Logo } from './HomePage.styles'
 
 export const HomePage = () => {
     const { Title, Paragraph, Link } = Typography
@@ -63,8 +37,7 @@ export const HomePage = () => {
                         teraz wystarczy, że wpiszesz numer koszulki i klikniesz
                         przycisk pobierania danych. Po tej operacji wszystkie
                         dane pobiorą się automatycznie z EZD. Oczywiście to nie
-                        jedyna super funkcja w tej aplikacji. Więcej odkryjesz
-                        we wkrótce dostępnym tutorialu.
+                        jedyna super funkcja tej aplikacji!
                     </Paragraph>
 
                     <Title level={3}>
@@ -84,7 +57,7 @@ export const HomePage = () => {
                     </Space>
                 </div>
                 <Divider />
-                <Title level={3}>Aplikacja powstała we współpracy z:</Title>
+                <Title level={3}>Strona powstała we współpracy z:</Title>
                 <Logo src={nfzlogo} />
                 <Space wrap size={'large'}>
                     <Card
@@ -138,76 +111,6 @@ export const HomePage = () => {
                         />
                     </Card>
                 </Space>
-
-                {/* <Row gutter={[20, 0]}>
-                    <Col xs-span={10} span={20}>
-                        <GuideItemsContainer>
-                            <GuideItemContainer id="logowanie">
-                                <Title level={3}>Logowanie</Title>
-                                <Paragraph>
-                                    Do aplikacji możemy zalogować się domenowo
-                                    czyli używając tych samych poświadczeń jak
-                                    do naszego komputera. Wystarczy podać login
-                                    lub adres email oraz wpisać hasło.
-                                </Paragraph>
-                            </GuideItemContainer>
-                            <GuideItemContainer id="dodawanie-zapytania">
-                                <Title level={3}>Dodawanie sprawy</Title>
-                                <Paragraph>
-                                    Klikając w menu przycisk [dodawanie]
-                                    otworzyn nam się formularz który umożliwia
-                                    zarejestrowanie zapytania które dostaliśmy
-                                    do realizacji.
-                                </Paragraph>
-                                <Paragraph>
-                                    Formularz podzielony jest na sekcje. Każda z
-                                    sekcji odpowiada za przetrzymywanie
-                                    określonych danych potrzebnych do
-                                    zarejestrowania sprawy w aplikacji.
-                                </Paragraph>
-                                <Title level={5}>Dane wpływu</Title>
-                                <Paragraph>
-                                    Ta sekcja umożliwia nam wprowadzenie
-                                    podstawowych danych dotyczących wpływu. Pola
-                                    oznaczone <Text type="danger">*</Text> są
-                                    wymagane.
-                                </Paragraph>
-                            </GuideItemContainer>
-                        </GuideItemsContainer>
-                    </Col>
-                    <Col span={4}>
-                        <AnchorStyled
-                            replace
-                            items={[
-                                {
-                                    key: 'logowanie',
-                                    href: '#logowanie',
-                                    title: 'logowanie',
-                                },
-                                {
-                                    key: 'dodawanie-zapytania',
-                                    href: '#dodawanie-zapytania',
-                                    title: 'dodawanie',
-                                },
-                                {
-                                    key: 'part-3',
-                                    href: '#part-3',
-                                    title: 'Part 3',
-                                },
-                                {
-                                    key: 'part-4',
-                                    href: '#part-4',
-                                    title: 'Part 4',
-                                },
-                                {
-                                    key: 'part-5',
-                                    href: '#part-5',
-                                    title: 'Part 5',
-                                },
-                            ]}
-                        />
-                    </Col>
-                </Row> */}
             </div>
         </Container>
     )
