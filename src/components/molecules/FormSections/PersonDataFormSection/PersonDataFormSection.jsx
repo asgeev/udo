@@ -2,7 +2,7 @@ import { Form, Input, Row, Col, Space, DatePicker, Alert } from 'antd'
 import { useTheme } from 'styled-components'
 import { FormSection } from '@molecules/FormSection/FormSection'
 
-export const PersonDataFormSection = ({ editMode = false, setError }) => {
+export const PersonDataFormSection = ({ editMode = false }) => {
     const { colors } = useTheme()
     return (
         <FormSection
@@ -30,17 +30,7 @@ export const PersonDataFormSection = ({ editMode = false, setError }) => {
             </Form.Item>
             <Row gutter={[8, 0]}>
                 <Col span={12}>
-                    <Form.Item
-                        label="Imię"
-                        name="first_name"
-                        rules={[
-                            {
-                                type: 'string',
-                                required: true,
-                                message: 'Podaj imię osoby',
-                            },
-                        ]}
-                    >
+                    <Form.Item label="Imię" name="first_name">
                         <Input placeholder="Imię" />
                     </Form.Item>
                 </Col>
@@ -52,17 +42,7 @@ export const PersonDataFormSection = ({ editMode = false, setError }) => {
             </Row>
             <Row gutter={[8, 0]}>
                 <Col span={12}>
-                    <Form.Item
-                        label="Nazwisko"
-                        name="last_name"
-                        rules={[
-                            {
-                                type: 'string',
-                                required: true,
-                                message: 'Podaj nazwisko osoby',
-                            },
-                        ]}
-                    >
+                    <Form.Item label="Nazwisko" name="last_name">
                         <Input placeholder="Nazwisko" />
                     </Form.Item>
                 </Col>

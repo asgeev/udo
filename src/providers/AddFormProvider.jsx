@@ -4,6 +4,7 @@ import { Form, message, Modal, Typography } from 'antd'
 import WP_Instance from '@services/WP_Instance'
 import { ModalStepsView } from '@molecules/ModalStepsView/ModalStepsView'
 import { createNewObjectWithValidDateFromEzd } from '@helpers/createNewObjectWithValidDateFromEzd'
+
 export const AddFormContext = createContext({
     addForm: null,
     onSubmit: () => {},
@@ -46,7 +47,6 @@ export const AddFormProvider = ({ children }) => {
                     // The request was made and the server responded with a status code
                     // that falls out of the range of 2xx
                     messageApi.error(error.response?.data?.message, 6)
-
                     console.log(error.response.data)
                     console.log(error.response.status)
                     console.log(error.response.headers)
@@ -97,14 +97,12 @@ export const AddFormProvider = ({ children }) => {
     }
 
     const showLoadingMessage = () => {
-        messageApi
-            .open({
-                key: 'loading',
-                type: 'loading',
-                content: 'Pobieranie danych z ezd...',
-                duration: 0,
-            })
-            .then(() => message.success('Dane z EZD zostały wstawione ', 4))
+        messageApi.open({
+            key: 'loading',
+            type: 'loading',
+            content: 'Pobieranie danych z ezd...',
+            duration: 0,
+        })
     }
 
     const setFormFields = (data) => {
@@ -120,14 +118,22 @@ export const AddFormProvider = ({ children }) => {
             WP_Instance.get(`udo/v1/getDataFromKoszulka?id=${idKoszulka}`)
                 .then((response) => {
                     setFormFields(response?.data)
-                    messageApi.destroy('loading')
+                    messageApi.success('Dane z EZD zostały wstawione ', 4)
                 })
                 .catch((error) => {
                     console.log(error)
-                    message.error('Niestety nie udało się pobrać danych z EZD')
+                    messageApi.error(
+                        `Niestety nie udało się pobrać danych z EZD`
+                    )
+                    //If response exist, show error message
+                    error?.response?.data &&
+                        messageApi.error(
+                            `${error?.response?.data?.description}`
+                        )
                 })
                 .finally(() => {
                     setSubmitLoading(false)
+                    messageApi.destroy('loading')
                 })
         } else {
             messageApi.error('Podaj nr koszulki wpływającej')
