@@ -44,9 +44,9 @@ export const EditForm = () => {
                     disabled={formDisabled || error}
                     scrollToFirstError={{ block: 'center', behavior: 'smooth' }}
                     onValuesChange={(changedValues) => {
+                        console.log(changedValues)
                         onValuesChange(changedValues)
                     }}
-                    // onFieldsChange={onChange}
                     layout="vertical"
                 >
                     <InflowFormSection

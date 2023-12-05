@@ -1,4 +1,4 @@
-import { Form, Input, Switch, Alert, Space, Radio } from 'antd'
+import { Form, Input } from 'antd'
 
 export const FiltersForm = ({ onFiltersChange }) => {
     const { Search } = Input
@@ -8,14 +8,14 @@ export const FiltersForm = ({ onFiltersChange }) => {
             name="filtersForm"
             onValuesChange={(values) => onFiltersChange(values)}
         >
-            <Alert
+            {/* <Alert
                 description="Na ten moment możesz wyszukiwać jedynie po nazwisku. Kolejne filtry zostaną przygotowane w najbliższym czasie. 🚀 "
                 type="info"
                 showIcon
                 closable
                 style={{ marginBottom: 30 }}
-            />
-            <Form.Item name="search_query" label="Wyszukaj nazwisko">
+            /> */}
+            <Form.Item name="search_query" label="Wyszukaj">
                 <Search
                     allowClear
                     style={{
@@ -24,7 +24,7 @@ export const FiltersForm = ({ onFiltersChange }) => {
                     enterButton
                 />
             </Form.Item>
-            <Space size={'large'}>
+            {/* <Space size={'large'}>
                 <Form.Item name="my" label="Moje" valuePropName="checked">
                     <Switch disabled />
                 </Form.Item>
@@ -49,7 +49,7 @@ export const FiltersForm = ({ onFiltersChange }) => {
                         <Radio.Button value="6611">6611</Radio.Button>
                     </Radio.Group>
                 </Form.Item>
-            </Space>
+            </Space> */}
         </Form>
     )
 }
