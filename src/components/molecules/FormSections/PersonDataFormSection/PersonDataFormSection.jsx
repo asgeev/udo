@@ -12,7 +12,7 @@ export const PersonDataFormSection = ({ editMode = false }) => {
             subTitle="Wprowadź dane dotyczące osoby której dotyczy zapytanie"
         >
             <Alert
-                message="Jeżeli pole pesel uzupełnisz dopiero w trybie edycji, pamiętaj, aby zapisać sprawę."
+                message="Jeżeli pole pesel uzupełnisz dopiero w trybie edycji, pamiętaj, aby najpierw zapisać sprawę."
                 type="info"
                 showIcon
                 closable
