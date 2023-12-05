@@ -12,6 +12,7 @@ import {
     Alert,
     Result,
     Typography,
+    Tooltip,
 } from 'antd'
 import { mergeTemplateObject } from '@helpers/mergeTemplateObject'
 import { CopyOutlined, WarningOutlined } from '@ant-design/icons'
@@ -19,25 +20,33 @@ import { templates } from '@molecules/RichTextEditor/TemplatesRichTextEditor/Tem
 
 export const CwuContainer = () => {
     const { addTextToEditor, mainEditorRef } = useRichTextContext()
+
     const { currentRecordId } = useRecordsViewContext()
     //Fetch data
     const { data, isLoading, isFetching, error } = useCwuData(currentRecordId)
     //Get fields value from edit form
-    const { editForm } = useEditFormContext()
+    const { editForm, messageApi } = useEditFormContext()
+
     const firstName = editForm?.getFieldValue('first_name')
+
     const lastName = editForm?.getFieldValue('last_name')
 
-    const { Paragraph, Text } = Typography
-
+    const { Paragraph, Title } = Typography
     //Generate templates
     const templateUbezpieczenie = templates.ubezpieczenieZdrowotne(data)
+
     const templateDaneAdresowe = templates.daneAdresowe(data)
 
     //Check if strings of first name and last name are equal
     const isFirstNameEqual =
         data?.imie?.toUpperCase() === firstName?.toUpperCase()
+
     const isLastNameEqual =
         data?.nazwisko?.toUpperCase() === lastName?.toUpperCase()
+
+    const copiedMessage = () => {
+        messageApi.info('Skopiowano do szablonu odpowiedzi')
+    }
 
     const descriptionItems = [
         {
@@ -89,17 +98,20 @@ export const CwuContainer = () => {
             label: 'Informacja o ubezpieczeniu',
             showArrow: true,
             extra: (
-                <Button
-                    size="small"
-                    icon={<CopyOutlined />}
-                    onClick={(event) => {
-                        event.stopPropagation()
-                        addTextToEditor(
-                            mainEditorRef,
-                            mergeTemplateObject(templateUbezpieczenie)
-                        )
-                    }}
-                />
+                <Tooltip title="Kopiuj do szablonu odpowiedzi">
+                    <Button
+                        size="small"
+                        icon={<CopyOutlined />}
+                        onClick={(event) => {
+                            event.stopPropagation()
+                            addTextToEditor(
+                                mainEditorRef,
+                                mergeTemplateObject(templateUbezpieczenie)
+                            )
+                            copiedMessage()
+                        }}
+                    />
+                </Tooltip>
             ),
             children: (
                 <div
@@ -114,17 +126,21 @@ export const CwuContainer = () => {
             label: 'Dane adresowe/teleadresowe',
             showArrow: true,
             extra: (
-                <Button
-                    size="small"
-                    icon={<CopyOutlined />}
-                    onClick={(event) => {
-                        event.stopPropagation()
-                        addTextToEditor(
-                            mainEditorRef,
-                            mergeTemplateObject(templateDaneAdresowe)
-                        )
-                    }}
-                />
+                <Tooltip title="Kopiuj do szablonu odpowiedzi">
+                    <Button
+                        size="small"
+                        icon={<CopyOutlined />}
+                        tooltip="asf"
+                        onClick={(event) => {
+                            event.stopPropagation()
+                            addTextToEditor(
+                                mainEditorRef,
+                                mergeTemplateObject(templateDaneAdresowe)
+                            )
+                            copiedMessage()
+                        }}
+                    />
+                </Tooltip>
             ),
             children: (
                 <div
@@ -138,25 +154,16 @@ export const CwuContainer = () => {
 
     if (error)
         return (
-            <>
-                <Result status="error" title="Ups! Coś poszło nie tak!">
-                    <div className="desc">
-                        <Paragraph>
-                            <Text
-                                strong
-                                style={{
-                                    fontSize: 16,
-                                }}
-                            >
-                                Opis błędu:
-                            </Text>
-                        </Paragraph>
+            <Result
+                status="404"
+                subTitle={
+                    <Title level={5}>
                         {error?.response
                             ? error?.response?.data?.description
                             : 'Wystąpił błąd podczas pobierania danych z systemu CWU, prosimy spróbować później'}
-                    </div>
-                </Result>
-            </>
+                    </Title>
+                }
+            />
         )
 
     return (
@@ -181,10 +188,7 @@ export const CwuContainer = () => {
                     ))}
             </Space>
 
-            <Spin
-                tip="Pobieranie danych z CWU..."
-                spinning={isLoading || isFetching}
-            >
+            <Spin tip="Pobieranie danych..." spinning={isLoading || isFetching}>
                 <Descriptions
                     size="small"
                     title="Dane osoby"
