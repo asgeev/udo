@@ -15,6 +15,7 @@ import {
     Collapse,
     Tooltip,
     Alert,
+    List,
 } from 'antd'
 import {
     PaperClipOutlined,
@@ -87,6 +88,7 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
                     </Space>
                     <Form.Item name="template_main_text">
                         <ReactQuill
+                            id="afg"
                             ref={mainEditorRef}
                             modules={modules}
                             readOnly={formDisabled}
@@ -138,38 +140,36 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
                 {areFiledsEmpty && (
                     <Space direction="vertical">
                         <Alert
-                            type="error"
+                            type="warning"
                             message="Uwaga!"
                             description="Wszystkie wskazane poniżej czynności prosimy robić z poziomu aplikacji UDO!!"
                             showIcon
                         />
                         <Alert
-                            type="warning"
-                            description={`Przyciski do pobierania danych zostały wyłączone, ponieważ w sprawie brakuje jednego z wymienionych elementów:`}
+                            type="info"
                             showIcon
+                            description={
+                                <>
+                                    <p>
+                                        Przyciski do pobierania danych z
+                                        zewnętrznych zródeł zostały wyłączone,
+                                        ponieważ w sprawie brakuje jednego z
+                                        wymienionych elementów:
+                                    </p>
+                                    <List>
+                                        {!pesel && (
+                                            <List.Item.Meta description="- nieuzupełnione pole pesel" />
+                                        )}
+                                        {!koszulka_id && (
+                                            <List.Item.Meta description="- brak utworzonej koszulki w EZD" />
+                                        )}
+                                        {!nr_sprawy && (
+                                            <List.Item.Meta description="- brak założonej sprawy na koszulce w EZD" />
+                                        )}
+                                    </List>
+                                </>
+                            }
                         />
-
-                        {!pesel && (
-                            <Alert
-                                type="warning"
-                                description={`Nieuzupełnione pole pesel`}
-                                showIcon
-                            />
-                        )}
-                        {!koszulka_id && (
-                            <Alert
-                                type="warning"
-                                description={`Brak utworzonej koszulki w EZD -> możesz ponownie spróbować utworzy ją z poziomu podglądu spraw`}
-                                showIcon
-                            />
-                        )}
-                        {!nr_sprawy && (
-                            <Alert
-                                type="warning"
-                                description={`Brak założonej sprawy na koszulce w EZD -> możesz ponownie spróbować utworzyć sprawę w EZD dla tej koszulki z poziomu podglądu spraw`}
-                                showIcon
-                            />
-                        )}
                     </Space>
                 )}
 
@@ -192,9 +192,6 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
                             CWU
                         </Button>
                     </Tooltip>
-                    <Button type="primary" disabled>
-                        Koszty leczenia
-                    </Button>
                     <Button type="primary" disabled>
                         SoFU
                     </Button>

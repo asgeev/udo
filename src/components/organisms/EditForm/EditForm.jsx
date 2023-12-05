@@ -44,7 +44,6 @@ export const EditForm = () => {
                     disabled={formDisabled || error}
                     scrollToFirstError={{ block: 'center', behavior: 'smooth' }}
                     onValuesChange={(changedValues) => {
-                        console.log(changedValues)
                         onValuesChange(changedValues)
                     }}
                     layout="vertical"

@@ -139,6 +139,7 @@ export const EditFormProvider = ({ children }) => {
             }
         } finally {
             setLoading(false)
+            setIsFormChanged(false)
         }
     }
 
@@ -147,8 +148,7 @@ export const EditFormProvider = ({ children }) => {
         console.log('Failed:', values)
     }
 
-    const onValuesChange = (values) => {
-        console.log(values)
+    const onValuesChange = () => {
         setIsFormChanged(true)
     }
 
@@ -173,6 +173,7 @@ export const EditFormProvider = ({ children }) => {
                 setSubmitLoading(false)
                 setFormDisabled(false)
                 setLoading(false)
+                setIsFormChanged(false)
             }
         } catch (error) {
             error.errorFields?.map((element) => {
@@ -202,6 +203,7 @@ export const EditFormProvider = ({ children }) => {
                 dataLoading,
                 setDataLoading,
                 saveFormAndDownloadFile,
+                messageApi,
             }}
         >
             {children}
