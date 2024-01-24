@@ -1,31 +1,24 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Form, Select, Input, Space } from 'antd'
-import WP_Instance from '@services/WP_Instance'
 import { FormSection } from '@molecules/FormSection/FormSection'
-import { createJrwaDataOptions } from '@helpers/createJrwaDataOptions'
+import { useGetJRWAListQuery } from '@hooks/useGetJRWAListQuery'
 
 export const EzdDataFormSection = ({ editMode = false, setError, form }) => {
-    const [jrwaData, setJrwaData] = useState([])
     const personFirstName = Form.useWatch(['first_name'], form)
     const personLastName = Form.useWatch(['last_name'], form)
     const ezdNameValue = `UDO - ${personFirstName ? personFirstName : ''} ${
         personLastName ? personLastName : ''
     }`
 
-    useEffect(() => {
-        WP_Instance.get(`/udo/v1/getJRWAList`)
-            .then((response) => {
-                setJrwaData(response?.data)
-            })
-            .catch((error) => {
-                console.error(error)
-                setError(true)
-            })
-    }, [])
+    //Fetch data for jrwa select
+    const { data, isError } = useGetJRWAListQuery()
+
+    //If error set error state
+    isError && setError(true)
 
     useEffect(() => {
         form?.setFieldValue('ezd_name', ezdNameValue)
-    }, [ezdNameValue])
+    }, [ezdNameValue, form])
 
     return (
         <FormSection
@@ -51,7 +44,7 @@ export const EzdDataFormSection = ({ editMode = false, setError, form }) => {
                         style={{ maxWidth: 200 }}
                         placeholder="wybierz jrwa"
                         allowClear
-                        options={createJrwaDataOptions(jrwaData)}
+                        options={data}
                     ></Select>
                 </Form.Item>
 
