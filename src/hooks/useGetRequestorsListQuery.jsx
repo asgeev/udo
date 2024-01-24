@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query'
 import WP_Instance from '@services/WP_Instance'
 
-export const useGetRequestorsList = () => {
+export const useGetRequestorsListQuery = () => {
     return useQuery({
         queryKey: ['getRequestorList'],
         queryFn: async () => {

@@ -1,32 +1,30 @@
-import { useEffect } from 'react'
 import { Form, AutoComplete, Space, Input, Alert, Select, Spin } from 'antd'
 import { useTheme } from 'styled-components'
 import { FormSection } from '@molecules/FormSection/FormSection'
 import { createCompanyDataOptions } from '@helpers/createCompanyDataOptions'
 import { createCompanyTypeIdOptions } from '@helpers/createCompanyTypeIdOptions'
-import { useGetRequestorsList } from '@hooks/useGetRequestorList'
-import { useGetRequestorTypesList } from '@hooks/useGetRequestorTypesList'
+import { useGetRequestorsListQuery } from '@hooks/useGetRequestorsListQuery'
+import { useGetRequestorTypesListQuery } from '@hooks/useGetRequestorTypesListQuery'
 
 export const CompanyDataFormSection = ({ editMode = false, setError }) => {
     const { colors } = useTheme()
     const form = Form.useFormInstance()
 
+    //Fetch requestors list
     const {
         data: requestorsList,
         isError: requestorsListError,
         isLoading,
-    } = useGetRequestorsList()
+    } = useGetRequestorsListQuery()
+    //Fetch requestor types list
     const { data: requestorTypesList, isError: requestorTypesListError } =
-        useGetRequestorTypesList()
+        useGetRequestorTypesListQuery()
 
-    useEffect(() => {
-        if (requestorTypesListError || requestorsListError) {
-            setError(true)
-        }
-    }, [requestorTypesListError, requestorsListError])
+    //Set error when fetching error
+    requestorsListError || (requestorTypesListError && setError(true))
 
-    const handleOnSelect = (value, option) => {
-        console.log(option)
+    //Change fields value when select requestor
+    const handleOnSelectRequestor = (value, option) => {
         form.setFieldValue('requestor_name', option?.name)
         form.setFieldValue('requestor_id', option?.id)
         form.setFieldValue('requestor_street', option?.street)
@@ -75,7 +73,9 @@ export const CompanyDataFormSection = ({ editMode = false, setError }) => {
                             ' ☹️ Brak wyników dla wyszukiwanej frazy'
                         )
                     }
-                    onSelect={(value, option) => handleOnSelect(value, option)}
+                    onSelect={(value, option) =>
+                        handleOnSelectRequestor(value, option)
+                    }
                     placeholder="wyszukaj lub wprowadź nazwę podmiotu"
                     allowClear
                     filterOption={(inputValue, option) =>

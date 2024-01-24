@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react'
+import { useContext } from 'react'
 import {
     Space,
     Form,
@@ -10,28 +10,18 @@ import {
     Alert,
 } from 'antd'
 import { SyncOutlined } from '@ant-design/icons'
-import WP_Instance from '@services/WP_Instance'
 import { FormSection } from '@molecules/FormSection/FormSection'
-import { createInflowWayDataOptions } from '@helpers/createInflowWayDataOptions'
 import { AddFormContext } from '@providers/AddFormProvider'
-
-const rpwRegex = '^RPW/'
-const isFieldValid = new RegExp(rpwRegex, 'i')
+import { useGetInflowWayListQuery } from '@hooks/useGetInflowWayListQuery'
 
 export const InflowFormSection = ({ editMode = false, setError }) => {
-    const [inflowWayList, setInflowWayList] = useState([])
     const { getMetaDataFromEzd } = useContext(AddFormContext)
 
-    useEffect(() => {
-        WP_Instance.get(`/udo/v1/getInflowWayList`)
-            .then((response) => {
-                setInflowWayList(response?.data)
-            })
-            .catch((error) => {
-                console.error(error)
-                setError(true)
-            })
-    }, [])
+    //Fetch inflow way list
+    const { data, isError } = useGetInflowWayListQuery()
+
+    //Set global error state
+    isError && setError(true)
 
     return (
         <FormSection
@@ -102,7 +92,7 @@ export const InflowFormSection = ({ editMode = false, setError }) => {
                     <Form.Item name="inflow_way_id" label="Sposób dostarczenia">
                         <Select
                             placeholder="sposób dostarczenia"
-                            options={createInflowWayDataOptions(inflowWayList)}
+                            options={data}
                             allowClear
                         />
                     </Form.Item>
