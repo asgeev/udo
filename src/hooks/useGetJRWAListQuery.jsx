@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import WP_Instance from '@services/WP_Instance'
 import { createJrwaDataOptions } from '@helpers/createJrwaDataOptions'
 

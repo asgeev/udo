@@ -1,59 +1,11 @@
-import { useEffect, useState } from 'react'
 import ReactQuill from 'react-quill'
 //Import contexts
 import { useRichTextContext } from '@hooks/useRichTextContext'
 import { useSecondDrawerContext } from '@hooks/useSecondDrawerContext'
 import { useEditFormContext } from '@hooks/useEditFormContext'
-
-const treeData = [
-    {
-        title: 'Centralny Wykaz Ubezpieczonych',
-        key: '1',
-        children: [
-            {
-                title: 'Czy osoba jest ubezpieczona?',
-                key: '1-1',
-            },
-            {
-                title: 'Weryfikacja danych adresowych świadczeniobiorcy',
-                key: '1-2',
-            },
-            {
-                title: 'Weryfikacja wydania karty EKUZ',
-                key: '1c',
-            },
-            {
-                title: 'Weryfikacja deklaracji POZ',
-                key: '1d',
-            },
-            {
-                title: 'Weryfikacja płatnika składek',
-                key: '1e',
-            },
-        ],
-    },
-    {
-        title: 'Bussiness object',
-        key: '2',
-        disabled: true,
-        children: [
-            {
-                title: 'Weryfikacja leczenia psychiatrycznego',
-                key: '2a',
-            },
-        ],
-    },
-    {
-        title: 'SoFu',
-        key: '3',
-        disabled: true,
-    },
-]
-
-import WP_Instance from '@services/WP_Instance'
+import { useGetSignatureListQuery } from '@hooks/useGetSignatureListQuery'
 import {
     Form,
-    Tree,
     Select,
     Space,
     Button,
@@ -73,39 +25,30 @@ import {
 import { FormSection } from '@molecules/FormSection/FormSection'
 import { PasteButtons } from '@molecules/PasteButtons/PasteButtons'
 
-import { createSignaturesDataOptions } from '@helpers/createSignaturesDataOptions'
-
-const modules = {
-    toolbar: [
-        ['bold', 'italic', 'underline'],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-    ],
-}
-
 export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
     const { openSecondDrawer } = useSecondDrawerContext()
     const { mainEditorRef, attachmentsEditorRef } = useRichTextContext()
     const { formDisabled } = useEditFormContext()
     const editForm = Form.useFormInstance()
+
+    //Check if fields are empty
     const pesel = Form.useWatch('pesel', editForm)
     const koszulka_id = Form.useWatch('koszulka_id', editForm)
     const nr_sprawy = Form.useWatch('nr_sprawy', editForm)
+    const areFiledsEmpty = pesel && koszulka_id && nr_sprawy ? false : true
 
-    const [signatures, setSignatures] = useState(null)
+    //Fetch inflow way list
+    const { data, isError } = useGetSignatureListQuery()
 
-    const areFieldsEmpty = pesel && koszulka_id && nr_sprawy ? false : true
+    //Set global error state
+    isError && setError(true)
 
-    useEffect(() => {
-        WP_Instance.get(`/udo/v1/getSignatureList`)
-            .then((response) => {
-                setSignatures(createSignaturesDataOptions(response?.data))
-            })
-            .catch((error) => {
-                console.error(error)
-                setError(true)
-            })
-    }, [])
-
+    const modules = {
+        toolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+        ],
+    }
     const collapseItems = [
         {
             key: '1',
@@ -183,7 +126,7 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
             subTitle={'Wpisz poniżej odpowiedź która znajdzie się na piśmie'}
         >
             <Space direction="vertical" size="large" style={{ width: '100%' }}>
-                {areFieldsEmpty && (
+                {areFiledsEmpty && (
                     <Space direction="vertical">
                         <Alert
                             type="warning"
@@ -218,13 +161,6 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
                         />
                     </Space>
                 )}
-                <Form.Item
-                    name="apis"
-                    valuePropName="checkedKeys"
-                    trigger="onCheck"
-                >
-                    <Tree checkable treeData={treeData} />
-                </Form.Item>
                 <Space
                     direction="horizontal"
                     style={{
@@ -239,7 +175,7 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
                                 e.preventDefault()
                                 openSecondDrawer(1)
                             }}
-                            disabled={areFieldsEmpty}
+                            disabled={areFiledsEmpty}
                         >
                             CWU
                         </Button>
@@ -270,7 +206,7 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
                     style={{ maxWidth: 200 }}
                     placeholder="wybierz podpis"
                     allowClear
-                    options={signatures}
+                    options={data}
                 />
             </Form.Item>
         </FormSection>
