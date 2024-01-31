@@ -12,13 +12,12 @@ import { useAddFormContext } from '@hooks/useAddFormContext'
 
 export const AddForm = () => {
     const {
-        error,
-        setError,
         addForm,
         onSubmit,
         onFinishFailed,
-        submitLoading,
-        updateEzdNameValue,
+        error,
+        setError,
+        isFormSubmitting,
     } = useAddFormContext()
 
     return (
@@ -40,7 +39,7 @@ export const AddForm = () => {
                 scrollToFirstError={{ block: 'center', behavior: 'smooth' }}
                 layout="vertical"
             >
-                <Spin spinning={submitLoading} size="large">
+                <Spin spinning={isFormSubmitting} size="large">
                     <GridWrapper>
                         <InflowFormSection setError={setError} />
                         <Divider />
@@ -53,7 +52,6 @@ export const AddForm = () => {
                         <EzdDataFormSection
                             setError={setError}
                             form={addForm}
-                            updateEzdNameValue={updateEzdNameValue}
                         />
                         <Divider />
                         <AdditionalInfoFormSection setError={setError} />
@@ -63,7 +61,9 @@ export const AddForm = () => {
                     <Col>
                         <Form.Item>
                             <Space>
-                                {submitLoading && <Spin indicator={antIcon} />}
+                                {isFormSubmitting && (
+                                    <Spin indicator={antIcon} />
+                                )}
                                 <Button
                                     id="saveAddFrom"
                                     type="primary"
