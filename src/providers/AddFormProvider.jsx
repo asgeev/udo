@@ -1,64 +1,55 @@
 import { useState, createContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Form, message, Modal, Typography } from 'antd'
-import WP_Instance from '@services/WP_Instance'
 import { ModalStepsView } from '@molecules/ModalStepsView/ModalStepsView'
 import { createNewObjectWithValidDateFromEzd } from '@helpers/createNewObjectWithValidDateFromEzd'
+import { useAddFormSubmitMutation } from '@hooks/useAddFormSubmitMutation'
+import { fetchDataFromKoszulkaQuery } from '@hooks/fetchDataFromKoszulkaQuery'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const AddFormContext = createContext({
     addForm: null,
     onSubmit: () => {},
     onFinishFailed: () => {},
-    submitLoading: false,
-    formDisabled: false,
     error: false,
     setError: () => {},
+    isFormSubmitting: false,
+    getMetaDataFromEzd: () => {},
 })
 
 export const AddFormProvider = ({ children }) => {
-    const [submitLoading, setSubmitLoading] = useState(false)
     const [error, setError] = useState(false)
     const [addForm] = Form.useForm()
     const navigate = useNavigate()
     const [modal, modalContextHolder] = Modal.useModal()
     const [messageApi, messageContextHolder] = message.useMessage()
     const { Title } = Typography
+    const queryClient = useQueryClient()
+
+    //Submit form query
+    const { mutateAsync: submitFormMutate, isPending: isFormSubmitting } =
+        useAddFormSubmitMutation()
+
+    const submitForm = (values) => {
+        return submitFormMutate(values, {
+            onSuccess: (response) => {
+                showSuccesModal(response?.data)
+            },
+            onError: (error) => {
+                if (error.response) {
+                    messageApi.error(error.response?.data?.message, 6)
+                } else {
+                    messageApi.error(
+                        'UPS! wystąpił problem z zapisem formularza, proszę spróbować później!'
+                    )
+                }
+            },
+        })
+    }
 
     // On submit form
     const onSubmit = (values) => {
-        const payload = {
-            ...values,
-            inflow_date: values['inflow_date']?.format('YYYY-MM-DD'),
-            birth_date: values['birth_date']?.format('YYYY-MM-DD'),
-            max_finish_date: values['max_finish_date']?.format('YYYY-MM-DD'),
-            requestor_act_date:
-                values['requestor_act_date']?.format('YYYY-MM-DD'),
-        }
-        console.log(payload)
-        setSubmitLoading(true)
-        WP_Instance.post(`/udo/v1/dataRequest`, payload)
-            .then((response) => {
-                console.log(response)
-                showSuccesModal(response?.data)
-            })
-            .catch((error) => {
-                console.log(error)
-                if (error.response) {
-                    // The request was made and the server responded with a status code
-                    // that falls out of the range of 2xx
-                    messageApi.error(error.response?.data?.message, 6)
-                    console.log(error.response.data)
-                    console.log(error.response.status)
-                    console.log(error.response.headers)
-                } else {
-                    messageApi.error(
-                        'USP, wystąpił problem z zapisem formualrza, proszę spróbować później!'
-                    )
-                }
-            })
-            .finally(() => {
-                setSubmitLoading(false)
-            })
+        submitForm(values)
     }
 
     //Form failed
@@ -107,34 +98,29 @@ export const AddFormProvider = ({ children }) => {
 
     const setFormFields = (data) => {
         const fieldsValue = createNewObjectWithValidDateFromEzd(data)
-        addForm.setFieldsValue(fieldsValue)
+        addForm?.setFieldsValue(fieldsValue)
     }
 
-    const getMetaDataFromEzd = () => {
-        const idKoszulka = addForm.getFieldValue('inflow_koszulka_id')
-        if (idKoszulka) {
+    const getMetaDataFromEzd = async () => {
+        const koszulkaId = addForm?.getFieldValue('inflow_koszulka_id')
+        if (koszulkaId) {
             showLoadingMessage()
-            setSubmitLoading(true)
-            WP_Instance.get(`udo/v1/getDataFromKoszulka?id=${idKoszulka}`)
-                .then((response) => {
-                    setFormFields(response?.data)
-                    messageApi.success('Dane z EZD zostały wstawione ', 4)
-                })
-                .catch((error) => {
-                    console.log(error)
-                    messageApi.error(
-                        `Niestety nie udało się pobrać danych z EZD`
-                    )
-                    //If response exist, show error message
-                    error?.response?.data &&
-                        messageApi.error(
-                            `${error?.response?.data?.description}`
-                        )
-                })
-                .finally(() => {
-                    setSubmitLoading(false)
-                    messageApi.destroy('loading')
-                })
+            try {
+                const data = await fetchDataFromKoszulkaQuery(
+                    queryClient,
+                    koszulkaId
+                )
+                setFormFields(data)
+                messageApi.success('Dane z EZD zostały wstawione ', 4)
+            } catch (error) {
+                console.error(error)
+                messageApi.error(`Niestety nie udało się pobrać danych z EZD`)
+                // If response exist, show error message from server
+                error?.response?.data &&
+                    messageApi.error(`${error?.response?.data?.description}`)
+            } finally {
+                messageApi.destroy('loading')
+            }
         } else {
             messageApi.error('Podaj nr koszulki wpływającej')
         }
@@ -146,9 +132,9 @@ export const AddFormProvider = ({ children }) => {
                 addForm,
                 onSubmit,
                 onFinishFailed,
-                submitLoading,
                 error,
                 setError,
+                isFormSubmitting,
                 getMetaDataFromEzd,
             }}
         >

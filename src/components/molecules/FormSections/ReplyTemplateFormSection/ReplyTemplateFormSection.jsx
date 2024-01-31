@@ -8,8 +8,6 @@ export const ReplyTemplateFormSection = ({ editMode = false }) => {
     const { data } = useExternalSystems()
     const api_systems = data?.api_systems
 
-    console.log(api_systems)
-
     return (
         <FormSection editMode={editMode} sectionName="Dane szablonu odpowiedzi">
             <Space direction="vertical" size={20}>
