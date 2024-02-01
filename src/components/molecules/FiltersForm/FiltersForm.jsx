@@ -1,21 +1,23 @@
 import { Form, Input } from 'antd'
+import { useSearchParams } from 'react-router-dom'
 
 export const FiltersForm = ({ onFiltersChange }) => {
     const { Search } = Input
+
+    //set searchValue after refresh page
+    const [searchParams] = useSearchParams()
+    const searchValue = searchParams.get('search_query')
 
     return (
         <Form
             name="filtersForm"
             onValuesChange={(values) => onFiltersChange(values)}
         >
-            {/* <Alert
-                description="Na ten moment możesz wyszukiwać jedynie po nazwisku. Kolejne filtry zostaną przygotowane w najbliższym czasie. 🚀 "
-                type="info"
-                showIcon
-                closable
-                style={{ marginBottom: 30 }}
-            /> */}
-            <Form.Item name="search_query" label="Wyszukaj">
+            <Form.Item
+                name="search_query"
+                label="Wyszukaj"
+                initialValue={searchValue}
+            >
                 <Search
                     allowClear
                     style={{

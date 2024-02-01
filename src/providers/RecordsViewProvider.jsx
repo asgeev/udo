@@ -1,44 +1,34 @@
-import { useState, useEffect, createContext } from 'react'
-import { useSearchParams, useNavigate } from 'react-router-dom'
+import { useState, createContext } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { message } from 'antd'
-import WP_Instance from '@services/WP_Instance'
-import { newDataTableWithKey } from '@helpers/newDataTableWithKey'
+import { useGetTableData } from '@hooks/useGetTableData'
+import { useEzdMutation } from '@hooks/useEzdMutation'
 
 export const RecordsViewContext = createContext({
+    data: [],
+    isLoading: false,
+    currentRecordId: null,
+    setCurrentRecordId: () => {},
+    ezdAction: () => {},
+    currentPage: null,
+    perPage: null,
+    searchParams: null,
     onFiltersChange: () => {},
+    onPaginationChange: () => {},
 })
 
 export const RecordsViewProvider = ({ children }) => {
     const [currentRecordId, setCurrentRecordId] = useState(null)
-    const [tableData, setTableData] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
-    const [total, setTotal] = useState(0)
     const [messageApi, messageContextHolder] = message.useMessage()
     const initialSearchParams = { page: 1, per_page: 10, search_query: '' }
     const [searchParams, setSearchParams] = useSearchParams(initialSearchParams)
     const currentPage = searchParams.get('page')
     const perPage = searchParams.get('per_page')
 
-    useEffect(() => {
-        if (searchParams) {
-            setIsLoading(true)
-            fetchDataTable()
-        }
-    }, [searchParams])
-
-    const fetchDataTable = () => {
-        WP_Instance.get(`/udo/v1/getDataRequestList?${searchParams}`)
-            .then((response) => {
-                setTableData(newDataTableWithKey(response?.data?.data))
-                setTotal(response?.data?.total)
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-            .finally(() => {
-                setIsLoading(false)
-            })
-    }
+    //Fetch data with search parameters for table
+    const { data, isLoading } = useGetTableData(searchParams)
+    //Ezd redoCreateKoszulka and redoCreateSprawa
+    const { mutateAsync } = useEzdMutation()
 
     const showMessage = (text, type, onClose) => {
         switch (type) {
@@ -67,14 +57,14 @@ export const RecordsViewProvider = ({ children }) => {
         }
     }
 
-    const ezdAction = (id, type) => {
+    const ezdAction = async (id, type) => {
         let actionType = {
             endpoint: '',
             loadingText: '',
             successText: '',
             errorText: '',
         }
-
+        //For add more interaction with ezd add next case
         switch (type) {
             case 'koszulka':
                 actionType = {
@@ -99,29 +89,28 @@ export const RecordsViewProvider = ({ children }) => {
             default:
                 actionType
         }
-
-        if (id > 0) {
+        //Ezd action requests
+        if (id && id > 0) {
             showMessage(actionType.loadingText, 'loading')
-            WP_Instance.put(
-                `/udo/v1/${actionType.endpoint}?data_request_id=${id}`
+            try {
+                const { data } = await mutateAsync({ id, actionType })
+                showMessage(data?.description, 'success')
+            } catch (error) {
+                if (error.response) {
+                    showMessage(error?.response?.data?.description, 'error')
+                } else {
+                    showMessage(
+                        'Wystąpił błąd, prosimy spróbować później',
+                        'error'
+                    )
+                }
+            } finally {
+                messageApi.destroy('loading')
+            }
+        } else {
+            messageApi.error(
+                'Wystąpił nieoczekiwany błąd, prosimy spróbować później'
             )
-                .then(({ data }) => {
-                    messageApi.destroy('loading')
-                    fetchDataTable()
-                    showMessage(data?.description, 'success')
-                })
-                .catch((error) => {
-                    if (error.response) {
-                        messageApi.destroy('loading')
-                        showMessage(error?.response?.data.description, 'error')
-                    } else {
-                        messageApi.destroy('loading')
-                        showMessage(
-                            'Wystąpił błąd, prosimy spróbować później',
-                            'error'
-                        )
-                    }
-                })
         }
     }
 
@@ -146,16 +135,14 @@ export const RecordsViewProvider = ({ children }) => {
     return (
         <RecordsViewContext.Provider
             value={{
+                data,
                 isLoading,
-                tableData,
-                total,
                 currentRecordId,
                 setCurrentRecordId,
                 ezdAction,
                 currentPage,
                 perPage,
                 searchParams,
-                setSearchParams,
                 onFiltersChange,
                 onPaginationChange,
             }}

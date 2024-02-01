@@ -9,9 +9,8 @@ import { FiltersForm } from '@molecules/FiltersForm/FiltersForm'
 export const RecordsViewTable = () => {
     const { openDrawer } = useFirstDrawerContext()
     const {
+        data,
         isLoading,
-        total,
-        tableData,
         showDrawer,
         setCurrentRecordId,
         ezdAction,
@@ -78,10 +77,9 @@ export const RecordsViewTable = () => {
     return (
         <>
             <FiltersForm onFiltersChange={onFiltersChange} />
-
             <Table
                 loading={isLoading}
-                dataSource={tableData}
+                dataSource={data?.data}
                 columns={columns}
                 showDrawer={showDrawer}
                 expandable={{
@@ -93,7 +91,7 @@ export const RecordsViewTable = () => {
                 pagination={{
                     current: parseInt(currentPage),
                     pageSize: parseInt(perPage),
-                    total: total,
+                    total: data?.total,
                     showSizeChanger: true,
                     onChange: (currentPage, pageSize) => {
                         onPaginationChange(currentPage, pageSize)
