@@ -6,7 +6,7 @@ export const useGetInflowWayListQuery = () => {
     return useQuery({
         queryKey: ['getInflowWayList'],
         queryFn: async () => {
-            const { data } = await WP_Instance.get(`/udo/v1/getInflowWayList`)
+            const { data } = await WP_Instance.get(`/udo/v1/inflowWay`)
             return data
         },
         select: (data) => createInflowWayDataOptions(data),

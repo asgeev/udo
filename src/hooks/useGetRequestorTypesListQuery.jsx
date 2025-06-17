@@ -6,7 +6,7 @@ export const useGetRequestorTypesListQuery = () => {
         queryKey: ['getRequestorTypesList'],
         queryFn: async () => {
             const { data } = await WP_Instance.get(
-                `/udo/v1/getRequestorTypesList`
+                `/udo/v1/requestorTypes`
             )
 
             return data

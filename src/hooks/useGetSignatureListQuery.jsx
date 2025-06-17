@@ -6,7 +6,7 @@ export const useGetSignatureListQuery = () => {
     return useQuery({
         queryKey: ['getSignatureList'],
         queryFn: async () => {
-            const { data } = await WP_Instance.get(`/udo/v1/getSignatureList`)
+            const { data } = await WP_Instance.get(`/udo/v1/signature`)
             return data
         },
         select: (data) => createSignaturesDataOptions(data),
