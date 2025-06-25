@@ -5,7 +5,7 @@ export const useExternalSystems = () => {
     return useQuery({
         queryKey: ['externalSystems'],
         queryFn: async () => {
-            const { data } = await WP_Instance.get(`/udo/v1/getApi`)
+            const { data } = await WP_Instance.get(`/udo/v1/externalSystems`)
 
             return data
         },

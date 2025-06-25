@@ -7,7 +7,7 @@ export const useEditFormInitalDataQuery = (currentRecordId) => {
         queryKey: ['editFormInitalData', currentRecordId],
         queryFn: async () => {
             const { data } = await WP_Instance.get(
-                `/udo/v1/dataRequest?id=${currentRecordId}`
+                `/udo/v1/dataRequest/${currentRecordId}`
             )
             return data
         },

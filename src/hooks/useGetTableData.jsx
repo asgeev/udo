@@ -11,7 +11,7 @@ export const useGetTableData = (searchParams) => {
         queryKey: ['getDataRequestList', currentPage, perPage, search_query],
         queryFn: async () => {
             const { data } = await WP_Instance.get(
-                `/udo/v1/getDataRequestList?${searchParams}`
+                `/udo/v1/dataRequest?${searchParams}`
             )
             return data
         },
