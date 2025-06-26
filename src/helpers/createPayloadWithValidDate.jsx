@@ -12,8 +12,8 @@ export const createPayloadWithValidDate = (values) => {
         requestor_act_date: values['requestor_act_date']?.format('YYYY-MM-DD'),
         external_systems_checkbox: checkedSystems.map((item) => ({
             ...item,
-            date_from: item.date_from.format('YYYY-MM-DD'),
-            date_to: item.date_to.format('YYYY-MM-DD'),
+            date_from: item.date_from?.format('YYYY-MM-DD'),
+            date_to: item.date_to?.format('YYYY-MM-DD'),
         })),
     }
 }
