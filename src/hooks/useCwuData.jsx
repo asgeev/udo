@@ -6,7 +6,7 @@ export const useCwuData = (currentRecordId) => {
         queryKey: ['cwuData', currentRecordId],
         queryFn: async () => {
             const { data } = await WP_Instance.get(
-                `/udo/v1/apiCall?data_request_id=${currentRecordId}&api_id=${1}`
+                `/udo/v1/dataRequestExternalSystems/${currentRecordId}`
             )
 
             return data

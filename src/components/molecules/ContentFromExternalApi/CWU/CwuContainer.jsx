@@ -6,17 +6,18 @@ import {
     Space,
     Spin,
     Button,
-    Descriptions,
     Divider,
-    Collapse,
     Alert,
     Result,
     Typography,
+    Flex,
     Tooltip,
+    Card,
+    Badge,
+    Popover,
+    Tag,
 } from 'antd'
-import { mergeTemplateObject } from '@helpers/mergeTemplateObject'
-import { CopyOutlined, WarningOutlined } from '@ant-design/icons'
-import { templates } from '@molecules/RichTextEditor/TemplatesRichTextEditor/TemplatesRichTextEditor'
+import { CopyOutlined, InfoCircleOutlined } from '@ant-design/icons'
 
 export const CwuContainer = () => {
     const { addTextToEditor, mainEditorRef } = useRichTextContext()
@@ -25,132 +26,55 @@ export const CwuContainer = () => {
     //Fetch data
     const { data, isLoading, isFetching, error } = useCwuData(currentRecordId)
     //Get fields value from edit form
-    const { editForm, messageApi } = useEditFormContext()
+    const { messageApi } = useEditFormContext()
 
-    const firstName = editForm?.getFieldValue('first_name')
-
-    const lastName = editForm?.getFieldValue('last_name')
-
-    const { Paragraph, Title } = Typography
-    //Generate templates
-    const templateUbezpieczenie = templates.ubezpieczenieZdrowotne(data)
-
-    const templateDaneAdresowe = templates.daneAdresowe(data)
-
-    //Check if strings of first name and last name are equal
-    const isFirstNameEqual =
-        data?.imie?.toUpperCase() === firstName?.toUpperCase()
-
-    const isLastNameEqual =
-        data?.nazwisko?.toUpperCase() === lastName?.toUpperCase()
+    const { Title, Text } = Typography
 
     const copiedMessage = () => {
         messageApi.info('Skopiowano do szablonu odpowiedzi')
     }
 
-    const descriptionItems = [
-        {
-            key: '1',
-            label: 'Pesel',
-            children: <p>{data?.pesel}</p>,
-        },
-        {
-            key: '2',
-            label: 'Płeć',
-            children: <p>{data?.plec}</p>,
-            span: 2,
-        },
-        {
-            key: '3',
-            label: 'Imię',
-            children: (
-                <Space align="baseline">
-                    <Paragraph type={!isFirstNameEqual && 'warning'}>
-                        {data?.imie}
-                    </Paragraph>
-                    {isFirstNameEqual ||
-                        (!isLoading && (
-                            <WarningOutlined style={{ color: '#faad14' }} />
-                        ))}
-                </Space>
-            ),
-        },
-        {
-            key: '4',
-            label: 'Nazwisko',
-            children: (
-                <Space align="baseline">
-                    <Paragraph type={!isLastNameEqual && 'warning'}>
-                        {data?.nazwisko}
-                    </Paragraph>
-                    {isLastNameEqual ||
-                        (!isLoading && (
-                            <WarningOutlined style={{ color: '#faad14' }} />
-                        ))}
-                </Space>
-            ),
-        },
-    ]
-
-    const collapseItems = [
-        {
-            key: '1',
-            label: 'Informacja o ubezpieczeniu',
-            showArrow: true,
-            extra: (
-                <Tooltip title="Kopiuj do szablonu odpowiedzi">
-                    <Button
-                        size="small"
-                        icon={<CopyOutlined />}
-                        onClick={(event) => {
-                            event.stopPropagation()
-                            addTextToEditor(
-                                mainEditorRef,
-                                mergeTemplateObject(templateUbezpieczenie)
-                            )
-                            copiedMessage()
-                        }}
-                    />
-                </Tooltip>
-            ),
-            children: (
-                <div
-                    dangerouslySetInnerHTML={{
-                        __html: templateUbezpieczenie?.html,
-                    }}
-                ></div>
-            ),
-        },
-        {
-            key: '2',
-            label: 'Dane adresowe/teleadresowe',
-            showArrow: true,
-            extra: (
-                <Tooltip title="Kopiuj do szablonu odpowiedzi">
-                    <Button
-                        size="small"
-                        icon={<CopyOutlined />}
-                        tooltip="asf"
-                        onClick={(event) => {
-                            event.stopPropagation()
-                            addTextToEditor(
-                                mainEditorRef,
-                                mergeTemplateObject(templateDaneAdresowe)
-                            )
-                            copiedMessage()
-                        }}
-                    />
-                </Tooltip>
-            ),
-            children: (
-                <div
-                    dangerouslySetInnerHTML={{
-                        __html: templateDaneAdresowe?.html,
-                    }}
-                ></div>
-            ),
-        },
-    ]
+    const renderStatus = (type, description) => {
+        switch (type) {
+            case 'processing':
+                return (
+                    <>
+                        <Badge status={type} />
+                        <Text strong type="secondary" style={{ fontSize: 12 }}>
+                            przetwarzanie
+                        </Text>
+                    </>
+                )
+            case 'success':
+                return (
+                    <>
+                        <Badge status={type} />
+                        <Text strong type="secondary" style={{ fontSize: 12 }}>
+                            sukces
+                        </Text>
+                    </>
+                )
+            case 'error':
+                return (
+                    <>
+                        <Badge status={type} />
+                        <Tooltip title={description}>
+                            <Text
+                                strong
+                                type="secondary"
+                                style={{ fontSize: 12 }}
+                                title={description}
+                            >
+                                błąd
+                            </Text>{' '}
+                            <InfoCircleOutlined style={{ fontSize: 10 }} />
+                        </Tooltip>
+                    </>
+                )
+            default:
+                null
+        }
+    }
 
     if (error)
         return (
@@ -166,6 +90,14 @@ export const CwuContainer = () => {
             />
         )
 
+    if (isLoading || isFetching)
+        return (
+            <Spin
+                spinning={isLoading || isFetching}
+                style={{ marginTop: 24, width: '100%' }}
+            />
+        )
+
     return (
         <>
             <Space
@@ -177,31 +109,141 @@ export const CwuContainer = () => {
                     showIcon
                     description="Wyświetlane dane są danymi testowymi!"
                 />
-                {(isFirstNameEqual && isLastNameEqual) ||
-                    (!isLoading && (
-                        <Alert
-                            message="Uwaga!"
-                            type="warning"
-                            showIcon
-                            description="Niektóre dane pobrane z CWU nie pasują do danych znajdujących się w zapytaniu!"
-                        />
-                    ))}
             </Space>
 
-            <Spin tip="Pobieranie danych..." spinning={isLoading || isFetching}>
-                <Descriptions
-                    size="small"
-                    title="Dane osoby"
-                    items={descriptionItems}
-                />
-                <Space
-                    direction="vertical"
-                    style={{ width: '100%', marginTop: 20 }}
-                >
-                    <Collapse items={collapseItems} />
-                    <Divider plain>więcej już niedługo</Divider>
-                </Space>
-            </Spin>
+            <Space direction="vertical" style={{ display: 'flex' }}>
+                {data && data?.length > 0 ? (
+                    data?.map(
+                        (
+                            {
+                                status,
+                                created_time,
+                                checkbox_name,
+                                result,
+                                first_name,
+                                last_name,
+                                pesel,
+                                date_from,
+                                date_to,
+                            },
+                            index
+                        ) => (
+                            <Card size="small" key={index}>
+                                <Flex gap={16} vertical>
+                                    <Flex
+                                        align="center"
+                                        justify="space-between"
+                                    >
+                                        <Flex align="center" gap={8}>
+                                            {renderStatus(
+                                                status?.type,
+                                                status?.description
+                                            )}
+                                        </Flex>
+                                        <Flex>
+                                            <Tooltip title="Data utworzenia zapytania">
+                                                <Text
+                                                    strong
+                                                    type="secondary"
+                                                    style={{ fontSize: 12 }}
+                                                >
+                                                    {created_time}
+                                                </Text>
+                                            </Tooltip>
+                                        </Flex>
+                                    </Flex>
+                                    <Flex
+                                        align="center"
+                                        justify="space-between"
+                                    >
+                                        <Flex vertical>
+                                            <Text
+                                                strong
+                                                type="secondary"
+                                                style={{ fontSize: 12 }}
+                                            >
+                                                Pytanie:
+                                            </Text>
+                                            <Popover
+                                                style={{ width: 1000 }}
+                                                content={
+                                                    <>
+                                                        <Text
+                                                            strong
+                                                            type="secondary"
+                                                        >
+                                                            Szczegółowe dane
+                                                        </Text>
+                                                        <Flex
+                                                            vertical
+                                                            gap={8}
+                                                            style={{
+                                                                marginTop: 16,
+                                                            }}
+                                                        >
+                                                            <Flex>
+                                                                <Tag>
+                                                                    {first_name}
+                                                                </Tag>
+                                                                <Tag>
+                                                                    {last_name}
+                                                                </Tag>
+                                                            </Flex>
+                                                            <Flex
+                                                                vertical
+                                                                gap={8}
+                                                            >
+                                                                <Tag>
+                                                                    {pesel}
+                                                                </Tag>
+                                                                <Flex>
+                                                                    <Tag>
+                                                                        {
+                                                                            date_from
+                                                                        }
+                                                                    </Tag>
+                                                                    <Tag>
+                                                                        {
+                                                                            date_to
+                                                                        }
+                                                                    </Tag>
+                                                                </Flex>
+                                                            </Flex>
+                                                        </Flex>
+                                                    </>
+                                                }
+                                            >
+                                                <Text
+                                                    strong
+                                                    style={{ fontSize: 12 }}
+                                                >
+                                                    {checkbox_name}
+                                                </Text>
+                                            </Popover>
+                                        </Flex>
+                                        <Tooltip title="Kopiuj do szablonu odpowiedzi">
+                                            <Button
+                                                icon={<CopyOutlined />}
+                                                disabled={!result?.content}
+                                                onClick={(event) => {
+                                                    event.stopPropagation()
+                                                    addTextToEditor(
+                                                        mainEditorRef,
+                                                        result?.content
+                                                    )
+                                                    copiedMessage()
+                                                }}
+                                            />
+                                        </Tooltip>
+                                    </Flex>
+                                </Flex>
+                            </Card>
+                        )
+                    )
+                ) : (
+                    <Divider plain>Brak danych</Divider>
+                )}
+            </Space>
         </>
     )
 }
