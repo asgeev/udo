@@ -1,6 +1,7 @@
 import { Drawer, Alert } from 'antd'
 import { useSecondDrawerContext } from '@hooks/useSecondDrawerContext'
 import { CwuContainer } from '@molecules/ContentFromExternalApi/CWU/CwuContainer'
+import ContentFromExternalApiModal from '@molecules/ContentFromExternalApi/ContentFromExternalApiModal'
 
 export const SecondDrawer = () => {
     const { drawerData, isSecondDrawerVisible, closeSecondDrawer, apiId } =
@@ -13,6 +14,7 @@ export const SecondDrawer = () => {
             open={isSecondDrawerVisible}
             destroyOnClose={true}
             onClose={closeSecondDrawer}
+            extra={<ContentFromExternalApiModal />}
         >
             {(() => {
                 switch (apiId) {
