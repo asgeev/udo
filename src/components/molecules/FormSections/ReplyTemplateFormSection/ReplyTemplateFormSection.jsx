@@ -18,8 +18,6 @@ export const ReplyTemplateFormSection = ({ editMode = false }) => {
 
     const externalSystems = Form.useWatch('external_systems_checkbox')
 
-    console.log(externalSystems)
-
     return (
         <FormSection editMode={editMode} sectionName="Dane szablonu odpowiedzi">
             <Space direction="vertical" size={20}>
@@ -115,11 +113,14 @@ export const ReplyTemplateFormSection = ({ editMode = false }) => {
                                                                         index
                                                                     ]?.checked,
                                                                 message:
-                                                                    'Data początkowa jest wymagana',
+                                                                    'Data od jest wymagana',
                                                             },
                                                         ]}
                                                     >
-                                                        <DatePicker placeholder="Data od" />
+                                                        <DatePicker
+                                                            inputReadOnly
+                                                            placeholder="Data od"
+                                                        />
                                                     </Form.Item>
                                                     <Form.Item
                                                         key={`date_to_${item.id}_${index}`}
@@ -137,11 +138,14 @@ export const ReplyTemplateFormSection = ({ editMode = false }) => {
                                                                         index
                                                                     ]?.checked,
                                                                 message:
-                                                                    'Data początkowa jest wymagana',
+                                                                    'Data do jest wymagana',
                                                             },
                                                         ]}
                                                     >
-                                                        <DatePicker placeholder="Data do" />
+                                                        <DatePicker
+                                                            inputReadOnly
+                                                            placeholder="Data do"
+                                                        />
                                                     </Form.Item>
                                                 </Flex>
                                             )}
