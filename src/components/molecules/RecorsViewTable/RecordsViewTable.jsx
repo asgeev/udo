@@ -11,6 +11,8 @@ export const RecordsViewTable = () => {
     const {
         data,
         isLoading,
+        isRefetching,
+
         showDrawer,
         setCurrentRecordId,
         ezdAction,
@@ -78,7 +80,7 @@ export const RecordsViewTable = () => {
         <>
             <FiltersForm onFiltersChange={onFiltersChange} />
             <Table
-                loading={isLoading}
+                loading={isLoading || isRefetching}
                 dataSource={data?.data}
                 columns={columns}
                 showDrawer={showDrawer}

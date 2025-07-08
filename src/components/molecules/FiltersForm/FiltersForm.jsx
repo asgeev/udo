@@ -1,5 +1,7 @@
-import { Form, Input } from 'antd'
+import { Button, Form, Input, Space } from 'antd'
 import { useSearchParams } from 'react-router-dom'
+import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
+import { SyncOutlined } from '@ant-design/icons'
 
 export const FiltersForm = ({ onFiltersChange }) => {
     const { Search } = Input
@@ -8,24 +10,36 @@ export const FiltersForm = ({ onFiltersChange }) => {
     const [searchParams] = useSearchParams()
     const searchValue = searchParams.get('search_query')
 
+    const { refetch } = useRecordsViewContext()
+
     return (
         <Form
             name="filtersForm"
             onValuesChange={(values) => onFiltersChange(values)}
         >
-            <Form.Item
-                name="search_query"
-                label="Wyszukaj"
-                initialValue={searchValue}
-            >
-                <Search
-                    allowClear
-                    style={{
-                        width: 300,
-                    }}
-                    enterButton
-                />
-            </Form.Item>
+            <Space align="baseline">
+                <Form.Item
+                    name="search_query"
+                    label="Wyszukaj"
+                    initialValue={searchValue}
+                >
+                    <Search
+                        allowClear
+                        style={{
+                            width: 300,
+                        }}
+                        enterButton
+                    />
+                </Form.Item>
+                <Button
+                    onClick={refetch}
+                    type="default"
+                    icon={<SyncOutlined />}
+                >
+                    Odśwież
+                </Button>
+            </Space>
+
             {/* <Space size={'large'}>
                 <Form.Item name="my" label="Moje" valuePropName="checked">
                     <Switch disabled />

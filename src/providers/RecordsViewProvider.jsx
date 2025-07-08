@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { message } from 'antd'
 import { useGetTableData } from '@hooks/useGetTableData'
 import { useEzdMutation } from '@hooks/useEzdMutation'
+import { queryOptions } from '@tanstack/react-query'
 
 export const RecordsViewContext = createContext({
     data: [],
@@ -15,6 +16,7 @@ export const RecordsViewContext = createContext({
     searchParams: null,
     onFiltersChange: () => {},
     onPaginationChange: () => {},
+    query: queryOptions,
 })
 
 export const RecordsViewProvider = ({ children }) => {
@@ -26,7 +28,7 @@ export const RecordsViewProvider = ({ children }) => {
     const perPage = searchParams.get('per_page')
 
     //Fetch data with search parameters for table
-    const { data, isLoading } = useGetTableData(searchParams)
+    const { ...query } = useGetTableData(searchParams)
     //Ezd redoCreateKoszulka and redoCreateSprawa
     const { mutateAsync } = useEzdMutation()
 
@@ -135,8 +137,6 @@ export const RecordsViewProvider = ({ children }) => {
     return (
         <RecordsViewContext.Provider
             value={{
-                data,
-                isLoading,
                 currentRecordId,
                 setCurrentRecordId,
                 ezdAction,
@@ -145,6 +145,7 @@ export const RecordsViewProvider = ({ children }) => {
                 searchParams,
                 onFiltersChange,
                 onPaginationChange,
+                ...query,
             }}
         >
             {messageContextHolder}
