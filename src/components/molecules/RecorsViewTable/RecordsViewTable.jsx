@@ -1,4 +1,4 @@
-import { Table } from 'antd'
+import { Table, Flex, Typography } from 'antd'
 import { TableRowDescription } from '@atoms/TableRowDescription/TableRowDescription'
 import { useFirstDrawerContext } from '@hooks/useFirstDrawerContext'
 import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
@@ -12,7 +12,6 @@ export const RecordsViewTable = () => {
         data,
         isLoading,
         isRefetching,
-
         showDrawer,
         setCurrentRecordId,
         ezdAction,
@@ -29,6 +28,7 @@ export const RecordsViewTable = () => {
             key: 'data_request_id',
             width: 60,
         },
+
         {
             title: 'Imię',
             dataIndex: 'first_name',
@@ -48,10 +48,45 @@ export const RecordsViewTable = () => {
             ellipsis: true,
         },
         {
+            title: 'Utworzono',
+            dataIndex: 'created_time',
+            key: 'created_time',
+            ellipsis: true,
+            render: (value) => {
+                const newDate = value ? new Date(value) : null
+                const date = newDate.toLocaleDateString()
+                const time = newDate.toLocaleTimeString()
+
+                return (
+                    <Flex vertical>
+                        <Typography.Text>{date}</Typography.Text>
+                        <Typography.Text
+                            style={{ fontSize: 12 }}
+                            type="secondary"
+                            strong
+                        >
+                            {time}
+                        </Typography.Text>
+                    </Flex>
+                )
+            },
+        },
+        {
             title: 'Data końca realizacji',
             dataIndex: 'max_finish_date',
             key: 'max_finish_date',
             ellipsis: true,
+
+            render: (value) => {
+                const newDate = value ? new Date(value) : null
+                const date = newDate?.toLocaleDateString()
+
+                return (
+                    <Flex vertical>
+                        <Typography.Text>{date}</Typography.Text>
+                    </Flex>
+                )
+            },
         },
         {
             title: 'Status',
