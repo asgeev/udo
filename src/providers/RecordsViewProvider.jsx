@@ -22,7 +22,13 @@ export const RecordsViewContext = createContext({
 export const RecordsViewProvider = ({ children }) => {
     const [currentRecordId, setCurrentRecordId] = useState(null)
     const [messageApi, messageContextHolder] = message.useMessage()
-    const initialSearchParams = { page: 1, per_page: 10, search_query: '' }
+
+    const initialSearchParams = {
+        page: 1,
+        per_page: 10,
+        search_query: '',
+        my_own: true,
+    }
     const [searchParams, setSearchParams] = useSearchParams(initialSearchParams)
     const currentPage = searchParams.get('page')
     const perPage = searchParams.get('per_page')

@@ -6,9 +6,16 @@ export const useGetTableData = (searchParams) => {
     const currentPage = searchParams.get('page')
     const perPage = searchParams.get('per_page')
     const search_query = searchParams.get('search_query')
+    const my_own = searchParams.get('my_own')
 
     return useQuery({
-        queryKey: ['getDataRequestList', currentPage, perPage, search_query],
+        queryKey: [
+            'getDataRequestList',
+            currentPage,
+            perPage,
+            search_query,
+            my_own,
+        ],
         queryFn: async () => {
             const { data } = await WP_Instance.get(
                 `/udo/v1/dataRequest?${searchParams}`
@@ -17,6 +24,6 @@ export const useGetTableData = (searchParams) => {
         },
         //return entire response object with changed data table (add keys)
         select: (data) => ({ ...data, data: newDataTableWithKey(data.data) }),
-        keepPreviousData: true,
+        // keepPreviousData: true,
     })
 }
