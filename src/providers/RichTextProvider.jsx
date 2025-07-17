@@ -1,5 +1,6 @@
 import { useRef, createContext } from 'react'
-//Import styles and others
+//DON'T REMOVE THIS IMPORT! Import styles and others
+// eslint-disable-next-line no-unused-vars
 import { RichTextEditor } from '@molecules/RichTextEditor/RichTextEditor'
 
 export const RichTextContext = createContext({
@@ -11,7 +12,6 @@ export const RichTextContext = createContext({
 
 export const RichTextProvider = ({ children }) => {
     const mainEditorRef = useRef()
-    const attachmentsEditorRef = useRef()
     const requestorTemplateEditorRef = useRef()
 
     const addTextToEditor = (selectedEditorRef, htmlTemplate) => {
@@ -38,7 +38,6 @@ export const RichTextProvider = ({ children }) => {
         <RichTextContext.Provider
             value={{
                 mainEditorRef,
-                attachmentsEditorRef,
                 requestorTemplateEditorRef,
                 addTextToEditor,
             }}

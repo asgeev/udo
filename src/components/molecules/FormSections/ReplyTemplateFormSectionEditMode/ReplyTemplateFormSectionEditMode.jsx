@@ -4,24 +4,40 @@ import { useRichTextContext } from '@hooks/useRichTextContext'
 import { useSecondDrawerContext } from '@hooks/useSecondDrawerContext'
 import { useEditFormContext } from '@hooks/useEditFormContext'
 import { useGetSignatureListQuery } from '@hooks/useGetSignatureListQuery'
-import { Form, Select, Space, Button, Tabs, Collapse, Tooltip } from 'antd'
+import {
+    Form,
+    Select,
+    Space,
+    Button,
+    Tabs,
+    Collapse,
+    List,
+    Divider,
+    Flex,
+    Tooltip,
+} from 'antd'
 import {
     PaperClipOutlined,
     SisternodeOutlined,
     IdcardOutlined,
     TeamOutlined,
+    DeleteOutlined,
 } from '@ant-design/icons'
 //Import components
 import { FormSection } from '@molecules/FormSection/FormSection'
 import { PasteButtons } from '@molecules/PasteButtons/PasteButtons'
+import { UploadFile } from '@molecules/UploadFile/UploadFile'
 
 export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
     const { openSecondDrawer } = useSecondDrawerContext()
-    const { mainEditorRef, attachmentsEditorRef } = useRichTextContext()
+    const { mainEditorRef } = useRichTextContext()
     const { formDisabled } = useEditFormContext()
 
     //Fetch inflow way list
     const { data, isError } = useGetSignatureListQuery()
+
+    //Temporary variable
+    const attachements = []
 
     //Set global error state
     isError && setError(true)
@@ -80,14 +96,38 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
             ),
             forceRender: true,
             children: (
-                <Form.Item name="template_attachments_text">
-                    <ReactQuill
-                        ref={attachmentsEditorRef}
-                        modules={modules}
-                        readOnly={formDisabled}
-                        placeholder="Tutaj wpisz listę załączników"
+                <Flex vertical gap={8}>
+                    <UploadFile />
+                    <List
+                        bordered
+                        size="small"
+                        dataSource={attachements ?? []}
+                        renderItem={(item) => (
+                            <List.Item
+                                actions={[
+                                    <Button
+                                        key={'open'}
+                                        title="Otwórz załącznik"
+                                    >
+                                        Otwórz
+                                    </Button>,
+                                    <Button
+                                        danger
+                                        icon={<DeleteOutlined />}
+                                        key={'delete'}
+                                        title="Usuń załączniki"
+                                    />,
+                                ]}
+                            >
+                                <List.Item.Meta
+                                    avatar={<PaperClipOutlined />}
+                                    title={item.fileName}
+                                    description={item.createdAt}
+                                />
+                            </List.Item>
+                        )}
                     />
-                </Form.Item>
+                </Flex>
             ),
         },
         {
@@ -137,6 +177,7 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
             </Space>
 
             <Tabs items={tabsItems} animated />
+            <Divider />
 
             <Form.Item
                 name="signature_id"
