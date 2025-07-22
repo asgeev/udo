@@ -138,6 +138,7 @@ export const EditFormProvider = ({ children }) => {
                 formError,
                 editMode,
                 isFormSubmitting,
+                messageApi,
             }}
         >
             {children}

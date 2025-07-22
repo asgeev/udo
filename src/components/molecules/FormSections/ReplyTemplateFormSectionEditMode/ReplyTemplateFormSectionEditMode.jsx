@@ -14,14 +14,13 @@ import {
     List,
     Divider,
     Flex,
-    Tooltip,
 } from 'antd'
 import {
     PaperClipOutlined,
     SisternodeOutlined,
     IdcardOutlined,
-    TeamOutlined,
     DeleteOutlined,
+    AndroidOutlined,
 } from '@ant-design/icons'
 //Import components
 import { FormSection } from '@molecules/FormSection/FormSection'
@@ -145,37 +144,24 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
     return (
         <FormSection
             editMode={editMode}
-            sectionName="Dane szablonu odpowiedzi"
+            sectionName={
+                <Flex justify="space-between">
+                    Dane szablonu odpowiedzi
+                    <Button
+                        icon={<AndroidOutlined />}
+                        title="Pokaż zadania dla robota"
+                        type="primary"
+                        onClick={(e) => {
+                            e.preventDefault()
+                            openSecondDrawer(1)
+                        }}
+                    >
+                        Odpowiedzi
+                    </Button>
+                </Flex>
+            }
             subTitle={'Wpisz poniżej odpowiedź która znajdzie się na piśmie'}
         >
-            <Space direction="vertical" size="large" style={{ width: '100%' }}>
-                <Space
-                    direction="horizontal"
-                    style={{
-                        marginBottom: 20,
-                    }}
-                >
-                    <Tooltip title="Pokaż dane z CWU">
-                        <Button
-                            icon={<TeamOutlined />}
-                            type="primary"
-                            onClick={(e) => {
-                                e.preventDefault()
-                                openSecondDrawer(1)
-                            }}
-                        >
-                            CWU
-                        </Button>
-                    </Tooltip>
-                    <Button type="primary" disabled>
-                        SoFU
-                    </Button>
-                    <Button type="primary" disabled>
-                        BO
-                    </Button>
-                </Space>
-            </Space>
-
             <Tabs items={tabsItems} animated />
             <Divider />
 
