@@ -1,102 +1,110 @@
-import { Form, Checkbox, Input, DatePicker, List, Flex } from 'antd'
+import {
+    Form,
+    Checkbox,
+    Input,
+    DatePicker,
+    List,
+    Flex,
+    Typography,
+    Select,
+} from 'antd'
 
-const ContentFromExternalApiCheckboxes = ({ data }) => {
-    const externalSystems = Form.useWatch('external_systems_checkbox')
+const ContentFromExternalApiCheckboxes = ({ data, inputName }) => {
+    const externalSystems = Form.useWatch(inputName)
 
+    const { Text } = Typography
     return (
-        <>
-            {data?.map((item) => {
+        <List
+            dataSource={data}
+            renderItem={({ id, name, columns, dates }, index) => {
+                //Convert columns to valid select options
+                const columnsOptions = columns?.map((item) => ({
+                    value: item?.id,
+                    label: item?.name,
+                }))
+
                 return (
-                    <List
-                        size="small"
-                        key={item.id}
-                        header={<strong>{item.system_long_name}</strong>}
-                        bordered
-                    >
-                        {item?.checkbox?.map((checkbox, index) => {
-                            return (
-                                <List.Item key={index} style={{ margin: 0 }}>
+                    <>
+                        <Form.Item
+                            name={[inputName, index, 'checked']}
+                            style={{ margin: 0 }}
+                            valuePropName="checked"
+                            initialValue={false}
+                        >
+                            <Checkbox>
+                                <Text style={{ fontSize: 12 }}>{name}</Text>
+                            </Checkbox>
+                        </Form.Item>
+                        <Form.Item
+                            name={[inputName, index, 'id']}
+                            style={{ margin: 0 }}
+                            hidden
+                            initialValue={id}
+                        >
+                            <Input hidden />
+                        </Form.Item>
+                        {externalSystems && externalSystems[index]?.checked && (
+                            <Flex gap={8} vertical>
+                                {dates === 1 && (
+                                    <Flex gap="small">
+                                        <Form.Item
+                                            key={`date_from_${id}_${index}`}
+                                            name={[
+                                                inputName,
+                                                index,
+                                                'date_from',
+                                            ]}
+                                            style={{ margin: 0 }}
+                                            rules={[
+                                                {
+                                                    required:
+                                                        externalSystems &&
+                                                        externalSystems[index]
+                                                            ?.checked,
+                                                    message:
+                                                        'Data od jest wymagana',
+                                                },
+                                            ]}
+                                        >
+                                            <DatePicker placeholder="Data od" />
+                                        </Form.Item>
+                                        <Form.Item
+                                            key={`date_to_${id}_${index}`}
+                                            style={{ margin: 0 }}
+                                            name={[inputName, index, 'date_to']}
+                                            rules={[
+                                                {
+                                                    required:
+                                                        externalSystems &&
+                                                        externalSystems[index]
+                                                            ?.checked,
+                                                    message:
+                                                        'Data do jest wymagana',
+                                                },
+                                            ]}
+                                        >
+                                            <DatePicker placeholder="Data do" />
+                                        </Form.Item>
+                                    </Flex>
+                                )}
+                                {columns && (
                                     <Form.Item
-                                        name={[
-                                            'external_systems_checkbox',
-                                            index,
-                                            'checked',
-                                        ]}
+                                        name={[inputName, index, 'columns']}
                                         style={{ margin: 0 }}
-                                        valuePropName="checked"
-                                        initialValue={false}
                                     >
-                                        <Checkbox>{checkbox.name}</Checkbox>
+                                        <Select
+                                            mode="multiple"
+                                            options={columnsOptions}
+                                            placeholder="Wybierz kolumny"
+                                        />
                                     </Form.Item>
-                                    <Form.Item
-                                        name={[
-                                            'external_systems_checkbox',
-                                            index,
-                                            'id',
-                                        ]}
-                                        style={{ margin: 0 }}
-                                        hidden
-                                        initialValue={checkbox.id}
-                                    >
-                                        <Input hidden />
-                                    </Form.Item>
-                                    {checkbox?.dates === 1 &&
-                                        externalSystems &&
-                                        externalSystems[index]?.checked && (
-                                            <Flex gap="small">
-                                                <Form.Item
-                                                    key={`date_from_${item.id}_${index}`}
-                                                    name={[
-                                                        'external_systems_checkbox',
-                                                        index,
-                                                        'date_from',
-                                                    ]}
-                                                    style={{ margin: 0 }}
-                                                    rules={[
-                                                        {
-                                                            required:
-                                                                externalSystems &&
-                                                                externalSystems[
-                                                                    index
-                                                                ]?.checked,
-                                                            message:
-                                                                'Data od jest wymagana',
-                                                        },
-                                                    ]}
-                                                >
-                                                    <DatePicker placeholder="Data od" />
-                                                </Form.Item>
-                                                <Form.Item
-                                                    key={`date_to_${item.id}_${index}`}
-                                                    style={{ margin: 0 }}
-                                                    name={[
-                                                        'external_systems_checkbox',
-                                                        index,
-                                                        'date_to',
-                                                    ]}
-                                                    rules={[
-                                                        {
-                                                            required:
-                                                                externalSystems &&
-                                                                externalSystems[
-                                                                    index
-                                                                ]?.checked,
-                                                            message:
-                                                                'Data do jest wymagana',
-                                                        },
-                                                    ]}
-                                                >
-                                                    <DatePicker placeholder="Data do" />
-                                                </Form.Item>
-                                            </Flex>
-                                        )}
-                                </List.Item>
-                            )
-                        })}
-                    </List>
+                                )}
+                            </Flex>
+                        )}
+                    </>
                 )
-            })}
-        </>
+            }}
+        />
     )
 }
 

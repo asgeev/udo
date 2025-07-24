@@ -102,7 +102,10 @@ const ContentFromExternalApiModal = () => {
 
                         <Form.Item name="pesel" hidden />
 
-                        <ContentFromExternalApiCheckboxes data={data} />
+                        <ContentFromExternalApiCheckboxes
+                            data={data}
+                            inputName={'external_systems_checkbox'}
+                        />
                     </Form>
                 </Space>
             </Modal>

@@ -13,6 +13,7 @@ const createPayload = (values) => {
             ...item,
             date_from: item.date_from?.format('YYYY-MM-DD'),
             date_to: item.date_to?.format('YYYY-MM-DD'),
+            columns: item?.columns?.map((item) => ({ id: item })),
         })),
     }
 }
@@ -31,9 +32,9 @@ export const useContentFromExternalApiMutation = (currentRecordId) => {
         },
         networkMode: 'always',
         enabled: !!currentRecordId,
-        onSuccess: () => {
+        onSettled: () => {
             queryClient.invalidateQueries({
-                queryKey: ['dataRequestExternalSystems', currentRecordId],
+                queryKey: ['jobs', currentRecordId],
             })
         },
     })
