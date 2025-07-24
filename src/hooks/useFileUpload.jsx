@@ -15,8 +15,8 @@ export const useFileUpload = () => {
             fileForm.append('data_request_id', currentRecordId)
             return WP_Instance.post(`/udo/v1/attachments`, fileForm)
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['getDataRequestList'] })
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['attachments'] })
         },
         networkMode: 'always',
     })

@@ -14,6 +14,7 @@ import {
     List,
     Divider,
     Flex,
+    Typography,
 } from 'antd'
 import {
     PaperClipOutlined,
@@ -26,17 +27,20 @@ import {
 import { FormSection } from '@molecules/FormSection/FormSection'
 import { PasteButtons } from '@molecules/PasteButtons/PasteButtons'
 import { UploadFile } from '@molecules/UploadFile/UploadFile'
+import { useAttachments } from '@hooks/useAttachments'
+import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
 
 export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
     const { openSecondDrawer } = useSecondDrawerContext()
     const { mainEditorRef } = useRichTextContext()
     const { formDisabled } = useEditFormContext()
+    const { currentRecordId } = useRecordsViewContext()
+    const { Text } = Typography
 
     //Fetch inflow way list
     const { data, isError } = useGetSignatureListQuery()
 
-    //Temporary variable
-    const attachements = []
+    const { data: attachements } = useAttachments(currentRecordId)
 
     //Set global error state
     isError && setError(true)
@@ -120,8 +124,18 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
                             >
                                 <List.Item.Meta
                                     avatar={<PaperClipOutlined />}
-                                    title={item.fileName}
-                                    description={item.createdAt}
+                                    title={
+                                        <Flex vertical>
+                                            {item?.name}
+                                            <Text
+                                                style={{ fontSize: 12 }}
+                                                type="secondary"
+                                                strong
+                                            >
+                                                {item?.created_time}
+                                            </Text>
+                                        </Flex>
+                                    }
                                 />
                             </List.Item>
                         )}
