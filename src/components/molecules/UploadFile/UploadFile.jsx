@@ -26,11 +26,15 @@ export const UploadFile = (props) => {
                     }
                 }}
                 customRequest={async ({ file }) => {
-                    messageApi.loading('Przesyłanie pliku')
+                    messageApi.open({
+                        type: 'loading',
+                        content: 'Przesyłanie pliku',
+                        duration: 0,
+                    })
                     try {
                         await uploadAsync({ file, currentRecordId })
                         messageApi.destroy()
-                        return messageApi.success('Plik został przesłany')
+                        messageApi.success('Plik został przesłany')
                     } catch (err) {
                         console.error('Error', err)
                         messageApi.destroy()

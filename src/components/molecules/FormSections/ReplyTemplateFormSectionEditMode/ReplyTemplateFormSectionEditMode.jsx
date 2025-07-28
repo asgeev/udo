@@ -11,39 +11,91 @@ import {
     Button,
     Tabs,
     Collapse,
-    List,
     Divider,
     Flex,
-    Typography,
+    Spin,
 } from 'antd'
 import {
     PaperClipOutlined,
     SisternodeOutlined,
     IdcardOutlined,
-    DeleteOutlined,
     AndroidOutlined,
 } from '@ant-design/icons'
 //Import components
 import { FormSection } from '@molecules/FormSection/FormSection'
 import { PasteButtons } from '@molecules/PasteButtons/PasteButtons'
 import { UploadFile } from '@molecules/UploadFile/UploadFile'
-import { useAttachments } from '@hooks/useAttachments'
 import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
+import { AttachmentsList } from '@molecules/Attachments/AttachmentList'
+import { AttachmentItem } from '@molecules/Attachments/AttachmentItem'
+import {
+    useAttachments,
+    useDeleteAttachment,
+    useGetAttachmentUrl,
+} from '@hooks/useAttachments'
 
 export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
     const { openSecondDrawer } = useSecondDrawerContext()
     const { mainEditorRef } = useRichTextContext()
-    const { formDisabled } = useEditFormContext()
+    const { formDisabled, messageApi } = useEditFormContext()
     const { currentRecordId } = useRecordsViewContext()
-    const { Text } = Typography
 
     //Fetch inflow way list
     const { data, isError } = useGetSignatureListQuery()
 
-    const { data: attachements } = useAttachments(currentRecordId)
-
     //Set global error state
     isError && setError(true)
+
+    const { data: attachements, isLoading } = useAttachments(currentRecordId)
+    const filteredAttachements = attachements?.filter(
+        ({ status }) => status === 'OK'
+    )
+
+    //Delete file
+    const { mutateAsync: deleteAttachmentMutate } = useDeleteAttachment()
+
+    const deleteAttachment = async ({ id }) => {
+        messageApi.open({
+            type: 'loading',
+            content: 'Usuwanie pliku',
+            duration: 0,
+        })
+        try {
+            await deleteAttachmentMutate(id)
+            messageApi.destroy()
+            return messageApi.success('Plik został usunięty')
+        } catch (err) {
+            console.error('Error', err)
+            messageApi.destroy()
+            messageApi.error(
+                'Wystąpił błąd podczas usuwania, spróbuj ponownie później',
+                4
+            )
+        }
+    }
+
+    //Get file url and open in new window
+    const { mutateAsync: openAttachmentMutate } = useGetAttachmentUrl()
+
+    const openAttachment = async ({ id }) => {
+        messageApi.open({
+            type: 'loading',
+            content: 'Otwieranie pliku',
+            duration: 0,
+        })
+        try {
+            const { data } = await openAttachmentMutate(id)
+            window.open(data?.link, '_blank')
+            messageApi.destroy()
+        } catch (err) {
+            console.error('Error', err)
+            messageApi.destroy()
+            messageApi.error(
+                'Wystąpił błąd podczas otwierania pliku, spróbuj ponownie później',
+                4
+            )
+        }
+    }
 
     const modules = {
         toolbar: [
@@ -101,45 +153,18 @@ export const ReplyTemplateFormSectionEditMode = ({ editMode, setError }) => {
             children: (
                 <Flex vertical gap={8}>
                     <UploadFile />
-                    <List
-                        bordered
-                        size="small"
-                        dataSource={attachements ?? []}
-                        renderItem={(item) => (
-                            <List.Item
-                                actions={[
-                                    <Button
-                                        key={'open'}
-                                        title="Otwórz załącznik"
-                                    >
-                                        Otwórz
-                                    </Button>,
-                                    <Button
-                                        danger
-                                        icon={<DeleteOutlined />}
-                                        key={'delete'}
-                                        title="Usuń załączniki"
-                                    />,
-                                ]}
-                            >
-                                <List.Item.Meta
-                                    avatar={<PaperClipOutlined />}
-                                    title={
-                                        <Flex vertical>
-                                            {item?.name}
-                                            <Text
-                                                style={{ fontSize: 12 }}
-                                                type="secondary"
-                                                strong
-                                            >
-                                                {item?.created_time}
-                                            </Text>
-                                        </Flex>
-                                    }
+                    <Spin spinning={isLoading}>
+                        <AttachmentsList
+                            attachements={filteredAttachements}
+                            renderItem={(item) => (
+                                <AttachmentItem
+                                    item={item}
+                                    onOpen={openAttachment}
+                                    onDelete={deleteAttachment}
                                 />
-                            </List.Item>
-                        )}
-                    />
+                            )}
+                        />
+                    </Spin>
                 </Flex>
             ),
         },
