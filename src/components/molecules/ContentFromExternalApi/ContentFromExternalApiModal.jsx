@@ -1,11 +1,13 @@
 import { useState } from 'react'
-import { Button, Modal, Form, Alert, Space, message } from 'antd'
+import { Button, Modal, Form, Space, message, Typography } from 'antd'
 import { PlusCircleOutlined } from '@ant-design/icons'
 import { useExternalSystems } from '@hooks/useExternalSystems'
 import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
 import ContentFromExternalApiCheckboxes from './ContentFromExternalApiCheckboxes'
 import { useContentFromExternalApiMutation } from '@hooks/useContentFromExternalApiMutation'
 import { useEditFormContext } from '@hooks/useEditFormContext'
+import { UserOutlined } from '@ant-design/icons'
+import EmptyFieldsAlert from '@atoms/EmptyFieldsAlert/EmptyFieldsAlert'
 
 const ContentFromExternalApiModal = () => {
     const [open, setOpen] = useState(false)
@@ -21,9 +23,9 @@ const ContentFromExternalApiModal = () => {
         useContentFromExternalApiMutation(currentRecordId)
 
     //Get values from edit form
-    const firstName = editForm.getFieldValue('first_name')
-    const lastName = editForm.getFieldValue('last_name')
-    const pesel = editForm.getFieldValue('pesel')
+    const firstName = Form.useWatch('first_name', editForm)
+    const lastName = Form.useWatch('last_name', editForm)
+    const pesel = Form.useWatch('pesel', editForm)
 
     const externalSystemsCheckbox = Form.useWatch(
         'external_systems_checkbox',
@@ -71,43 +73,44 @@ const ContentFromExternalApiModal = () => {
             <Modal
                 open={open}
                 confirmLoading={isPending}
-                title="Wybierz pytania które chcesz dodać"
+                title="Wybierz zadania które chcesz zlecić"
                 onOk={form.submit}
                 onCancel={handleCancel}
                 width={700}
                 okText="Prześlij"
                 okButtonProps={{ disabled: !isChecked }}
             >
-                <Space direction="vertical">
-                    <Alert
-                        message="Dane osoby"
-                        type="info"
-                        showIcon
-                        description={`${firstName} ${lastName}, pesel: ${pesel}`}
-                    />
+                {!firstName || !lastName || !pesel ? (
+                    <EmptyFieldsAlert />
+                ) : (
+                    <Space direction="vertical" style={{ marginTop: 16 }}>
+                        <Typography.Text style={{ fontSize: 13 }} strong>
+                            <UserOutlined /> {firstName} {lastName}, pesel:{' '}
+                            {pesel}
+                        </Typography.Text>
+                        <Form
+                            name="ContentFromExternalApi"
+                            onFinish={onSubmit}
+                            form={form}
+                            initialValues={{
+                                first_name: firstName,
+                                last_name: lastName,
+                                pesel: pesel,
+                            }}
+                        >
+                            <Form.Item name="first_name" hidden />
 
-                    <Form
-                        name="ContentFromExternalApi"
-                        onFinish={onSubmit}
-                        form={form}
-                        initialValues={{
-                            first_name: firstName,
-                            last_name: lastName,
-                            pesel: pesel,
-                        }}
-                    >
-                        <Form.Item name="first_name" hidden />
+                            <Form.Item name="last_name" hidden />
 
-                        <Form.Item name="last_name" hidden />
+                            <Form.Item name="pesel" hidden />
 
-                        <Form.Item name="pesel" hidden />
-
-                        <ContentFromExternalApiCheckboxes
-                            data={data}
-                            inputName={'external_systems_checkbox'}
-                        />
-                    </Form>
-                </Space>
+                            <ContentFromExternalApiCheckboxes
+                                data={data}
+                                inputName={'external_systems_checkbox'}
+                            />
+                        </Form>
+                    </Space>
+                )}
             </Modal>
         </>
     )
