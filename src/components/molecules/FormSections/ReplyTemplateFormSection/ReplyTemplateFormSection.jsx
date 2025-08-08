@@ -1,4 +1,4 @@
-import { Space, Form, Typography } from 'antd'
+import { Form } from 'antd'
 import { FormSection } from '@molecules/FormSection/FormSection'
 import ContentFromExternalApiCheckboxes from '@molecules/ContentFromExternalApi/ContentFromExternalApiCheckboxes'
 
@@ -24,15 +24,11 @@ export const ReplyTemplateFormSection = ({ editMode = false }) => {
             {!firstName || !lastName || !pesel ? (
                 <EmptyFieldsAlert />
             ) : (
-                <Space direction="vertical" size={16}>
-                    <Typography.Text strong>
-                        Wybierz zadania dla robota :
-                    </Typography.Text>
-                    <ContentFromExternalApiCheckboxes
-                        data={data}
-                        inputName={'external_systems_checkbox'}
-                    />
-                </Space>
+                <ContentFromExternalApiCheckboxes
+                    data={data}
+                    inputName={'external_systems_checkbox'}
+                    form={addForm}
+                />
             )}
         </FormSection>
     )

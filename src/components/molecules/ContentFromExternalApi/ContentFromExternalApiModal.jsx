@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import { Button, Modal, Form, Space, message, Typography } from 'antd'
+import { Button, Modal, Form, Flex, message, Typography, Alert } from 'antd'
 import { PlusCircleOutlined } from '@ant-design/icons'
 import { useExternalSystems } from '@hooks/useExternalSystems'
 import { useRecordsViewContext } from '@hooks/useRecordsViewContext'
 import ContentFromExternalApiCheckboxes from './ContentFromExternalApiCheckboxes'
 import { useContentFromExternalApiMutation } from '@hooks/useContentFromExternalApiMutation'
 import { useEditFormContext } from '@hooks/useEditFormContext'
-import { UserOutlined } from '@ant-design/icons'
 import EmptyFieldsAlert from '@atoms/EmptyFieldsAlert/EmptyFieldsAlert'
 
 const ContentFromExternalApiModal = () => {
@@ -31,9 +30,8 @@ const ContentFromExternalApiModal = () => {
         'external_systems_checkbox',
         form
     )
-    const isChecked = externalSystemsCheckbox?.some(
-        (item) => item.checked === true
-    )
+
+    const isListEmpty = externalSystemsCheckbox?.length > 0
 
     const showModal = () => {
         setOpen(true)
@@ -49,10 +47,12 @@ const ContentFromExternalApiModal = () => {
     }
 
     const onSubmit = async (values) => {
+        console.log(values)
         try {
             await mutateAsync(values)
             handleCancel()
             showMessage().success('Przesłano do realizacji')
+            form.resetFields()
         } catch (err) {
             console.error(err)
             showMessage().error(
@@ -77,17 +77,21 @@ const ContentFromExternalApiModal = () => {
                 onOk={form.submit}
                 onCancel={handleCancel}
                 width={700}
-                okText="Prześlij"
-                okButtonProps={{ disabled: !isChecked }}
+                okText="Dodaj"
+                okButtonProps={{ disabled: !isListEmpty }}
             >
                 {!firstName || !lastName || !pesel ? (
                     <EmptyFieldsAlert />
                 ) : (
-                    <Space direction="vertical" style={{ marginTop: 16 }}>
-                        <Typography.Text style={{ fontSize: 13 }} strong>
-                            <UserOutlined /> {firstName} {lastName}, pesel:{' '}
-                            {pesel}
-                        </Typography.Text>
+                    <Flex vertical style={{ marginTop: 16 }} gap={16}>
+                        <Alert
+                            message={
+                                <Typography.Text style={{ fontSize: 12 }}>
+                                    {firstName} {lastName}, pesel: {pesel}
+                                </Typography.Text>
+                            }
+                        />
+
                         <Form
                             name="ContentFromExternalApi"
                             onFinish={onSubmit}
@@ -107,9 +111,10 @@ const ContentFromExternalApiModal = () => {
                             <ContentFromExternalApiCheckboxes
                                 data={data}
                                 inputName={'external_systems_checkbox'}
+                                form={form}
                             />
                         </Form>
-                    </Space>
+                    </Flex>
                 )}
             </Modal>
         </>

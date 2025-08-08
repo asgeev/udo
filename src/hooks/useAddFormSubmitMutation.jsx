@@ -4,9 +4,9 @@ import WP_Instance from '@services/WP_Instance'
 
 const createPayload = (values) => {
     //Filter only checked systems
-    const checkedSystems = values?.external_systems_checkbox?.filter(
-        (item) => item.checked === true
-    )
+    if (!values) throw Error('Must provide values')
+
+    const { external_systems_checkbox } = values
 
     return {
         ...values,
@@ -14,11 +14,10 @@ const createPayload = (values) => {
         birth_date: values['birth_date']?.format('YYYY-MM-DD'),
         max_finish_date: values['max_finish_date']?.format('YYYY-MM-DD'),
         requestor_act_date: values['requestor_act_date']?.format('YYYY-MM-DD'),
-        external_systems_checkbox: checkedSystems.map((item) => ({
+        external_systems_checkbox: external_systems_checkbox?.map((item) => ({
             ...item,
             date_from: item?.date_from?.format('YYYY-MM-DD'),
             date_to: item?.date_to?.format('YYYY-MM-DD'),
-            columns: item?.columns?.map((item) => ({ id: item })),
         })),
     }
 }

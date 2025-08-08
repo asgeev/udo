@@ -6,6 +6,7 @@ import { Routes } from '@templates/Routes/Routes'
 import { theme } from './theme/theme'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { theme as antdTheme } from 'antd'
 
 function App() {
     const queryClient = new QueryClient()
@@ -18,7 +19,9 @@ function App() {
                 cookieDomain={window.location.hostname}
                 cookieSecure={window.location.protocol === 'https:'}
             >
-                <ConfigProvider>
+                <ConfigProvider
+                    theme={{ algorithm: antdTheme.compactAlgorithm }}
+                >
                     <ThemeProvider theme={theme}>
                         <Routes />
                     </ThemeProvider>
