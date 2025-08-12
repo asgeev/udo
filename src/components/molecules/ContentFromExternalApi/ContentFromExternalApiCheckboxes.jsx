@@ -210,12 +210,45 @@ const ContentFromExternalApiCheckboxes = ({ data, inputName, form }) => {
                                                                                     name,
                                                                                     'date_to',
                                                                                 ]}
+                                                                                dependencies={[
+                                                                                    inputName,
+                                                                                    name,
+                                                                                    'date_from',
+                                                                                ]}
                                                                                 rules={[
                                                                                     {
                                                                                         required: true,
                                                                                         message:
                                                                                             'Data do jest wymagana',
                                                                                     },
+                                                                                    ({
+                                                                                        getFieldValue,
+                                                                                    }) => ({
+                                                                                        validator(
+                                                                                            _,
+                                                                                            value
+                                                                                        ) {
+                                                                                            if (
+                                                                                                !value ||
+                                                                                                getFieldValue(
+                                                                                                    [
+                                                                                                        inputName,
+                                                                                                        name,
+                                                                                                        'date_from',
+                                                                                                    ]
+                                                                                                ) <
+                                                                                                    value
+                                                                                            ) {
+                                                                                                return Promise.resolve()
+                                                                                            }
+
+                                                                                            return Promise.reject(
+                                                                                                new Error(
+                                                                                                    'Data jest wcześniejsza niż data od'
+                                                                                                )
+                                                                                            )
+                                                                                        },
+                                                                                    }),
                                                                                 ]}
                                                                             >
                                                                                 <DatePicker placeholder="Data do" />
@@ -259,6 +292,12 @@ const ContentFromExternalApiCheckboxes = ({ data, inputName, form }) => {
                                                                                 listHeight={
                                                                                     selectHeight
                                                                                 }
+                                                                                maxTagCount={
+                                                                                    2
+                                                                                }
+                                                                                maxTagTextLength={
+                                                                                    20
+                                                                                }
                                                                                 mode="multiple"
                                                                                 options={
                                                                                     selectColumns
@@ -296,6 +335,9 @@ const ContentFromExternalApiCheckboxes = ({ data, inputName, form }) => {
                                                                                 mode="multiple"
                                                                                 listHeight={
                                                                                     selectHeight
+                                                                                }
+                                                                                maxTagCount={
+                                                                                    6
                                                                                 }
                                                                                 options={
                                                                                     selectRodzaje
