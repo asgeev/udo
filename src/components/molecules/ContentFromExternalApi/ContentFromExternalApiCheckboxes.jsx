@@ -18,6 +18,8 @@ const ContentFromExternalApiCheckboxes = ({ data, inputName, form }) => {
     const [selected, setSelected] = useState(null)
     if (!inputName) return
 
+    const selectHeight = 240
+
     const map = (arr) => {
         return arr?.map((item) => ({
             value: item?.id,
@@ -45,28 +47,36 @@ const ContentFromExternalApiCheckboxes = ({ data, inputName, form }) => {
                 const isListEmpty = fields?.length <= 0
 
                 return (
-                    <>
-                        <Typography.Paragraph>
-                            Wybierz zadanie dla robota
-                        </Typography.Paragraph>
-                        <Flex gap={8} style={{ marginBottom: 16 }}>
-                            <Select
-                                options={selectData}
-                                onChange={(val) => setSelected(val)}
-                                style={{ width: 400 }}
-                                placeholder="Wybierz z listy"
-                                defaultValue={selected}
-                            />
-                            <Button
-                                type="primary"
-                                icon={<PlusCircleOutlined />}
-                                disabled={!selected}
-                                onClick={() => {
-                                    add({ id: selected })
-                                }}
-                            >
-                                Dodaj zadanie
-                            </Button>
+                    <Flex vertical gap={8}>
+                        <Flex vertical>
+                            <Typography.Text>
+                                Wybierz zadanie dla robota
+                            </Typography.Text>
+
+                            <Row gutter={8} wrap={false}>
+                                <Col flex="auto">
+                                    <Select
+                                        options={selectData}
+                                        onChange={(val) => setSelected(val)}
+                                        style={{ width: '100%' }}
+                                        placeholder="Wybierz z listy"
+                                        defaultValue={selected}
+                                        listHeight={selectHeight}
+                                    />
+                                </Col>
+                                <Col flex="none">
+                                    <Button
+                                        type="primary"
+                                        icon={<PlusCircleOutlined />}
+                                        disabled={!selected}
+                                        onClick={() => {
+                                            add({ id: selected })
+                                        }}
+                                    >
+                                        Dodaj zadanie
+                                    </Button>
+                                </Col>
+                            </Row>
                         </Flex>
 
                         <List bordered itemLayout="vertical">
@@ -162,7 +172,7 @@ const ContentFromExternalApiCheckboxes = ({ data, inputName, form }) => {
                                                                         span={4}
                                                                     >
                                                                         <Typography.Text type="secondary">
-                                                                            Czasookres
+                                                                            Czasookres*
                                                                         </Typography.Text>
                                                                     </Col>
                                                                     <Col
@@ -222,7 +232,7 @@ const ContentFromExternalApiCheckboxes = ({ data, inputName, form }) => {
                                                                         span={4}
                                                                     >
                                                                         <Typography.Text type="secondary">
-                                                                            Kolumny
+                                                                            Kolumny*
                                                                         </Typography.Text>
                                                                     </Col>
                                                                     <Col
@@ -236,10 +246,18 @@ const ContentFromExternalApiCheckboxes = ({ data, inputName, form }) => {
                                                                                 name,
                                                                                 'columns',
                                                                             ]}
+                                                                            rules={[
+                                                                                {
+                                                                                    required: true,
+                                                                                    message:
+                                                                                        'Wybierz co najmniej jedną kolumnę',
+                                                                                },
+                                                                            ]}
                                                                         >
                                                                             <Select
-                                                                                showSearch={
-                                                                                    false
+                                                                                optionFilterProp="label"
+                                                                                listHeight={
+                                                                                    selectHeight
                                                                                 }
                                                                                 mode="multiple"
                                                                                 options={
@@ -276,15 +294,16 @@ const ContentFromExternalApiCheckboxes = ({ data, inputName, form }) => {
                                                                         >
                                                                             <Select
                                                                                 mode="multiple"
+                                                                                listHeight={
+                                                                                    selectHeight
+                                                                                }
                                                                                 options={
                                                                                     selectRodzaje
-                                                                                }
-                                                                                showSearch={
-                                                                                    false
                                                                                 }
                                                                                 maxTagTextLength={
                                                                                     3
                                                                                 }
+                                                                                optionFilterProp="label"
                                                                                 placeholder="Wybierz rodzaje świadczeń"
                                                                             />
                                                                         </Form.Item>
@@ -316,16 +335,17 @@ const ContentFromExternalApiCheckboxes = ({ data, inputName, form }) => {
                                                                         >
                                                                             <Select
                                                                                 mode="multiple"
+                                                                                listHeight={
+                                                                                    selectHeight
+                                                                                }
                                                                                 options={
                                                                                     selectZakres
-                                                                                }
-                                                                                showSearch={
-                                                                                    false
                                                                                 }
                                                                                 maxTagTextLength={
                                                                                     60
                                                                                 }
                                                                                 placeholder="Wybierz zakresy świadczeń"
+                                                                                optionFilterProp="label"
                                                                             />
                                                                         </Form.Item>
                                                                     </Col>
@@ -355,7 +375,11 @@ const ContentFromExternalApiCheckboxes = ({ data, inputName, form }) => {
                                                                             ]}
                                                                         >
                                                                             <Select
+                                                                                optionFilterProp="label"
                                                                                 mode="multiple"
+                                                                                listHeight={
+                                                                                    selectHeight
+                                                                                }
                                                                                 options={
                                                                                     selectOptions
                                                                                 }
@@ -374,7 +398,7 @@ const ContentFromExternalApiCheckboxes = ({ data, inputName, form }) => {
                                 </>
                             )}
                         </List>
-                    </>
+                    </Flex>
                 )
             }}
         </Form.List>
